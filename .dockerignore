@@ -1,0 +1,65 @@
+# ===========================================
+# Docker Build Ignore File
+# ===========================================
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE and Editor
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+
+# Documentation
+README.md
+*.md
+docs/
+
+# Environment files (will be injected at runtime)
+.env
+.env.local
+.env.*.local
+.env.production
+.env.example
+
+# Node modules (frontend builds done separately)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Laravel specific
+laravel/vendor
+laravel/node_modules
+laravel/storage/logs/*
+laravel/storage/framework/cache/*
+laravel/storage/framework/sessions/*
+laravel/storage/framework/views/*
+laravel/.phpunit.result.cache
+laravel/phpunit.xml
+laravel/tests
+
+# WordPress specific
+wordpress/wp-content/debug.log
+wordpress/wp-content/uploads/*
+wordpress/wp-content/cache/*
+
+# Build artifacts
+*.log
+*.sql
+*.zip
+*.tar.gz
+
+# Backup files
+*_backup*
+backups/
+
+# SSL certificates (managed separately)
+docker/certbot/
+
+# Deployment scripts (not needed in container)
+deploy.sh
+ssl-setup.sh
