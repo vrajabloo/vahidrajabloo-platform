@@ -52,9 +52,21 @@ echo "Compressing backups..."
 gzip "${BACKUP_DIR}/wordpress_${TIMESTAMP}.sql"
 gzip "${BACKUP_DIR}/laravel_${TIMESTAMP}.sql"
 
+# Backup WordPress uploads (weekly - check if it's Sunday)
+DAY_OF_WEEK=$(date +%u)
+if [ "$DAY_OF_WEEK" -eq 7 ] || [ "$1" = "--full" ]; then
+    echo "Backing up WordPress uploads..."
+    WP_UPLOADS="/var/www/vahidrajabloo-platform/wordpress/wp-content/uploads"
+    if [ -d "$WP_UPLOADS" ]; then
+        tar -czf "${BACKUP_DIR}/uploads_${TIMESTAMP}.tar.gz" -C /var/www/vahidrajabloo-platform/wordpress/wp-content uploads
+        echo "Uploads backup complete"
+    fi
+fi
+
 # Cleanup old backups
 echo "Cleaning up old backups (older than ${KEEP_DAYS} days)..."
 find $BACKUP_DIR -name "*.sql.gz" -mtime +$KEEP_DAYS -delete
+find $BACKUP_DIR -name "uploads_*.tar.gz" -mtime +30 -delete  # Keep uploads for 30 days
 
 # List current backups
 echo ""

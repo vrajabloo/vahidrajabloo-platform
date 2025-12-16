@@ -8,8 +8,19 @@
 *.log
 *.swp
 
-# WordPress (managed separately)
-wordpress/
+# WordPress (granular - protect uploads & config, track themes/plugins)
+wordpress/wp-config.php
+wordpress/wp-config-local.php
+wordpress/wp-config-docker.php
+wordpress/wp-admin/
+wordpress/wp-includes/
+wordpress/wp-content/uploads/
+wordpress/wp-content/cache/
+wordpress/wp-content/upgrade/
+wordpress/wp-content/upgrade-temp-backup/
+wordpress/wp-content/languages/
+wordpress/wp-content/litespeed/
+wordpress/*.log
 
 # Laravel vendor & node
 laravel/vendor/
