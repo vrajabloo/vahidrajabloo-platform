@@ -29,9 +29,9 @@ class WpAutoLoginController extends Controller
             expiryMinutes: 5
         );
 
-        // Redirect to WordPress auto-login endpoint
+        // Redirect to WordPress with SSO token (mu-plugin will intercept)
         $wpAutoLoginUrl = config('app.wordpress_url', 'https://vahidrajabloo.com') 
-            . '/wp-auto-login.php?token=' . $loginToken->token;
+            . '/?sso=1&token=' . $loginToken->token;
 
         return redirect()->away($wpAutoLoginUrl);
     }

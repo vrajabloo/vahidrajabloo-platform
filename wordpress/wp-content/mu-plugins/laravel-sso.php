@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Laravel SSO Auto-Login
  * Description: Handles auto-login from Laravel Admin Panel
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: VahidRajabloo Platform
  */
 
@@ -19,17 +19,17 @@ define('WP_ADMIN_USERNAME', 'admin');
 define('WP_ADMIN_EMAIL', 'vahidrajablou87@gmail.com');
 
 /**
- * Handle auto-login requests
+ * Handle auto-login requests early (before WordPress loads)
  */
-add_action('init', function() {
-    // Only handle requests to wp-auto-login.php or with token parameter
-    if (!isset($_GET['token']) || empty($_GET['token'])) {
+add_action('init', 'laravel_sso_handle_login', 1);
+
+function laravel_sso_handle_login() {
+    // Check if this is an SSO request
+    if (!isset($_GET['sso']) || $_GET['sso'] != '1') {
         return;
     }
     
-    // Check if this is the auto-login request
-    $requestUri = $_SERVER['REQUEST_URI'] ?? '';
-    if (strpos($requestUri, 'wp-auto-login') === false && !isset($_GET['sso'])) {
+    if (!isset($_GET['token']) || empty($_GET['token'])) {
         return;
     }
     
@@ -48,14 +48,15 @@ add_action('init', function() {
     
     if (is_wp_error($response)) {
         error_log('SSO Error: ' . $response->get_error_message());
-        wp_die('Could not validate token', 'SSO Error', ['response' => 500]);
+        wp_die('Could not validate token: ' . $response->get_error_message(), 'SSO Error', ['response' => 500]);
     }
     
     $statusCode = wp_remote_retrieve_response_code($response);
     $body = json_decode(wp_remote_retrieve_body($response), true);
     
     if ($statusCode !== 200 || empty($body['valid'])) {
-        wp_die('Invalid or expired token', 'SSO Error', ['response' => 401]);
+        $error = $body['error'] ?? 'Unknown error';
+        wp_die('Invalid or expired token: ' . $error, 'SSO Error', ['response' => 401]);
     }
     
     // Get WordPress user by username
@@ -77,7 +78,7 @@ add_action('init', function() {
         
         if (is_wp_error($userId)) {
             error_log('SSO Error: Could not create user - ' . $userId->get_error_message());
-            wp_die('Could not create user', 'SSO Error', ['response' => 500]);
+            wp_die('Could not create user: ' . $userId->get_error_message(), 'SSO Error', ['response' => 500]);
         }
         
         // Set as administrator
@@ -96,29 +97,4 @@ add_action('init', function() {
     // Redirect to WordPress admin
     wp_safe_redirect(admin_url());
     exit;
-});
-
-/**
- * Add rewrite rule for clean URL
- */
-add_action('init', function() {
-    add_rewrite_rule(
-        '^wp-auto-login/?$',
-        'index.php?sso=1',
-        'top'
-    );
-});
-
-add_filter('query_vars', function($vars) {
-    $vars[] = 'sso';
-    return $vars;
-});
-
-/**
- * Handle the clean URL
- */
-add_action('template_redirect', function() {
-    if (get_query_var('sso') && isset($_GET['token'])) {
-        // The init hook above will handle this
-    }
-});
+}
