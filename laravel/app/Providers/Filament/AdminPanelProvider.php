@@ -44,7 +44,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 \Filament\Navigation\NavigationItem::make('WordPress Admin')
-                    ->url('/wp-redirect', shouldOpenInNewTab: true)
+                    ->url(fn () => route('wp.redirect'))
                     ->icon('heroicon-o-globe-alt')
                     ->group('External')
                     ->sort(100),
