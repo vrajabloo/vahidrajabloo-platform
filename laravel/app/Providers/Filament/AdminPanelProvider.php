@@ -42,6 +42,13 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
             ])
+            ->navigationItems([
+                \Filament\Navigation\NavigationItem::make('WordPress Admin')
+                    ->url('/wp-redirect', shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-globe-alt')
+                    ->group('External')
+                    ->sort(100),
+            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
