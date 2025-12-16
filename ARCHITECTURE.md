@@ -104,6 +104,19 @@
 | Password Reset | Email-based |
 | Profile | Edit personal info |
 | Welcome Widget | Personalized greeting |
+| My Projects | View user's own projects |
+| My Wallet | View wallet transactions + balance widget |
+| My Points | View points history + balance widget |
+| My Incomes | View income history |
+
+---
+
+## 🎨 Panel Branding
+
+| Panel | Brand Name | Color |
+|-------|-----------|-------|
+| Admin | 🛡️ Admin Panel | Rose (Red) |
+| User | 👤 My Dashboard | Blue |
 
 ---
 

@@ -118,6 +118,39 @@ docker compose exec laravel php artisan tinker --execute="App\Models\User::creat
 
 ---
 
+## 🔄 WordPress Database Sync
+
+> ⚠️ WordPress content (posts, pages, settings) is stored in **MySQL database**, NOT in Git!
+
+### Sync Local → Server:
+
+```bash
+# 1. Export from local
+docker exec mysql mysqldump -u wpuser -pBp4VbST1ELlZEGw3ZMcZPYJclUmfemeb wordpress 2>/dev/null > wordpress_backup.sql
+
+# 2. Copy to server
+scp wordpress_backup.sql root@116.203.78.31:/var/www/vahidrajabloo-platform/
+
+# 3. Import on server
+ssh root@116.203.78.31 "cat /var/www/vahidrajabloo-platform/wordpress_backup.sql | docker exec -i mysql mysql -u wpuser -pBp4VbST1ELlZEGw3ZMcZPYJclUmfemeb wordpress"
+
+# 4. Update URLs
+ssh root@116.203.78.31 "docker exec mysql mysql -u wpuser -pBp4VbST1ELlZEGw3ZMcZPYJclUmfemeb wordpress -e \"UPDATE wp_options SET option_value='https://vahidrajabloo.com' WHERE option_name IN ('siteurl','home');\""
+```
+
+### What syncs via Git vs Database:
+
+| Item | Git | Database |
+|------|-----|----------|
+| Theme files | ✅ | |
+| Plugin code | ✅ | |
+| Posts/Pages | | ✅ |
+| Settings | | ✅ |
+| Menus | | ✅ |
+| Uploads | ❌ (.gitignore) | |
+
+---
+
 ## ⚠️ Never Do
 
 - ❌ Edit files directly on server
