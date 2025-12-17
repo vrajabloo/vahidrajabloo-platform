@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Laravel SSO Auto-Login
  * Description: Handles auto-login from Laravel Admin Panel
- * Version: 1.2.0
+ * Version: 1.3.0
  * Author: VahidRajabloo Platform
  */
 
@@ -10,9 +10,6 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-
-// Start output buffering VERY early to prevent "headers already sent"
-ob_start();
 
 /**
  * Configuration - Dynamic based on environment
@@ -29,9 +26,10 @@ define('LARAVEL_SSO_WP_ADMIN_USERNAME', 'admin');
 define('LARAVEL_SSO_WP_ADMIN_EMAIL', 'vahidrajablou87@gmail.com');
 
 /**
- * Handle auto-login requests as early as possible
+ * Handle auto-login requests - using 'init' hook with early priority
+ * Note: 'muplugins_loaded' is too early (WordPress functions not available)
  */
-add_action('muplugins_loaded', 'laravel_sso_handle_login');
+add_action('init', 'laravel_sso_handle_login', 0);
 
 function laravel_sso_handle_login() {
     // Check if this is an SSO request
@@ -41,6 +39,11 @@ function laravel_sso_handle_login() {
     
     if (!isset($_GET['token']) || empty($_GET['token'])) {
         return;
+    }
+    
+    // Start output buffering to prevent "headers already sent"
+    if (!ob_get_level()) {
+        ob_start();
     }
     
     $token = sanitize_text_field($_GET['token']);
@@ -110,8 +113,7 @@ function laravel_sso_handle_login() {
     // Log the SSO login
     error_log('SSO Login: User ' . $user->user_login . ' logged in via Laravel SSO');
     
-    // Redirect to WordPress admin using header() directly
-    $adminUrl = admin_url();
-    header('Location: ' . $adminUrl, true, 302);
+    // Redirect to WordPress admin
+    wp_safe_redirect(admin_url());
     exit;
 }
