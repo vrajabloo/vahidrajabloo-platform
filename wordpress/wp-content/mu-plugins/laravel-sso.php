@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Laravel SSO Auto-Login
  * Description: Handles auto-login from Laravel Admin Panel
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: VahidRajabloo Platform
  */
 
@@ -11,17 +11,27 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Configuration
- */
-define('LARAVEL_API_URL', 'https://app.vahidrajabloo.com/api/wp-validate-token');
-define('WP_ADMIN_USERNAME', 'admin');
-define('WP_ADMIN_EMAIL', 'vahidrajablou87@gmail.com');
+// Start output buffering VERY early to prevent "headers already sent"
+ob_start();
 
 /**
- * Handle auto-login requests early (before WordPress loads)
+ * Configuration - Dynamic based on environment
  */
-add_action('init', 'laravel_sso_handle_login', 1);
+function laravel_sso_get_api_url() {
+    // Check if we're on local or production
+    if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], '.local') !== false) {
+        return 'http://app.vahidrajabloo.local/api/wp-validate-token';
+    }
+    return 'https://app.vahidrajabloo.com/api/wp-validate-token';
+}
+
+define('LARAVEL_SSO_WP_ADMIN_USERNAME', 'admin');
+define('LARAVEL_SSO_WP_ADMIN_EMAIL', 'vahidrajablou87@gmail.com');
+
+/**
+ * Handle auto-login requests as early as possible
+ */
+add_action('muplugins_loaded', 'laravel_sso_handle_login');
 
 function laravel_sso_handle_login() {
     // Check if this is an SSO request
@@ -41,9 +51,10 @@ function laravel_sso_handle_login() {
     }
     
     // Validate token with Laravel API
-    $response = wp_remote_get(LARAVEL_API_URL . '?token=' . urlencode($token), [
+    $apiUrl = laravel_sso_get_api_url();
+    $response = wp_remote_get($apiUrl . '?token=' . urlencode($token), [
         'timeout' => 10,
-        'sslverify' => true,
+        'sslverify' => false, // Allow for local development
     ]);
     
     if (is_wp_error($response)) {
@@ -60,20 +71,20 @@ function laravel_sso_handle_login() {
     }
     
     // Get WordPress user by username
-    $wpUsername = $body['wp_username'] ?? WP_ADMIN_USERNAME;
+    $wpUsername = $body['wp_username'] ?? LARAVEL_SSO_WP_ADMIN_USERNAME;
     $user = get_user_by('login', $wpUsername);
     
     // If user doesn't exist, try by email
     if (!$user) {
-        $user = get_user_by('email', WP_ADMIN_EMAIL);
+        $user = get_user_by('email', LARAVEL_SSO_WP_ADMIN_EMAIL);
     }
     
     // If still no user, create one (admin only)
     if (!$user) {
         $userId = wp_create_user(
-            WP_ADMIN_USERNAME,
+            LARAVEL_SSO_WP_ADMIN_USERNAME,
             wp_generate_password(32),
-            WP_ADMIN_EMAIL
+            LARAVEL_SSO_WP_ADMIN_EMAIL
         );
         
         if (is_wp_error($userId)) {
@@ -86,6 +97,11 @@ function laravel_sso_handle_login() {
         $user->set_role('administrator');
     }
     
+    // Clear any output buffer before setting headers
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+    
     // Log the user in
     wp_clear_auth_cookie();
     wp_set_current_user($user->ID);
@@ -94,7 +110,8 @@ function laravel_sso_handle_login() {
     // Log the SSO login
     error_log('SSO Login: User ' . $user->user_login . ' logged in via Laravel SSO');
     
-    // Redirect to WordPress admin
-    wp_safe_redirect(admin_url());
+    // Redirect to WordPress admin using header() directly
+    $adminUrl = admin_url();
+    header('Location: ' . $adminUrl, true, 302);
     exit;
 }

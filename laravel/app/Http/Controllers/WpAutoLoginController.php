@@ -30,8 +30,8 @@ class WpAutoLoginController extends Controller
         );
 
         // Redirect to WordPress with SSO token (mu-plugin will intercept)
-        $wpAutoLoginUrl = config('app.wordpress_url', 'https://vahidrajabloo.com') 
-            . '/?sso=1&token=' . $loginToken->token;
+        $wordpressUrl = env('WORDPRESS_URL', 'https://vahidrajabloo.com');
+        $wpAutoLoginUrl = $wordpressUrl . '/?sso=1&token=' . $loginToken->token;
 
         return redirect()->away($wpAutoLoginUrl);
     }
