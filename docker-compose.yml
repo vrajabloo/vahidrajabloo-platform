@@ -12,6 +12,7 @@ services:
       - ./laravel:/var/www/laravel
       - ./docker/certbot/conf:/etc/letsencrypt
       - ./docker/certbot/www:/var/www/certbot
+      - nginx-cache:/var/cache/nginx
     depends_on:
       - wordpress
       - laravel
@@ -91,3 +92,4 @@ networks:
 
 volumes:
   mysql-data:
+  nginx-cache:
