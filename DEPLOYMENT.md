@@ -1,10 +1,13 @@
 # 🚀 Deployment Guide
 
+**Last Updated:** 2025-12-18
+
 ## 🔐 Golden Rule
 
 ```
 ❌ Never edit code directly on server
 ✅ Only GitHub → deploy.sh
+✅ Every deploy is logged
 ```
 
 ---
@@ -14,10 +17,10 @@
 | Action | Command |
 |--------|---------|
 | Deploy | `ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"` |
+| Rollback | `ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"` |
 | View logs | `ssh root@116.203.78.31 "docker logs nginx --tail 50"` |
-| Restart | `ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose restart"` |
 | Status | `ssh root@116.203.78.31 "docker ps"` |
-| Backup | `ssh root@116.203.78.31 "/var/www/vahidrajabloo-platform/backup.sh"` |
+| File check | `ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./scripts/file-monitor.sh check"` |
 
 ---
 
@@ -28,80 +31,60 @@
 │   LOCAL     │────▶│   GITHUB    │────▶│   SERVER    │
 │   Edit      │     │   Push      │     │  deploy.sh  │
 └─────────────┘     └─────────────┘     └─────────────┘
+                                               │
+                                               ▼
+                                        ┌─────────────┐
+                                        │  LOGGED     │
+                                        │  BASELINED  │
+                                        └─────────────┘
 ```
 
 ### Step 1: Make Changes (Local)
 ```bash
 cd ~/Desktop/My\ Web\ Site/vahidrajabloo-platform
-# Edit files...
-# Test locally
-docker-compose up -d
-```
-
-### Step 2: Commit & Push
-```bash
+# Edit theme/plugin files
 git add .
 git commit -m "feat: description"
 git push origin main
 ```
 
-### Step 3: Deploy
+### Step 2: Deploy
 ```bash
 ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 ```
 
+### Step 3: Verify
+- Website: https://vahidrajabloo.com
+- Admin: https://vahidrajabloo.com/wp-admin/
+- SSO: From Laravel admin panel
+
 ---
 
-## 🔄 First Time Server Setup
+## 🔄 Rollback (Emergency)
 
 ```bash
-# On server
-cd /var/www
-git clone https://github.com/YOUR_USERNAME/vahidrajabloo-platform.git
-cd vahidrajabloo-platform
+# Interactive mode
+ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"
 
-# Copy environment
-cp .env.production .env
+# Direct to specific commit
+ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh abc123"
 
-# Make scripts executable
-chmod +x deploy.sh backup.sh firewall-setup.sh ssl-setup.sh
-
-# Setup firewall
-./firewall-setup.sh
-
-# Initial deployment
-./deploy.sh
-
-# Run migrations
-docker compose exec laravel php artisan migrate --force
-
-# Create admin user
-docker compose exec laravel php artisan tinker --execute="App\Models\User::create(['name'=>'Admin','email'=>'admin@vahidrajabloo.com','password'=>bcrypt('YOUR_PASSWORD'),'role'=>'admin']);"
+# Dry run first
+ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --dry-run"
 ```
 
 ---
 
-## 🔒 Security Setup (Already Done)
+## 🛡️ Security Features
 
-| Item | Status | Command |
-|------|--------|---------|
-| Firewall | ✅ Active | `ufw status` |
-| SSL | ✅ Installed | Auto-renews daily 3am |
-| Backup | ✅ Active | Daily 2am |
-| Log Rotation | ✅ Active | Max 10MB × 3 files |
-
----
-
-## 🚨 Emergency Commands
-
-| Situation | Command |
-|-----------|---------|
-| Rollback | `git checkout HEAD~1 -- . && docker compose up -d --build` |
-| Force rebuild | `docker compose down && docker compose up -d --build` |
-| View errors | `docker logs nginx 2>&1 \| tail -50` |
-| Restart all | `docker compose restart` |
-| Manual backup | `./backup.sh` |
-| SSH to server | `ssh root@116.203.78.31` |
+| Feature | Status |
+|---------|--------|
+| DISALLOW_FILE_EDIT | ✅ Active |
+| DISALLOW_FILE_MODS | ✅ Active |
+| FORCE_SSL_ADMIN | ✅ Active |
+| Deploy logging | ✅ Active |
+| File integrity monitor | ✅ Active |
+| Cloudflare WAF | ✅ Active |
 
 ---
 
@@ -118,43 +101,25 @@ docker compose exec laravel php artisan tinker --execute="App\Models\User::creat
 
 ---
 
-## 🔄 WordPress Database Sync
-
-> ⚠️ WordPress content (posts, pages, settings) is stored in **MySQL database**, NOT in Git!
-
-### Sync Local → Server:
-
-```bash
-# 1. Export from local
-docker exec mysql mysqldump -u wpuser -pBp4VbST1ELlZEGw3ZMcZPYJclUmfemeb wordpress 2>/dev/null > wordpress_backup.sql
-
-# 2. Copy to server
-scp wordpress_backup.sql root@116.203.78.31:/var/www/vahidrajabloo-platform/
-
-# 3. Import on server
-ssh root@116.203.78.31 "cat /var/www/vahidrajabloo-platform/wordpress_backup.sql | docker exec -i mysql mysql -u wpuser -pBp4VbST1ELlZEGw3ZMcZPYJclUmfemeb wordpress"
-
-# 4. Update URLs
-ssh root@116.203.78.31 "docker exec mysql mysql -u wpuser -pBp4VbST1ELlZEGw3ZMcZPYJclUmfemeb wordpress -e \"UPDATE wp_options SET option_value='https://vahidrajabloo.com' WHERE option_name IN ('siteurl','home');\""
-```
-
-### What syncs via Git vs Database:
+## 🗂️ What Syncs Where
 
 | Item | Git | Database |
 |------|-----|----------|
 | Theme files | ✅ | |
-| Plugin code | ✅ | |
+| mu-plugins | ✅ | |
+| Security scripts | ✅ | |
 | Posts/Pages | | ✅ |
 | Settings | | ✅ |
-| Menus | | ✅ |
-| Uploads | ❌ (.gitignore) | |
+| Uploads | ❌ | |
 
 ---
 
 ## ⚠️ Never Do
 
-- ❌ Edit files directly on server
-- ❌ Run `docker compose down -v` (deletes database!)
-- ❌ Change .env on server without updating .env.production locally
-- ❌ Expose database port publicly
-- ❌ Use weak passwords
+```
+❌ Edit files directly on server
+❌ Run docker compose down -v
+❌ Install plugins via wp-admin
+❌ Expose database port
+❌ Skip rollback.sh for emergencies
+```

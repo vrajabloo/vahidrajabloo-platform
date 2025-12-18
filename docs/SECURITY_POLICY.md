@@ -1,13 +1,28 @@
 # 🔒 Security Policy
 
+**Last Updated:** 2025-12-18
+
 ## 🎯 Core Principles
 
 ```
 1. Git is the SINGLE SOURCE OF TRUTH for code
 2. Any change outside Git = 🚨 SECURITY ALERT
-3. Core WordPress files = Docker image only
-4. mu-plugins = Git tracked (SSO critical)
-5. Database & uploads = SACRED (never in Git)
+3. Server is DISPOSABLE - rebuild anytime
+4. Database & uploads = SACRED (never in Git)
+5. All deploys = Logged and auditable
+```
+
+---
+
+## 🔐 WordPress Hardening (Active)
+
+### wp-config.php Security Defines
+```php
+define('DISALLOW_FILE_EDIT', true);      // ✅ No dashboard editor
+define('DISALLOW_FILE_MODS', true);      // ✅ No plugin/theme installs
+define('WP_AUTO_UPDATE_CORE', false);    // ✅ Git-only updates
+define('WP_DEBUG', false);               // ✅ Debug disabled
+define('FORCE_SSL_ADMIN', true);         // ✅ SSL enforced
 ```
 
 ---
@@ -16,105 +31,112 @@
 
 | Path | Git Tracked | Source |
 |------|-------------|--------|
-| `wordpress/wp-content/mu-plugins/` | ✅ YES | Your code (SSO) |
-| `wordpress/wp-content/themes/hello-elementor/` | ✅ YES | Your customizations |
-| `wordpress/wp-content/plugins/` | ⚠️ Selective | Custom plugins only |
-| `wordpress/wp-admin/` | ❌ NO | Docker WordPress image |
-| `wordpress/wp-includes/` | ❌ NO | Docker WordPress image |
-| `wordpress/index.php` | ❌ NO | Docker WordPress image |
+| `wordpress/wp-content/mu-plugins/` | ✅ YES | SSO code |
+| `wordpress/wp-content/themes/vahidrajabloo-theme/` | ✅ YES | Custom theme |
+| `wordpress/wp-content/plugins/` | ❌ NO | Managed via dashboard |
+| `wordpress/wp-admin/` | ❌ NO | Docker image |
+| `wordpress/wp-includes/` | ❌ NO | Docker image |
 | `wordpress/wp-config.php` | ❌ NO | Server-specific |
 | `wordpress/wp-content/uploads/` | ❌ NO | User data (SACRED) |
+| `scripts/` | ✅ YES | Security scripts |
+
+---
+
+## 🛡️ Security Scripts
+
+| Script | Purpose | Usage |
+|--------|---------|-------|
+| `scripts/file-monitor.sh` | Detect unauthorized file changes | `./file-monitor.sh check` |
+| `scripts/deploy-log.sh` | Audit trail for deployments | Auto-runs on deploy |
+| `deploy.sh` | Safe deployment | `./deploy.sh` |
+| `rollback.sh` | Emergency rollback | `./rollback.sh <commit>` |
+
+### File Integrity Monitoring
+```bash
+# Create baseline after clean deploy
+./scripts/file-monitor.sh baseline
+
+# Check for changes (run via cron)
+./scripts/file-monitor.sh check
+```
 
 ---
 
 ## 🚨 Security Alerts
 
-### When to Investigate:
-
-| Condition | Action |
-|-----------|--------|
-| `index.php` modified | 🔴 CRITICAL - Check for malware |
-| Unknown files in `wp-content/` | 🔴 Investigate immediately |
-| mu-plugins mismatch with Git | 🔴 Restore from Git |
-| Core files different from Docker | 🟡 Rebuild container |
-| Files edited directly on server | 🟡 Violates Golden Rule |
+| Condition | Severity | Action |
+|-----------|----------|--------|
+| Unknown PHP in `/wp-content/` | 🔴 CRITICAL | Delete + investigate |
+| PHP in `/wp-content/uploads/` | 🔴 CRITICAL | Malware - delete all |
+| `index.php` modified | 🔴 CRITICAL | Restore from Git |
+| Unknown admin users | 🔴 CRITICAL | Delete + reset passwords |
+| Files edited on server | 🟡 WARNING | Restore from Git |
+| Core file mismatch | 🟡 WARNING | Rebuild container |
 
 ---
 
 ## 🔐 SSO Security
 
-The Laravel-WordPress SSO uses:
-- **Token-based authentication** (64-char random)
-- **5-minute expiry**
-- **One-time use tokens**
-- **API validation between services**
-
-### SSO Critical Files:
+### Critical Files
 ```
 laravel/app/Models/WpLoginToken.php
 laravel/app/Http/Controllers/WpAutoLoginController.php
 wordpress/wp-content/mu-plugins/laravel-sso.php
 ```
 
-> ⚠️ Any modification to these files outside Git = SECURITY BREACH
+### Token Requirements
+- Length: 64 characters
+- Expiry: 5 minutes
+- Usage: Single-use only
+- Transport: HTTPS only
 
 ---
 
-## 🛡️ Integrity Verification
+## 🌐 Cloudflare WAF Rules
 
-### Check Core Files:
-```bash
-# On server - verify WordPress core against Docker image
-ssh root@116.203.78.31 "docker exec wordpress wp core verify-checksums --allow-root"
-```
-
-### Check mu-plugins Match Git:
-```bash
-# On server - diff mu-plugins
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && git diff wordpress/wp-content/mu-plugins/"
-```
-
-### Check for Unknown Files:
-```bash
-# On server - find files not in Git
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && git status wordpress/wp-content/"
-```
+| Rule | Action |
+|------|--------|
+| Allow SSO `?sso=1&token=` | Skip |
+| Block `/xmlrpc.php` | Block |
+| Block PHP in uploads | Block |
+| Challenge `/wp-login.php` | Challenge |
+| Protect `/wp-admin/` | Challenge |
+| Rate limit login | 5/min then block |
 
 ---
 
-## 🔄 Recovery from Security Incident
+## 🔄 Incident Recovery
 
 ### Step 1: Isolate
 ```bash
-# Stop the site
 ssh root@116.203.78.31 "docker compose stop wordpress"
 ```
 
-### Step 2: Restore Code from Git
+### Step 2: Rollback
 ```bash
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && git checkout -- ."
+ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh HEAD~1"
 ```
 
-### Step 3: Rebuild Containers (Clean Core)
+### Step 3: Clean Malware
 ```bash
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose up -d --build --force-recreate"
+ssh root@116.203.78.31 "docker exec wordpress find /var/www/html/wp-content/uploads -name '*.php' -delete"
 ```
 
-### Step 4: Verify
+### Step 4: Reset Passwords
 ```bash
-ssh root@116.203.78.31 "docker exec wordpress wp core verify-checksums --allow-root"
+# Via Laravel SSO or wp-cli
 ```
 
 ---
 
-## 📋 Weekly Security Checklist
+## 📋 Weekly Checklist
 
-- [ ] Run `wp core verify-checksums`
-- [ ] Check `git status` on server (should be clean)
-- [ ] Review WordPress login logs
-- [ ] Check Laravel SSO token table for anomalies
-- [ ] Verify no unknown files in wp-content
+- [ ] Run `file-monitor.sh check`
+- [ ] Review deploy-history.log
+- [ ] Check Cloudflare WAF logs
+- [ ] Verify no unknown admin users
 - [ ] Backup database
+- [ ] Check WordPress error logs
 
 ---
 
@@ -123,10 +145,10 @@ ssh root@116.203.78.31 "docker exec wordpress wp core verify-checksums --allow-r
 ```
 ❌ Edit files directly on server
 ❌ Upload files via FTP
-❌ Install plugins via wp-admin on production
-❌ Give wp-admin access to non-admins
+❌ Install plugins via wp-admin
 ❌ Share SSO tokens
-❌ Disable mu-plugins
+❌ Expose database port
+❌ Run docker compose down -v
 ```
 
 ---
@@ -134,10 +156,10 @@ ssh root@116.203.78.31 "docker exec wordpress wp core verify-checksums --allow-r
 ## ✅ Always Do
 
 ```
-✅ Deploy code via Git only
-✅ Use Docker for WordPress core
-✅ Keep mu-plugins in Git
-✅ Monitor for file changes
+✅ Deploy via Git only
+✅ Use rollback.sh for emergencies
+✅ Monitor file integrity
+✅ Log all deployments
 ✅ Use strong passwords
-✅ Keep backups
+✅ Enable Cloudflare WAF
 ```

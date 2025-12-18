@@ -144,16 +144,32 @@ docker-compose exec laravel php artisan cache:clear
 
 - ✅ UFW Firewall (ports 22, 80, 443)
 - ✅ SSL/HTTPS via Let's Encrypt
-- ✅ Strong passwords (32 char)
-- ✅ Rate limiting in Nginx
-- ✅ Automated backups (daily 2am)
-- ✅ SSL auto-renewal (daily 3am)
+- ✅ Cloudflare WAF protection
+- ✅ DISALLOW_FILE_EDIT / DISALLOW_FILE_MODS
+- ✅ File integrity monitoring
+- ✅ Deploy logging & audit trail
+- ✅ Automated backups (daily)
+- ✅ Rollback system ready
+
+---
+
+## 📁 Security Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `deploy.sh` | Safe deployment with logging |
+| `rollback.sh` | Emergency rollback |
+| `scripts/file-monitor.sh` | File integrity monitoring |
+| `scripts/deploy-log.sh` | Deploy audit trail |
 
 ---
 
 ## ⚠️ Important Notes
 
 - **Never** commit `.env` to Git
+- **Never** edit files directly on server
 - Change passwords in production
-- Use SSL/TLS in production
+- Use `rollback.sh` for emergencies
 - Follow `DEPLOYMENT.md` for deployments
+- Check `docs/SECURITY_POLICY.md` for full policy
+

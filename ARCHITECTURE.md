@@ -131,9 +131,12 @@
 |---------|--------|
 | UFW Firewall | ✅ Active (22, 80, 443) |
 | SSL/HTTPS | ✅ Let's Encrypt |
-| Strong Passwords | ✅ 32 characters |
-| Rate Limiting | ✅ Nginx config |
-| Blocked .env/.git | ✅ Nginx config |
+| Cloudflare WAF | ✅ Active |
+| DISALLOW_FILE_EDIT | ✅ Active |
+| DISALLOW_FILE_MODS | ✅ Active |
+| File Integrity Monitor | ✅ Active |
+| Deploy Logging | ✅ Active |
+| Rollback System | ✅ Ready |
 | Daily Backups | ✅ 2am cron |
 | SSL Auto-Renew | ✅ 3am cron |
 
@@ -142,3 +145,15 @@
 ## 💰 Currency
 
 All monetary values are in **USD ($)**
+
+---
+
+## 📁 Key Documentation
+
+| Document | Purpose |
+|----------|---------|
+| `DEPLOYMENT.md` | How to deploy |
+| `docs/ROLLBACK.md` | Emergency rollback |
+| `docs/SECURITY_POLICY.md` | Security guidelines |
+| `docs/PRE_DEPLOY_CHECKLIST.md` | Deploy checklist |
+
