@@ -346,9 +346,9 @@ a.btn--primary:hover {
 }
 
 .btn--secondary:hover {
-    background-color: var(--color-primary);
-    color: #FFFFFF;
-    border-color: var(--color-primary);
+    background-color: var(--color-gray-100);
+    color: var(--color-text-primary);
+    border-color: var(--color-gray-300);
 }
 
 .btn--link {
