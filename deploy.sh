@@ -113,9 +113,23 @@ echo "=========================================="
 echo -e "${GREEN}✅ Deployment Complete!${NC}"
 echo "=========================================="
 echo ""
+
+# Log deployment
+if [ -f "./scripts/deploy-log.sh" ]; then
+    chmod +x ./scripts/deploy-log.sh 2>/dev/null || true
+    ./scripts/deploy-log.sh "Deploy via deploy.sh" 2>/dev/null || true
+fi
+
+# Update file integrity baseline
+if [ -f "./scripts/file-monitor.sh" ]; then
+    chmod +x ./scripts/file-monitor.sh 2>/dev/null || true
+    ./scripts/file-monitor.sh baseline 2>/dev/null || true
+fi
+
 echo "🌐 Website: https://vahidrajabloo.com"
 echo "🌐 App:     https://app.vahidrajabloo.com"
 echo ""
 echo "Deployed commit:"
 git log -1 --oneline
 echo ""
+
