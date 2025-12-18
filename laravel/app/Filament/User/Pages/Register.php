@@ -6,6 +6,8 @@ use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Component;
 use Filament\Pages\Auth\Register as BaseRegister;
+use Filament\Actions\Action;
+use Illuminate\Support\HtmlString;
 
 class Register extends BaseRegister
 {
@@ -38,4 +40,14 @@ class Register extends BaseRegister
             ->required()
             ->default(User::ROLE_DISABLED_USER);
     }
+
+    public function getSubheading(): string|HtmlString|null
+    {
+        return new HtmlString(
+            '<a href="https://vahidrajabloo.com" class="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">' .
+            '← Back to Website' .
+            '</a>'
+        );
+    }
 }
+
