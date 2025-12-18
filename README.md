@@ -75,6 +75,18 @@ docker-compose exec laravel php artisan migrate
 | Points | Point transactions |
 | Wallet | Wallet deposits/withdrawals |
 | Settings | System configuration |
+| WordPress | SSO link to WordPress admin |
+
+---
+
+## 👤 User Dashboard Features
+
+| Feature | Description |
+|---------|-------------|
+| MyProjectResource | View user's projects |
+| MyWalletResource | Wallet transactions |
+| MyPointsResource | Points history |
+| MyIncomeResource | Income history |
 
 ---
 

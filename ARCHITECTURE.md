@@ -92,22 +92,27 @@
 | Points | Transaction management |
 | Wallet | Deposits/withdrawals |
 | Settings | System configuration |
+| WordPress Admin | SSO link to WordPress dashboard |
 
 ---
 
 ## 👤 User Dashboard Features
 
+### Authentication
 | Feature | Description |
 |---------|-------------|
 | Registration | With role selection (no admin) |
 | Login | Email/password |
 | Password Reset | Email-based |
 | Profile | Edit personal info |
-| Welcome Widget | Personalized greeting |
-| My Projects | View user's own projects |
-| My Wallet | View wallet transactions + balance widget |
-| My Points | View points history + balance widget |
-| My Incomes | View income history |
+
+### Filament Resources (4)
+| Resource | Description |
+|----------|-------------|
+| MyProjectResource | View user's own projects |
+| MyWalletResource | View wallet transactions + balance widget |
+| MyPointsResource | View points history + balance widget |
+| MyIncomeResource | View income history |
 
 ---
 
