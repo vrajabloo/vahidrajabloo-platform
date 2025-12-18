@@ -5,23 +5,32 @@
  */
 
 /* ==========================================================================
-   Header Styles
+   Header Styles - Floating Header
    ========================================================================== */
 .site-header {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    top: var(--spacing-md);
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - var(--spacing-xl) * 2);
+    max-width: var(--container-max-width);
     z-index: 1000;
-    background: var(--color-secondary);
-    border-bottom: 1px solid var(--color-gray-200);
-    transition: box-shadow var(--transition-base);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-base);
 }
 
 .site-header.scrolled {
-    box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow-xl);
 }
 
 .header-inner {
-    padding: var(--spacing-md) 0;
+    padding: var(--spacing-sm) var(--spacing-xl);
 }
 
 .header-logo a {
@@ -36,39 +45,197 @@
 
 .site-title {
     font-size: var(--font-size-xl);
-    font-weight: 700;
-    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
 }
 
-/* Navigation Menu */
+/* Navigation Menu - Modern Beautiful Style */
 .nav-menu {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xl);
+    gap: var(--spacing-xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: nowrap;
+}
+
+.nav-menu>li {
+    position: relative;
+    list-style: none;
 }
 
 .nav-menu li a {
-    font-size: var(--font-size-base);
-    font-weight: 500;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    position: relative;
+    display: block;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-base);
+}
+
+/* Hover effect - pill background */
+.nav-menu>li>a:hover {
+    background: var(--color-gray-100);
     color: var(--color-primary);
-    padding: var(--spacing-sm) 0;
+}
+
+/* Current/Active menu item */
+.nav-menu>li.current-menu-item>a,
+.nav-menu>li.current_page_item>a {
+    background: var(--color-primary);
+    color: #FFFFFF;
+}
+
+.nav-menu>li.current-menu-item>a:hover,
+.nav-menu>li.current_page_item>a:hover {
+    background: var(--color-primary-dark);
+}
+
+/* Remove underline effect - using pill now */
+.nav-menu>li>a::after {
+    display: none;
+}
+
+/* Parent menu item with children - arrow indicator */
+.nav-menu>li.menu-item-has-children>a {
+    padding-right: calc(var(--spacing-md) + 12px);
+}
+
+.nav-menu>li.menu-item-has-children>a::before {
+    content: '';
+    position: absolute;
+    right: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    transition: transform var(--transition-fast);
+}
+
+.nav-menu>li.menu-item-has-children:hover>a::before {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Dropdown Submenu - Clean Modern Style */
+.nav-menu .sub-menu {
+    display: none !important;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: #FFFFFF;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-xs);
+    z-index: 1000;
+    list-style: none;
+    margin: 0;
+    padding-top: calc(var(--spacing-xs) + 8px);
+    /* Visual padding + bridge space */
+    border: 1px solid var(--color-border);
+    transition: opacity var(--transition-fast), visibility var(--transition-fast), transform var(--transition-fast);
+    transform: translateY(8px);
+}
+
+/* Invisible hover bridge - prevents submenu from closing */
+.nav-menu .sub-menu::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: transparent;
+}
+
+/* Show submenu on hover with smooth animation */
+.nav-menu>li:hover>.sub-menu {
+    display: block !important;
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nav-menu .sub-menu li {
+    margin: 0;
     position: relative;
 }
 
-.nav-menu li a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--color-primary);
-    transition: width var(--transition-fast);
+/* Submenu item links - SUBTLE GRAY HOVER, NOT BLUE */
+.nav-menu .sub-menu li a {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-weight: var(--font-weight-normal);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-body);
+    white-space: nowrap;
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast), color var(--transition-fast);
+    display: block;
+    background: transparent;
 }
 
-.nav-menu li a:hover::after,
-.nav-menu li.current-menu-item a::after {
-    width: 100%;
+/* FIXED: Subtle gray background on hover, NOT blue */
+.nav-menu .sub-menu li a:hover {
+    background: var(--color-gray-100);
+    color: var(--color-text-primary);
+}
+
+/* Nested Submenu (level 3+) - Opens to the right cleanly */
+.nav-menu .sub-menu .sub-menu {
+    top: -8px;
+    left: 100%;
+    padding-left: calc(var(--spacing-xs) + 8px);
+    /* Visual + bridge space */
+    padding-top: var(--spacing-xs);
+    margin-left: 0;
+    margin-top: 0;
+    transform: translateX(8px);
+}
+
+/* Invisible hover bridge for nested submenu */
+.nav-menu .sub-menu .sub-menu::before {
+    top: 0;
+    left: -12px;
+    right: auto;
+    width: 12px;
+    height: 100%;
+}
+
+/* Show nested submenu on hover */
+.nav-menu .sub-menu li:hover>.sub-menu {
+    display: block !important;
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Arrow indicator for nested submenu items */
+.nav-menu .sub-menu li.menu-item-has-children>a {
+    padding-right: calc(var(--spacing-md) + 16px);
+}
+
+.nav-menu .sub-menu li.menu-item-has-children>a::after {
+    content: '›';
+    position: absolute;
+    right: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast);
+}
+
+.nav-menu .sub-menu li.menu-item-has-children:hover>a::after {
+    color: var(--color-text-primary);
 }
 
 /* Mobile Menu Toggle */
@@ -107,7 +274,7 @@
 .mobile-nav {
     display: none;
     background: var(--color-secondary);
-    border-top: 1px solid var(--color-gray-200);
+    border-top: 1px solid var(--color-border);
     padding: var(--spacing-lg) 0;
 }
 
@@ -120,14 +287,58 @@
 }
 
 .mobile-menu li {
-    border-bottom: 1px solid var(--color-gray-200);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .mobile-menu li a {
     display: block;
     padding: var(--spacing-md) 0;
     font-size: var(--font-size-lg);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
+}
+
+/* Mobile Submenus */
+.mobile-menu .sub-menu {
+    display: none;
+    padding-left: var(--spacing-lg);
+    background: var(--color-gray-50);
+    list-style: none;
+}
+
+.mobile-menu .sub-menu.active {
+    display: block;
+}
+
+.mobile-menu .sub-menu li {
+    border-bottom: 1px solid var(--color-gray-100);
+}
+
+.mobile-menu .sub-menu li:last-child {
+    border-bottom: none;
+}
+
+.mobile-menu .sub-menu li a {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    color: var(--color-text-body);
+    padding: var(--spacing-sm) 0;
+}
+
+.mobile-menu .menu-item-has-children>a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobile-menu .menu-item-has-children>a::after {
+    content: '+';
+    font-size: 1.5em;
+    font-weight: 300;
+    transition: transform var(--transition-fast);
+}
+
+.mobile-menu .menu-item-has-children.submenu-open>a::after {
+    content: '−';
 }
 
 .mobile-nav-actions {
@@ -140,9 +351,43 @@
     width: 100%;
 }
 
-@media (max-width: 768px) {
+/* Floating Header - Main Content Spacing */
+.site-main {
+    padding-top: 100px;
+    /* Space for floating header */
+}
+
+@media (max-width: 1024px) {
+
+    /* Hide desktop nav on tablet, show mobile toggle */
+    .primary-nav {
+        display: none;
+    }
+
     .mobile-menu-toggle {
         display: block;
+    }
+
+    .header-actions {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Floating header mobile adjustments */
+    .site-header {
+        top: var(--spacing-sm);
+        width: calc(100% - var(--spacing-md) * 2);
+        border-radius: var(--radius-lg);
+    }
+
+    .header-inner {
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+
+    .site-main {
+        padding-top: 80px;
     }
 }
 
@@ -166,7 +411,7 @@
 
 .hero-text {
     font-size: var(--font-size-lg);
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
     margin-bottom: var(--spacing-xl);
     max-width: 500px;
 }
@@ -277,12 +522,12 @@
 .newsletter-section .btn--primary {
     background: var(--color-secondary);
     color: var(--color-primary);
-    border-color: var(--color-secondary);
+    border: none;
 }
 
 .newsletter-section .btn--primary:hover {
     background: var(--color-gray-100);
-    border-color: var(--color-gray-100);
+    transform: translateY(-1px);
 }
 
 /* ==========================================================================
@@ -307,7 +552,7 @@
 }
 
 .footer-menu li a {
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
     font-size: var(--font-size-base);
 }
 
@@ -333,31 +578,34 @@
     height: 40px;
     border-radius: var(--radius-full);
     background: var(--color-gray-200);
-    transition: background var(--transition-fast);
+    color: var(--color-text-body);
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.social-link svg {
+    width: 20px;
+    height: 20px;
 }
 
 .social-link:hover {
     background: var(--color-primary);
-}
-
-.social-link:hover .social-icon {
-    filter: invert(1);
+    color: var(--color-secondary);
 }
 
 /* Footer Bottom */
 .footer-bottom {
     padding: var(--spacing-lg) 0;
-    border-top: 1px solid var(--color-gray-200);
+    border-top: 1px solid var(--color-border);
 }
 
 .copyright {
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
     font-size: var(--font-size-sm);
     margin: 0;
 }
 
 .footer-links a {
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
     font-size: var(--font-size-sm);
 }
 
@@ -395,7 +643,7 @@
 }
 
 .post-meta {
-    color: var(--color-gray-500);
+    color: var(--color-text-muted);
     font-size: var(--font-size-sm);
 }
 
@@ -440,7 +688,7 @@
     padding-left: var(--spacing-lg);
     margin: var(--spacing-xl) 0;
     font-style: italic;
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
 }
 
 /* Tags */
@@ -450,7 +698,7 @@
     background: var(--color-gray-100);
     border-radius: var(--radius-full);
     font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
 }
 
 .tag:hover {
@@ -465,7 +713,7 @@
 }
 
 .share-link {
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
 }
 
 /* Author Bio */
@@ -484,7 +732,7 @@
 }
 
 .author-description {
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
     margin: 0;
 }
 
@@ -506,12 +754,12 @@
 
 .nav-label {
     font-size: var(--font-size-sm);
-    color: var(--color-gray-500);
+    color: var(--color-text-muted);
     margin-bottom: var(--spacing-xs);
 }
 
 .nav-title {
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
 }
 
 /* ==========================================================================
@@ -534,7 +782,7 @@
 }
 
 .error-text {
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
     max-width: 500px;
     margin: 0 auto var(--spacing-xl);
 }
@@ -566,7 +814,7 @@
     padding: 0 var(--spacing-sm);
     border: 1px solid var(--color-gray-300);
     border-radius: var(--radius-sm);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
 }
 
 .pagination .page-numbers.current,

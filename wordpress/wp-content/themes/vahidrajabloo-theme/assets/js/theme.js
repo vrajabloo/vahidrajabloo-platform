@@ -42,8 +42,26 @@
             document.body.style.overflow = !isExpanded ? 'hidden' : '';
         });
 
-        // Close menu on link click
-        mobileNav.querySelectorAll('a').forEach(link => {
+        // Mobile submenu toggle
+        const mobileSubmenus = mobileNav.querySelectorAll('.menu-item-has-children');
+        mobileSubmenus.forEach(item => {
+            const link = item.querySelector(':scope > a');
+            const submenu = item.querySelector(':scope > .sub-menu');
+
+            if (link && submenu) {
+                link.addEventListener('click', function (e) {
+                    // Prevent navigation if has children
+                    e.preventDefault();
+
+                    // Toggle this submenu
+                    item.classList.toggle('submenu-open');
+                    submenu.classList.toggle('active');
+                });
+            }
+        });
+
+        // Close menu on link click (but not parent items)
+        mobileNav.querySelectorAll('.sub-menu a, a:not(.menu-item-has-children > a)').forEach(link => {
             link.addEventListener('click', function () {
                 mobileMenuToggle.classList.remove('active');
                 mobileNav.classList.remove('active');

@@ -14,29 +14,49 @@ Text Domain: vahidrajabloo-theme
 */
 
 /* ==========================================================================
-   CSS Variables - Design Tokens from Figma
+   CSS Variables - HaiChat Design System
    ========================================================================== */
 :root {
-    /* Brand Colors */
-    --color-primary: #1f609a;
-    /* Navy Blue - main brand color */
-    --color-secondary: #fcfefd;
-    /* Off White - background */
-    --color-accent: #069fa4;
-    /* Dark Teal - accent/CTA */
-    --color-accent-light: #5ec0c1;
-    /* Teal - hover states */
-    --color-background-alt: #d3effa;
-    /* Light Blue - sections background */
+    /* Brand Colors - HaiChat Palette */
+    --color-primary: #4361EE;
+    /* Bright Blue - main brand color */
+    --color-primary-dark: #3651D4;
+    /* Darker Blue - hover states */
+    --color-primary-light: #6B7FFF;
+    /* Light Blue - accents */
+    --color-secondary: #FFFFFF;
+    /* White - background */
+    --color-accent: #7C3AED;
+    /* Purple - decorative accent */
+    --color-accent-light: #22D3EE;
+    /* Cyan - gradient accent */
+    --color-background-alt: #F8FAFC;
+    /* Light Gray - sections background */
+    --color-background-dark: #1E293B;
+    /* Dark Navy - footer, dark sections */
+
+    /* Text Colors */
+    --color-text-primary: #0F172A;
+    /* Dark Navy - headings */
+    --color-text-body: #475569;
+    /* Slate Gray - body text */
+    --color-text-muted: #94A3B8;
+    /* Light Slate - muted text */
 
     /* Gray Scale */
-    --color-gray-100: #F8F8F8;
-    --color-gray-200: #F2F2F2;
-    --color-gray-300: #E5E5E5;
-    --color-gray-400: #CCCCCC;
-    --color-gray-500: #999999;
-    --color-gray-600: #666666;
-    --color-gray-700: #333333;
+    --color-gray-50: #F8FAFC;
+    --color-gray-100: #F1F5F9;
+    --color-gray-200: #E2E8F0;
+    --color-gray-300: #CBD5E1;
+    --color-gray-400: #94A3B8;
+    --color-gray-500: #64748B;
+    --color-gray-600: #475569;
+    --color-gray-700: #334155;
+    --color-gray-800: #1E293B;
+    --color-gray-900: #0F172A;
+
+    /* Border */
+    --color-border: #E2E8F0;
 
     /* Typography */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -46,10 +66,16 @@ Text Domain: vahidrajabloo-theme
     --font-size-lg: 1.125rem;
     --font-size-xl: 1.25rem;
     --font-size-2xl: 1.5rem;
-    --font-size-3xl: 2rem;
+    --font-size-3xl: 1.75rem;
     --font-size-4xl: 2.5rem;
-    --font-size-5xl: 3rem;
-    --font-size-6xl: 3.75rem;
+    --font-size-5xl: 3.5rem;
+    --font-size-6xl: 4rem;
+
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
 
     /* Spacing */
     --spacing-xs: 0.25rem;
@@ -71,15 +97,17 @@ Text Domain: vahidrajabloo-theme
     --transition-base: 300ms ease;
     --transition-slow: 500ms ease;
 
-    /* Shadows */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    /* Shadows - HaiChat Style */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.12);
 
-    /* Border Radius */
-    --radius-sm: 0.25rem;
-    --radius-md: 0.5rem;
+    /* Border Radius - HaiChat Style (more rounded) */
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
     --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
     --radius-full: 9999px;
 }
 
@@ -105,7 +133,7 @@ body {
     font-family: var(--font-family);
     font-size: var(--font-size-base);
     line-height: 1.6;
-    color: var(--color-primary);
+    color: var(--color-text-body);
     background-color: var(--color-secondary);
 }
 
@@ -122,7 +150,12 @@ a {
 }
 
 a:hover {
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
+}
+
+/* Prevent global a:hover from affecting buttons */
+a.btn:hover {
+    color: inherit;
 }
 
 ul,
@@ -146,8 +179,9 @@ h3,
 h4,
 h5,
 h6 {
-    font-weight: 700;
+    font-weight: var(--font-weight-bold);
     line-height: 1.2;
+    color: var(--color-text-primary);
     margin-bottom: var(--spacing-md);
 }
 
@@ -181,7 +215,7 @@ p {
 
 .tagline {
     font-size: var(--font-size-sm);
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--color-accent);
@@ -281,45 +315,51 @@ p {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-sm) var(--spacing-lg);
+    padding: 0.75rem 1.5rem;
     font-size: var(--font-size-base);
-    font-weight: 500;
-    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-full);
     transition: all var(--transition-fast);
     white-space: nowrap;
+    box-shadow: var(--shadow-sm);
 }
 
 .btn--primary {
     background-color: var(--color-primary);
-    color: var(--color-secondary);
-    border: 2px solid var(--color-primary);
+    color: #FFFFFF;
+    border: none;
 }
 
-.btn--primary:hover {
-    background-color: var(--color-accent-light);
-    border-color: var(--color-accent-light);
-    color: var(--color-secondary);
+.btn--primary:hover,
+a.btn--primary:hover {
+    background-color: var(--color-primary-dark);
+    color: #FFFFFF !important;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
 }
 
 .btn--secondary {
     background-color: transparent;
-    color: var(--color-primary);
-    border: 2px solid var(--color-primary);
+    color: var(--color-text-primary);
+    border: 2px solid var(--color-border);
+    box-shadow: none;
 }
 
 .btn--secondary:hover {
     background-color: var(--color-primary);
-    color: var(--color-secondary);
+    color: #FFFFFF;
+    border-color: var(--color-primary);
 }
 
 .btn--link {
     padding: 0;
     color: var(--color-primary);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
+    box-shadow: none;
 }
 
 .btn--link:hover {
-    color: var(--color-gray-600);
+    color: var(--color-primary-dark);
 }
 
 /* ==========================================================================
@@ -350,7 +390,7 @@ p {
 .card__category {
     font-size: var(--font-size-sm);
     color: var(--color-accent);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     margin-bottom: var(--spacing-sm);
 }
 
@@ -360,7 +400,7 @@ p {
 }
 
 .card__text {
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
     font-size: var(--font-size-base);
 }
 
@@ -382,7 +422,7 @@ p {
 }
 
 .feature-card__text {
-    color: var(--color-gray-600);
+    color: var(--color-text-body);
     font-size: var(--font-size-base);
 }
 
@@ -409,7 +449,7 @@ p {
 }
 
 .form-input::placeholder {
-    color: var(--color-gray-500);
+    color: var(--color-text-muted);
 }
 
 /* Newsletter Form */

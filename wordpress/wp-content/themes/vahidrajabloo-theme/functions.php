@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Theme Constants
-define( 'VAHIDRAJABLOO_THEME_VERSION', '1.0.0' );
+define( 'VAHIDRAJABLOO_THEME_VERSION', '1.5.5' );
 define( 'VAHIDRAJABLOO_THEME_PATH', get_template_directory() );
 define( 'VAHIDRAJABLOO_THEME_URL', get_template_directory_uri() );
 define( 'VAHIDRAJABLOO_THEME_ASSETS_URL', VAHIDRAJABLOO_THEME_URL . '/assets/' );
@@ -41,7 +41,9 @@ function vahidrajabloo_theme_setup() {
     // Register Navigation Menus
     register_nav_menus( array(
         'primary'   => esc_html__( 'Primary Menu', 'vahidrajabloo-theme' ),
-        'footer'    => esc_html__( 'Footer Menu', 'vahidrajabloo-theme' ),
+        'footer'    => esc_html__( 'Footer Menu 1', 'vahidrajabloo-theme' ),
+        'footer-2'  => esc_html__( 'Footer Menu 2', 'vahidrajabloo-theme' ),
+        'footer-3'  => esc_html__( 'Footer Menu 3', 'vahidrajabloo-theme' ),
     ));
 
     // HTML5 support
@@ -367,7 +369,7 @@ function vahidrajabloo_customize_register( $wp_customize ) {
     ));
 
     // Social Links
-    $social_networks = array( 'facebook', 'twitter', 'instagram', 'linkedin', 'youtube' );
+    $social_networks = array( 'facebook', 'twitter', 'instagram', 'linkedin', 'youtube', 'wikipedia' );
     foreach ( $social_networks as $network ) {
         $wp_customize->add_setting( "footer_social_{$network}", array(
             'default'           => '',
@@ -382,38 +384,38 @@ function vahidrajabloo_customize_register( $wp_customize ) {
 
     // === COLORS SECTION ===
     $wp_customize->add_setting( 'theme_primary_color', array(
-        'default'           => '#1f609a',
+        'default'           => '#4361EE',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_primary_color', array(
-        'label'   => __( 'Primary Color (Navy Blue)', 'vahidrajabloo-theme' ),
+        'label'   => __( 'Primary Color (Blue)', 'vahidrajabloo-theme' ),
         'section' => 'colors',
     )));
 
     $wp_customize->add_setting( 'theme_accent_color', array(
-        'default'           => '#069fa4',
+        'default'           => '#7C3AED',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_accent_color', array(
-        'label'   => __( 'Accent Color (Teal)', 'vahidrajabloo-theme' ),
+        'label'   => __( 'Accent Color (Purple)', 'vahidrajabloo-theme' ),
         'section' => 'colors',
     )));
 
     $wp_customize->add_setting( 'theme_accent_light_color', array(
-        'default'           => '#5ec0c1',
+        'default'           => '#22D3EE',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_accent_light_color', array(
-        'label'   => __( 'Accent Light Color', 'vahidrajabloo-theme' ),
+        'label'   => __( 'Accent Light Color (Cyan)', 'vahidrajabloo-theme' ),
         'section' => 'colors',
     )));
 
     $wp_customize->add_setting( 'theme_background_alt_color', array(
-        'default'           => '#d3effa',
+        'default'           => '#F8FAFC',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_background_alt_color', array(
-        'label'   => __( 'Background Alt Color (Light Blue)', 'vahidrajabloo-theme' ),
+        'label'   => __( 'Background Alt Color (Light Gray)', 'vahidrajabloo-theme' ),
         'section' => 'colors',
     )));
 }
@@ -423,10 +425,10 @@ add_action( 'customize_register', 'vahidrajabloo_customize_register' );
  * Output Customizer CSS
  */
 function vahidrajabloo_customizer_css() {
-    $primary_color = get_theme_mod( 'theme_primary_color', '#1f609a' );
-    $accent_color = get_theme_mod( 'theme_accent_color', '#069fa4' );
-    $accent_light_color = get_theme_mod( 'theme_accent_light_color', '#5ec0c1' );
-    $background_alt_color = get_theme_mod( 'theme_background_alt_color', '#d3effa' );
+    $primary_color = get_theme_mod( 'theme_primary_color', '#4361EE' );
+    $accent_color = get_theme_mod( 'theme_accent_color', '#7C3AED' );
+    $accent_light_color = get_theme_mod( 'theme_accent_light_color', '#22D3EE' );
+    $background_alt_color = get_theme_mod( 'theme_background_alt_color', '#F8FAFC' );
     
     ?>
     <style type="text/css">
