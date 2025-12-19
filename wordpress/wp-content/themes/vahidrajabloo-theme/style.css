@@ -976,3 +976,22 @@ a.btn--primary:hover {
 .links-footer p {
     margin: 0;
 }
+
+/* ==========================================================================
+   Homepage - Feature Card Links
+   ========================================================================== */
+.feature-card--linked {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all var(--transition-fast, 150ms) ease;
+}
+
+.feature-card--linked:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card--linked:hover .feature-card__title {
+    color: var(--color-primary, #4361EE);
+}

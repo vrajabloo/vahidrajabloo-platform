@@ -64,8 +64,16 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
         </div>
         
         <div class="features-grid grid grid--4">
-            <?php for ( $i = 1; $i <= 4; $i++ ) : ?>
-                <div class="feature-card">
+            <?php for ( $i = 1; $i <= 4; $i++ ) : 
+                $feature_link = get_theme_mod( "feature_{$i}_link", '' );
+                $has_link = ! empty( $feature_link );
+            ?>
+                <?php if ( $has_link ) : ?>
+                    <a href="<?php echo esc_url( $feature_link ); ?>" class="feature-card feature-card--linked">
+                <?php else : ?>
+                    <div class="feature-card">
+                <?php endif; ?>
+                    
                     <?php
                     $icon = get_theme_mod( "feature_{$i}_icon", '' );
                     if ( $icon ) {
@@ -80,7 +88,12 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
                     <p class="feature-card__text">
                         <?php echo esc_html( get_theme_mod( "feature_{$i}_text", 'Feature description goes here.' ) ); ?>
                     </p>
-                </div>
+                    
+                <?php if ( $has_link ) : ?>
+                    </a>
+                <?php else : ?>
+                    </div>
+                <?php endif; ?>
             <?php endfor; ?>
         </div>
     </div>

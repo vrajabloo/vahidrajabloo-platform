@@ -315,6 +315,17 @@ function vahidrajabloo_customize_register( $wp_customize ) {
             'label'   => sprintf( __( 'Feature %d Icon', 'vahidrajabloo-theme' ), $i ),
             'section' => 'vahidrajabloo_features',
         )));
+
+        // Feature Link URL
+        $wp_customize->add_setting( "feature_{$i}_link", array(
+            'default'           => '',
+            'sanitize_callback' => 'esc_url_raw',
+        ));
+        $wp_customize->add_control( "feature_{$i}_link", array(
+            'label'   => sprintf( __( 'Feature %d Link URL', 'vahidrajabloo-theme' ), $i ),
+            'section' => 'vahidrajabloo_features',
+            'type'    => 'url',
+        ));
     }
 
     // === NEWSLETTER SECTION ===
