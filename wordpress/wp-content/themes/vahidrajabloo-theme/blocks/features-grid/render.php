@@ -29,8 +29,15 @@ $wrapper_attributes = get_block_wrapper_attributes([
         
         <?php if (!empty($features)) : ?>
             <div class="vr-features-grid__grid">
-                <?php foreach ($features as $feature) : ?>
-                    <div class="vr-features-grid__item">
+                <?php foreach ($features as $feature) : 
+                    $has_link = !empty($feature['link']);
+                ?>
+                    <?php if ($has_link) : ?>
+                        <a href="<?php echo esc_url($feature['link']); ?>" class="vr-features-grid__item vr-features-grid__item--linked">
+                    <?php else : ?>
+                        <div class="vr-features-grid__item">
+                    <?php endif; ?>
+                        
                         <?php if (!empty($feature['icon'])) : ?>
                             <span class="vr-features-grid__icon"><?php echo esc_html($feature['icon']); ?></span>
                         <?php endif; ?>
@@ -42,7 +49,12 @@ $wrapper_attributes = get_block_wrapper_attributes([
                         <?php if (!empty($feature['description'])) : ?>
                             <p class="vr-features-grid__item-description"><?php echo esc_html($feature['description']); ?></p>
                         <?php endif; ?>
-                    </div>
+                    
+                    <?php if ($has_link) : ?>
+                        </a>
+                    <?php else : ?>
+                        </div>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>

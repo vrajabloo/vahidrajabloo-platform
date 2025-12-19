@@ -29,17 +29,20 @@
                 {
                     "icon": "⭐",
                     "title": "Feature One",
-                    "description": "Brief description of this feature."
+                    "description": "Brief description of this feature.",
+                    "link": ""
                 },
                 {
                     "icon": "🎯",
                     "title": "Feature Two",
-                    "description": "Brief description of this feature."
+                    "description": "Brief description of this feature.",
+                    "link": ""
                 },
                 {
                     "icon": "💡",
                     "title": "Feature Three",
-                    "description": "Brief description of this feature."
+                    "description": "Brief description of this feature.",
+                    "link": ""
                 }
             ]
         },

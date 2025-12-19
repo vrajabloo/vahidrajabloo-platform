@@ -24,7 +24,7 @@
 
             const addFeature = () => {
                 setAttributes({
-                    features: [...features, { icon: '✨', title: 'New Feature', description: 'Description here.' }]
+                    features: [...features, { icon: '✨', title: 'New Feature', description: 'Description here.', link: '' }]
                 });
             };
 
@@ -81,6 +81,11 @@
                                 label: 'Description',
                                 value: feature.description,
                                 onChange: (value) => updateFeature(index, 'description', value)
+                            }),
+                            wp.element.createElement(TextControl, {
+                                label: 'Link URL (optional)',
+                                value: feature.link || '',
+                                onChange: (value) => updateFeature(index, 'link', value)
                             }),
                             wp.element.createElement(Button, {
                                 variant: 'link',

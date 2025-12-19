@@ -92,3 +92,22 @@
         grid-template-columns: 1fr !important;
     }
 }
+
+/* Linked Features */
+.vr-features-grid__item--linked {
+    text-decoration: none;
+    color: inherit;
+    padding: var(--spacing-lg, 24px);
+    border-radius: var(--radius-lg, 16px);
+    transition: all var(--transition-fast, 150ms);
+}
+
+.vr-features-grid__item--linked:hover {
+    background-color: var(--color-gray-50, #f8fafc);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.vr-features-grid__item--linked:hover .vr-features-grid__item-title {
+    color: var(--color-primary, #4361EE);
+}
