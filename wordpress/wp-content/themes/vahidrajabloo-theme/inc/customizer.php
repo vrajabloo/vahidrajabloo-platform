@@ -14,6 +14,34 @@ if (!defined('ABSPATH')) {
  */
 function vahidrajabloo_customize_register($wp_customize) {
     
+    // Home Page Products Section
+    $wp_customize->add_section('vahidrajabloo_home_products', [
+        'title'    => __('Home Page - Products Section', 'vahidrajabloo-theme'),
+        'priority' => 30,
+    ]);
+
+    // Products Section Tagline
+    $wp_customize->add_setting('products_tagline', [
+        'default'           => 'Products',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('products_tagline', [
+        'label'   => __('Section Tagline', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_home_products',
+        'type'    => 'text',
+    ]);
+
+    // Products Section Title
+    $wp_customize->add_setting('products_title', [
+        'default'           => 'Our Products & Services',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('products_title', [
+        'label'   => __('Section Title', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_home_products',
+        'type'    => 'text',
+    ]);
+
     // Contact Info Section
     $wp_customize->add_section('vahidrajabloo_contact_info', [
         'title'    => __('Contact Information', 'vahidrajabloo-theme'),

@@ -51,37 +51,79 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
     </div>
 </section>
 
-<!-- Features Section -->
-<section class="features-section section section--gray" id="features">
+<!-- Products Section -->
+<section class="products-showcase section section--gray" id="products">
     <div class="container">
         <div class="section-header text-center">
             <span class="tagline">
-                <?php echo esc_html( get_theme_mod( 'features_tagline', 'Features' ) ); ?>
+                <?php echo esc_html( get_theme_mod( 'products_tagline', 'Products' ) ); ?>
             </span>
             <h2 class="section-title">
-                <?php echo esc_html( get_theme_mod( 'features_title', 'What we build and why it matters' ) ); ?>
+                <?php echo esc_html( get_theme_mod( 'products_title', 'Our Products & Services' ) ); ?>
             </h2>
         </div>
         
-        <div class="features-grid grid grid--4">
-            <?php for ( $i = 1; $i <= 4; $i++ ) : ?>
-                <div class="feature-card">
-                    <?php
-                    $icon = get_theme_mod( "feature_{$i}_icon", '' );
-                    if ( $icon ) {
-                        echo '<img src="' . esc_url( $icon ) . '" alt="" class="feature-card__icon">';
-                    } else {
-                        echo '<div class="feature-card__icon feature-icon-placeholder"></div>';
-                    }
-                    ?>
-                    <h3 class="feature-card__title">
-                        <?php echo esc_html( get_theme_mod( "feature_{$i}_title", "Feature {$i}" ) ); ?>
-                    </h3>
-                    <p class="feature-card__text">
-                        <?php echo esc_html( get_theme_mod( "feature_{$i}_text", 'Feature description goes here.' ) ); ?>
-                    </p>
-                </div>
-            <?php endfor; ?>
+        <div class="products-grid grid grid--3">
+            <?php
+            $products_query = new WP_Query([
+                'post_type'      => 'product',
+                'posts_per_page' => 6,
+                'post_status'    => 'publish',
+                'orderby'        => 'menu_order date',
+                'order'          => 'ASC',
+            ]);
+            
+            if ( $products_query->have_posts() ) :
+                while ( $products_query->have_posts() ) : $products_query->the_post();
+                    $price = get_post_meta( get_the_ID(), '_product_price', true );
+                    $currency = get_post_meta( get_the_ID(), '_product_currency', true ) ?: 'تومان';
+                    $link = get_post_meta( get_the_ID(), '_product_link', true );
+            ?>
+                <article class="product-card card">
+                    <?php if ( has_post_thumbnail() ) : ?>
+                        <a href="<?php the_permalink(); ?>">
+                            <?php the_post_thumbnail( 'medium_large', [ 'class' => 'card__image' ] ); ?>
+                        </a>
+                    <?php else : ?>
+                        <div class="card__image card__image--placeholder"></div>
+                    <?php endif; ?>
+                    
+                    <div class="card__content">
+                        <?php
+                        $categories = get_the_terms( get_the_ID(), 'product_category' );
+                        if ( $categories && ! is_wp_error( $categories ) ) :
+                        ?>
+                            <span class="card__category"><?php echo esc_html( $categories[0]->name ); ?></span>
+                        <?php endif; ?>
+                        
+                        <h3 class="card__title">
+                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                        </h3>
+                        
+                        <?php if ( $price ) : ?>
+                            <span class="product-card__price"><?php echo esc_html( $price . ' ' . $currency ); ?></span>
+                        <?php endif; ?>
+                        
+                        <?php if ( has_excerpt() ) : ?>
+                            <p class="card__text"><?php echo wp_trim_words( get_the_excerpt(), 12 ); ?></p>
+                        <?php endif; ?>
+                        
+                        <a href="<?php the_permalink(); ?>" class="btn btn--link">View Details →</a>
+                    </div>
+                </article>
+            <?php
+                endwhile;
+                wp_reset_postdata();
+            else :
+            ?>
+                <p class="no-posts">No products found. <a href="<?php echo admin_url('post-new.php?post_type=product'); ?>">Add your first product</a></p>
+            <?php endif; ?>
+        </div>
+        
+        <div class="section-footer text-center mt-xl">
+            <a href="<?php echo esc_url( get_post_type_archive_link( 'product' ) ); ?>" class="btn btn--secondary">
+                View All Products
+            </a>
         </div>
     </div>
 </section>
