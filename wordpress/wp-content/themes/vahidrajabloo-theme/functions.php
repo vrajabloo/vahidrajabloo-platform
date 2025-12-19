@@ -11,10 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Theme Constants
-define( 'VAHIDRAJABLOO_THEME_VERSION', '1.5.5' );
+define( 'VAHIDRAJABLOO_THEME_VERSION', '1.6.0' );
 define( 'VAHIDRAJABLOO_THEME_PATH', get_template_directory() );
 define( 'VAHIDRAJABLOO_THEME_URL', get_template_directory_uri() );
 define( 'VAHIDRAJABLOO_THEME_ASSETS_URL', VAHIDRAJABLOO_THEME_URL . '/assets/' );
+
+// Include custom blocks
+require_once VAHIDRAJABLOO_THEME_PATH . '/inc/blocks.php';
 
 /**
  * Theme Setup

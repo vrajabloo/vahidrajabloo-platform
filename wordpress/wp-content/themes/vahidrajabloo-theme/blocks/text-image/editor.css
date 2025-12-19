@@ -1,0 +1,10 @@
+/* Text + Image Block Editor Styles */
+.vr-text-image {
+    padding: 32px;
+    background-color: #fafafa;
+    border-radius: 8px;
+}
+
+.vr-text-image__container {
+    gap: 32px;
+}

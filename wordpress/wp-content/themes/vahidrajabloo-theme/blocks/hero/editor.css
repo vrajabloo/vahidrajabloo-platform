@@ -1,0 +1,14 @@
+/* Hero Block Editor Styles */
+.vr-hero {
+    padding: 40px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.vr-hero__container {
+    max-width: 100%;
+}
+
+.vr-hero__title {
+    font-size: 2rem;
+}

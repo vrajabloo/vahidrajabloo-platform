@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "vahidrajabloo/text-image",
+    "version": "1.0.0",
+    "title": "Text with Image",
+    "category": "vahidrajabloo",
+    "icon": "align-pull-left",
+    "description": "A section with text content and an image, side by side.",
+    "keywords": [
+        "text",
+        "image",
+        "content",
+        "split"
+    ],
+    "textdomain": "vahidrajabloo-theme",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "Section Title"
+        },
+        "description": {
+            "type": "string",
+            "default": "Add your description here."
+        },
+        "buttonText": {
+            "type": "string",
+            "default": ""
+        },
+        "buttonUrl": {
+            "type": "string",
+            "default": "#"
+        },
+        "imageUrl": {
+            "type": "string",
+            "default": ""
+        },
+        "imageId": {
+            "type": "number",
+            "default": 0
+        },
+        "imageAlt": {
+            "type": "string",
+            "default": ""
+        },
+        "imagePosition": {
+            "type": "string",
+            "default": "right"
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ]
+    },
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./editor.css",
+    "style": "file:./style.css",
+    "render": "file:./render.php"
+}

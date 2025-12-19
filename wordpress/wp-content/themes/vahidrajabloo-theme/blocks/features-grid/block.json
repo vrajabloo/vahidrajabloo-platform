@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "vahidrajabloo/features-grid",
+    "version": "1.0.0",
+    "title": "Features Grid",
+    "category": "vahidrajabloo",
+    "icon": "grid-view",
+    "description": "A grid of features with icons, titles, and descriptions.",
+    "keywords": [
+        "features",
+        "grid",
+        "services",
+        "benefits"
+    ],
+    "textdomain": "vahidrajabloo-theme",
+    "attributes": {
+        "sectionTitle": {
+            "type": "string",
+            "default": ""
+        },
+        "sectionSubtitle": {
+            "type": "string",
+            "default": ""
+        },
+        "features": {
+            "type": "array",
+            "default": [
+                {
+                    "icon": "⭐",
+                    "title": "Feature One",
+                    "description": "Brief description of this feature."
+                },
+                {
+                    "icon": "🎯",
+                    "title": "Feature Two",
+                    "description": "Brief description of this feature."
+                },
+                {
+                    "icon": "💡",
+                    "title": "Feature Three",
+                    "description": "Brief description of this feature."
+                }
+            ]
+        },
+        "columns": {
+            "type": "number",
+            "default": 3
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ]
+    },
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./editor.css",
+    "style": "file:./style.css",
+    "render": "file:./render.php"
+}

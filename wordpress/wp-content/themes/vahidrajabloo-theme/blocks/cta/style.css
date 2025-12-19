@@ -1,0 +1,58 @@
+/* CTA Block Styles */
+.vr-cta {
+    padding: var(--spacing-lg, 80px) var(--spacing-container, 64px);
+    background-color: var(--color-gray-100, #f5f5f5);
+}
+
+.vr-cta--dark {
+    background-color: var(--color-text-primary, #000000);
+    color: #ffffff;
+}
+
+.vr-cta--dark .vr-cta__title,
+.vr-cta--dark .vr-cta__description {
+    color: #ffffff;
+}
+
+.vr-cta__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-md, 24px);
+}
+
+.vr-cta__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm, 16px);
+    max-width: 600px;
+}
+
+.vr-cta__title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-text-primary, #000000);
+    margin: 0;
+}
+
+.vr-cta__description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary, #666666);
+    margin: 0;
+}
+
+.vr-cta__action {
+    margin-top: var(--spacing-sm, 16px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .vr-cta {
+        padding: 64px 16px;
+    }
+}

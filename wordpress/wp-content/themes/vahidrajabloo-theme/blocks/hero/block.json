@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "vahidrajabloo/hero",
+    "version": "1.0.0",
+    "title": "Hero Section",
+    "category": "vahidrajabloo",
+    "icon": "superhero-alt",
+    "description": "A hero section with title, subtitle, buttons, and image.",
+    "keywords": [
+        "hero",
+        "banner",
+        "header",
+        "landing"
+    ],
+    "textdomain": "vahidrajabloo-theme",
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "Welcome to VahidRajabloo"
+        },
+        "subtitle": {
+            "type": "string",
+            "default": "Building inclusive solutions for a better world"
+        },
+        "primaryButtonText": {
+            "type": "string",
+            "default": "Get Started"
+        },
+        "primaryButtonUrl": {
+            "type": "string",
+            "default": "#"
+        },
+        "secondaryButtonText": {
+            "type": "string",
+            "default": "Learn More"
+        },
+        "secondaryButtonUrl": {
+            "type": "string",
+            "default": "#"
+        },
+        "imageUrl": {
+            "type": "string",
+            "default": ""
+        },
+        "imageId": {
+            "type": "number",
+            "default": 0
+        },
+        "imageAlt": {
+            "type": "string",
+            "default": ""
+        },
+        "alignment": {
+            "type": "string",
+            "default": "center"
+        },
+        "showSecondaryButton": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "color": {
+            "background": true,
+            "text": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        }
+    },
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./editor.css",
+    "style": "file:./style.css",
+    "render": "file:./render.php"
+}
