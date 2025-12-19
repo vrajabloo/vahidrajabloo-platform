@@ -863,3 +863,116 @@ a.btn--primary:hover {
 .related-products .section-title {
     margin-bottom: var(--spacing-2xl);
 }
+
+/* ==========================================================================
+   Links Page (Linktree-style)
+   ========================================================================== */
+.links-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    padding: var(--spacing-3xl) var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.links-container {
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+}
+
+.links-profile {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.links-profile__avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    margin-bottom: var(--spacing-md);
+}
+
+.links-profile__avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 0 auto var(--spacing-md);
+}
+
+.links-profile__name {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: white;
+    margin: 0 0 var(--spacing-sm);
+}
+
+.links-profile__bio {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--font-size-base);
+    margin: 0;
+}
+
+.links-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-2xl);
+}
+
+/* Style buttons/links inside content */
+.links-content .wp-block-button__link,
+.links-content a:not(.wp-block-button__link) {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+}
+
+.links-content .wp-block-button__link:hover,
+.links-content a:not(.wp-block-button__link):hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.links-social {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.links-social__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    transition: all var(--transition-fast);
+}
+
+.links-social__item:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.links-footer {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: var(--font-size-sm);
+}
+
+.links-footer p {
+    margin: 0;
+}
