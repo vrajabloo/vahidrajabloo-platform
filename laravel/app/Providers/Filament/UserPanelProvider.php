@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Filament\User\Pages\Register;
-use App\Filament\User\Pages\Login;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -29,7 +28,7 @@ class UserPanelProvider extends PanelProvider
         return $panel
             ->id('user')
             ->path('dashboard')
-            ->login(Login::class)
+            ->login()
             ->registration(Register::class)
             ->passwordReset()
             ->emailVerification()
@@ -38,16 +37,6 @@ class UserPanelProvider extends PanelProvider
                 'primary' => Color::Blue,
             ])
             ->brandName('👤 My Dashboard')
-            ->renderHook(
-                PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
-                fn () => Blade::render('
-                    <div class="text-center mt-4">
-                        <a href="https://app.vahidrajabloo.com/" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                            ← Back to Home
-                        </a>
-                    </div>
-                ')
-            )
             ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\\Filament\\User\\Resources')
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\\Filament\\User\\Pages')
@@ -58,6 +47,18 @@ class UserPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
             ])
+            ->renderHook(
+                PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+                fn () => Blade::render('<div class="text-center mt-4"><a href="https://vahidrajabloo.com" class="text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400">← Back to Website</a></div>')
+            )
+            ->renderHook(
+                PanelsRenderHook::AUTH_REGISTER_FORM_AFTER,
+                fn () => Blade::render('<div class="text-center mt-4"><a href="https://vahidrajabloo.com" class="text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400">← Back to Website</a></div>')
+            )
+            ->renderHook(
+                PanelsRenderHook::AUTH_PASSWORD_RESET_REQUEST_FORM_AFTER,
+                fn () => Blade::render('<div class="text-center mt-4"><a href="https://vahidrajabloo.com" class="text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400">← Back to Website</a></div>')
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -74,4 +75,5 @@ class UserPanelProvider extends PanelProvider
             ]);
     }
 }
+
 
