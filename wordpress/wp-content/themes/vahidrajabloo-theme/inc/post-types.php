@@ -50,7 +50,7 @@ function vahidrajabloo_register_product_cpt() {
         'show_in_rest'       => true, // Enable Gutenberg
     ];
 
-    register_post_type('product', $args);
+    register_post_type('vr_product', $args);
 }
 add_action('init', 'vahidrajabloo_register_product_cpt');
 
@@ -82,7 +82,7 @@ function vahidrajabloo_register_product_taxonomy() {
         'show_in_rest'      => true,
     ];
 
-    register_taxonomy('product_category', ['product'], $args);
+    register_taxonomy('product_category', ['vr_product'], $args);
 }
 add_action('init', 'vahidrajabloo_register_product_taxonomy');
 
@@ -94,7 +94,7 @@ function vahidrajabloo_add_product_meta_boxes() {
         'vahidrajabloo_product_details',
         __('Product Details', 'vahidrajabloo-theme'),
         'vahidrajabloo_product_details_callback',
-        'product',
+        'vr_product',
         'side',
         'high'
     );
@@ -160,4 +160,4 @@ function vahidrajabloo_save_product_meta($post_id) {
         update_post_meta($post_id, '_product_link_text', sanitize_text_field($_POST['product_link_text']));
     }
 }
-add_action('save_post_product', 'vahidrajabloo_save_product_meta');
+add_action('save_post_vr_product', 'vahidrajabloo_save_product_meta');

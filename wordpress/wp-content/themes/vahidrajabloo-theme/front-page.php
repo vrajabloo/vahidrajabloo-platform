@@ -66,7 +66,7 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
         <div class="products-grid grid grid--3">
             <?php
             $products_query = new WP_Query([
-                'post_type'      => 'product',
+                'post_type'      => 'vr_product',
                 'posts_per_page' => 6,
                 'post_status'    => 'publish',
                 'orderby'        => 'menu_order date',
@@ -116,12 +116,12 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
                 wp_reset_postdata();
             else :
             ?>
-                <p class="no-posts">No products found. <a href="<?php echo admin_url('post-new.php?post_type=product'); ?>">Add your first product</a></p>
+                <p class="no-posts">No products found. <a href="<?php echo admin_url('post-new.php?post_type=vr_product'); ?>">Add your first product</a></p>
             <?php endif; ?>
         </div>
         
         <div class="section-footer text-center mt-xl">
-            <a href="<?php echo esc_url( get_post_type_archive_link( 'product' ) ); ?>" class="btn btn--secondary">
+            <a href="<?php echo esc_url( get_post_type_archive_link( 'vr_product' ) ); ?>" class="btn btn--secondary">
                 View All Products
             </a>
         </div>
