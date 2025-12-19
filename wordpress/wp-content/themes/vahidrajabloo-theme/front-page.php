@@ -51,8 +51,43 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
     </div>
 </section>
 
+<!-- Features Section -->
+<section class="features-section section section--gray" id="features">
+    <div class="container">
+        <div class="section-header text-center">
+            <span class="tagline">
+                <?php echo esc_html( get_theme_mod( 'features_tagline', 'Features' ) ); ?>
+            </span>
+            <h2 class="section-title">
+                <?php echo esc_html( get_theme_mod( 'features_title', 'What we build and why it matters' ) ); ?>
+            </h2>
+        </div>
+        
+        <div class="features-grid grid grid--4">
+            <?php for ( $i = 1; $i <= 4; $i++ ) : ?>
+                <div class="feature-card">
+                    <?php
+                    $icon = get_theme_mod( "feature_{$i}_icon", '' );
+                    if ( $icon ) {
+                        echo '<img src="' . esc_url( $icon ) . '" alt="" class="feature-card__icon">';
+                    } else {
+                        echo '<div class="feature-card__icon feature-icon-placeholder"></div>';
+                    }
+                    ?>
+                    <h3 class="feature-card__title">
+                        <?php echo esc_html( get_theme_mod( "feature_{$i}_title", "Feature {$i}" ) ); ?>
+                    </h3>
+                    <p class="feature-card__text">
+                        <?php echo esc_html( get_theme_mod( "feature_{$i}_text", 'Feature description goes here.' ) ); ?>
+                    </p>
+                </div>
+            <?php endfor; ?>
+        </div>
+    </div>
+</section>
+
 <!-- Products Section -->
-<section class="products-showcase section section--gray" id="products">
+<section class="products-showcase section" id="products">
     <div class="container">
         <div class="section-header text-center">
             <span class="tagline">
