@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
 /**
  * Add customizer settings
  */
-function vahidrajabloo_customize_register($wp_customize) {
+function vahidrajabloo_additional_customizer_settings($wp_customize) {
     
     // Home Page Products Section
     $wp_customize->add_section('vahidrajabloo_home_products', [
@@ -142,4 +142,4 @@ function vahidrajabloo_customize_register($wp_customize) {
         'type'    => 'url',
     ]);
 }
-add_action('customize_register', 'vahidrajabloo_customize_register');
+add_action('customize_register', 'vahidrajabloo_additional_customizer_settings');
