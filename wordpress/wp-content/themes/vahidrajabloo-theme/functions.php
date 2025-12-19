@@ -18,6 +18,7 @@ define( 'VAHIDRAJABLOO_THEME_ASSETS_URL', VAHIDRAJABLOO_THEME_URL . '/assets/' )
 
 // Include custom blocks
 require_once VAHIDRAJABLOO_THEME_PATH . '/inc/blocks.php';
+require_once VAHIDRAJABLOO_THEME_PATH . '/inc/customizer.php';
 
 /**
  * Theme Setup

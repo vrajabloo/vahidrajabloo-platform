@@ -580,3 +580,174 @@ a.btn--primary:hover {
         display: none;
     }
 }
+
+/* ==========================================================================
+   Page Header Styles
+   ========================================================================== */
+.page-header {
+    padding: var(--spacing-4xl) 0 var(--spacing-3xl);
+    background-color: var(--color-gray-50);
+    text-align: center;
+}
+
+.page-header__title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-md);
+}
+
+.page-header__subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-body);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   Contact Page Styles
+   ========================================================================== */
+.contact-section {
+    padding: var(--spacing-4xl) 0;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: var(--spacing-3xl);
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-2xl);
+    }
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.contact-info__title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.contact-info__item {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+}
+
+.contact-info__icon {
+    font-size: 1.5rem;
+}
+
+.contact-info__item strong {
+    display: block;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.contact-info__item a,
+.contact-info__item span {
+    color: var(--color-text-body);
+    text-decoration: none;
+}
+
+.contact-info__item a:hover {
+    color: var(--color-primary);
+}
+
+.contact-info__social {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.contact-info__social a {
+    color: var(--color-text-body);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+}
+
+.contact-info__social a:hover {
+    color: var(--color-primary);
+}
+
+.contact-form {
+    background: var(--color-gray-50);
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-lg);
+}
+
+/* ==========================================================================
+   Gravity Forms Styling
+   ========================================================================== */
+.gform_wrapper.gravity-theme {
+    --gf-color-primary: var(--color-primary);
+}
+
+.gform_wrapper.gravity-theme .gfield_label {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+.gform_wrapper.gravity-theme input[type="text"],
+.gform_wrapper.gravity-theme input[type="email"],
+.gform_wrapper.gravity-theme input[type="tel"],
+.gform_wrapper.gravity-theme textarea,
+.gform_wrapper.gravity-theme select {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+    transition: border-color var(--transition-fast);
+}
+
+.gform_wrapper.gravity-theme input:focus,
+.gform_wrapper.gravity-theme textarea:focus,
+.gform_wrapper.gravity-theme select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+.gform_wrapper.gravity-theme .gform_button,
+.gform_wrapper.gravity-theme input[type="submit"] {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.gform_wrapper.gravity-theme .gform_button:hover,
+.gform_wrapper.gravity-theme input[type="submit"]:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* ==========================================================================
+   Block Canvas Template
+   ========================================================================== */
+.site-main--blocks {
+    padding: 0;
+}
+
+.site-main--blocks>.alignfull {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: none;
+}
