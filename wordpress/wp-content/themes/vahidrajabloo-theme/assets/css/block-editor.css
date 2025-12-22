@@ -15,15 +15,15 @@
 }
 
 .btn--primary {
-    background-color: #000000;
+    background-color: var(--color-primary, #4361EE);
     color: #ffffff;
     border: none;
 }
 
 .btn--secondary {
     background-color: transparent;
-    color: #000000;
-    border: 2px solid #e0e0e0;
+    color: var(--color-text-primary, #0F172A);
+    border: 2px solid var(--color-border, #e2e8f0);
 }
 
 /* Block placeholder backgrounds */

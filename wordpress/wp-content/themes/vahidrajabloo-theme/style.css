@@ -42,6 +42,7 @@ Text Domain: vahidrajabloo-theme
     /* Slate Gray - body text */
     --color-text-muted: #94A3B8;
     /* Light Slate - muted text */
+    --color-text-invert: #FFFFFF;
 
     /* Gray Scale */
     --color-gray-50: #F8FAFC;
@@ -83,32 +84,85 @@ Text Domain: vahidrajabloo-theme
     --spacing-md: 1rem;
     --spacing-lg: 1.5rem;
     --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
-    --spacing-3xl: 4rem;
-    --spacing-4xl: 6rem;
-    --spacing-5xl: 8rem;
+    --spacing-2xl: 2rem;
+    --spacing-3xl: 2.5rem;
+    --spacing-4xl: 3rem;
+    --spacing-5xl: 3rem;
 
     /* Layout */
     --container-max-width: 1280px;
     --container-padding: 1.5rem;
+    --header-height: 80px;
 
     /* Transitions */
     --transition-fast: 150ms ease;
     --transition-base: 300ms ease;
     --transition-slow: 500ms ease;
+    --transition-bounce: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
-    /* Shadows - HaiChat Style */
+    /* Shadows - Premium Layered Shadows */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-glow: 0 0 20px rgba(67, 97, 238, 0.3);
+    --shadow-primary: 0 10px 30px -5px rgba(67, 97, 238, 0.4);
+    --shadow-accent: 0 10px 30px -5px rgba(124, 58, 237, 0.4);
 
     /* Border Radius - HaiChat Style (more rounded) */
     --radius-sm: 0.5rem;
     --radius-md: 0.75rem;
     --radius-lg: 1rem;
     --radius-xl: 1.5rem;
+    --radius-2xl: 2rem;
     --radius-full: 9999px;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #4361EE 0%, #7C3AED 100%);
+    --gradient-accent: linear-gradient(135deg, #7C3AED 0%, #22D3EE 100%);
+    --gradient-dark: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+    --gradient-light: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+    --gradient-mesh: radial-gradient(at 80% 0%, rgba(67, 97, 238, 0.15) 0%, transparent 50%),
+        radial-gradient(at 0% 80%, rgba(124, 58, 237, 0.15) 0%, transparent 50%);
+    --gradient-hero: linear-gradient(180deg, #F8FAFC 0%, #E2E8F0 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+
+    /* Translucent Backgrounds */
+    --color-secondary-85: rgba(255, 255, 255, 0.85);
+    --color-secondary-95: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="dark"] {
+    --color-primary: #5B74F3;
+    /* Slightly lighter for dark mode */
+    --color-secondary: #0F172A;
+    /* Dark background */
+    --color-background-alt: #1E293B;
+    /* Slightly lighter dark background */
+    --color-text-primary: #F8FAFC;
+    --color-text-body: #CBD5E1;
+    --color-text-muted: #94A3B8;
+    --color-gray-100: #1E293B;
+    --color-gray-200: #334155;
+    --color-gray-300: #475569;
+    --color-border: #334155;
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+    --gradient-light: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+    --gradient-hero: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+    --gradient-mesh: radial-gradient(at 80% 0%, rgba(67, 97, 238, 0.1) 0%, transparent 50%),
+        radial-gradient(at 0% 80%, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+
+    /* Translucent Backgrounds for Dark Mode */
+    --color-secondary-85: rgba(15, 23, 42, 0.85);
+    --color-secondary-95: rgba(15, 23, 42, 0.95);
 }
 
 /* ==========================================================================
@@ -127,6 +181,10 @@ html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+html.smooth-scroll {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -233,7 +291,7 @@ p {
 }
 
 .section {
-    padding: var(--spacing-5xl) 0;
+    padding: 2rem 0 !important;
 }
 
 .section--gray {
@@ -584,10 +642,77 @@ a.btn--primary:hover {
 /* ==========================================================================
    Page Header Styles
    ========================================================================== */
-.page-header {
-    padding: var(--spacing-4xl) 0 var(--spacing-3xl);
-    background-color: var(--color-gray-50);
-    text-align: center;
+
+/* ==========================================================================
+   Page Header Styles
+   ========================================================================== */
+.site-header {
+    width: 100%;
+    z-index: 1000;
+    transition: all var(--transition-base);
+    background: transparent;
+    padding: var(--spacing-md) 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.site-header.is-scrolled {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: var(--spacing-sm) 0;
+    box-shadow: var(--shadow-sm);
+}
+
+[data-theme="dark"] .site-header.is-scrolled {
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.site-main {
+    padding-top: calc(var(--header-height) + var(--spacing-xl));
+}
+
+
+/* Dark Mode Toggle */
+.theme-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-primary);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-full);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--color-gray-100);
+    color: var(--color-primary);
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+    background-color: var(--color-gray-800);
+}
+
+.theme-toggle-btn .icon-sun {
+    display: none;
+}
+
+.theme-toggle-btn .icon-moon {
+    display: block;
+}
+
+[data-theme="dark"] .theme-toggle-btn .icon-sun {
+    display: block;
+}
+
+[data-theme="dark"] .theme-toggle-btn .icon-moon {
+    display: none;
 }
 
 .page-header__title {
@@ -984,14 +1109,1070 @@ a.btn--primary:hover {
     text-decoration: none;
     color: inherit;
     display: block;
-    transition: all var(--transition-fast, 150ms) ease;
+    transition: all var(--transition-smooth);
 }
 
 .feature-card--linked:hover {
     transform: translateY(-8px);
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-xl);
 }
 
 .feature-card--linked:hover .feature-card__title {
-    color: var(--color-primary, #4361EE);
+    color: var(--color-primary);
+}
+
+/* ==========================================================================
+   Premium Animations & Keyframes
+   ========================================================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Animation Utility Classes */
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in-down {
+    animation: fadeInDown 0.6s ease-out forwards;
+}
+
+.animate-fade-in-left {
+    animation: fadeInLeft 0.6s ease-out forwards;
+}
+
+.animate-fade-in-right {
+    animation: fadeInRight 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Animation Delays */
+.delay-100 {
+    animation-delay: 100ms;
+}
+
+.delay-200 {
+    animation-delay: 200ms;
+}
+
+.delay-300 {
+    animation-delay: 300ms;
+}
+
+.delay-400 {
+    animation-delay: 400ms;
+}
+
+.delay-500 {
+    animation-delay: 500ms;
+}
+
+/* ==========================================================================
+   Glassmorphism Components
+   ========================================================================== */
+.glass {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-light {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-dark {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   Gradient Utilities
+   ========================================================================== */
+.bg-gradient-primary {
+    background: var(--gradient-primary);
+}
+
+.bg-gradient-accent {
+    background: var(--gradient-accent);
+}
+
+.bg-gradient-dark {
+    background: var(--gradient-dark);
+}
+
+.bg-gradient-mesh {
+    background: var(--gradient-mesh);
+}
+
+.bg-gradient-animated {
+    background: linear-gradient(-45deg, #4361EE, #7C3AED, #22D3EE, #4361EE);
+    background-size: 400% 400%;
+    animation: gradient-shift 8s ease infinite;
+}
+
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-gradient-accent {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==========================================================================
+   Premium Button Styles
+   ========================================================================== */
+.btn--premium {
+    background: var(--gradient-primary);
+    border: none;
+    padding: 16px 32px;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.5px;
+    color: white;
+    box-shadow: var(--shadow-primary);
+    transition: all var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn--premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn--premium:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px -5px rgba(67, 97, 238, 0.5);
+}
+
+.btn--premium:hover::before {
+    left: 100%;
+}
+
+.btn--glass {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: white;
+    padding: 14px 28px;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-smooth);
+}
+
+.btn--glass:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.btn--outline-animated {
+    background: transparent;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+    padding: 14px 28px;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-weight-semibold);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: color var(--transition-smooth);
+}
+
+.btn--outline-animated::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    background: var(--color-primary);
+    transition: height var(--transition-smooth);
+    z-index: -1;
+}
+
+.btn--outline-animated:hover {
+    color: white;
+}
+
+.btn--outline-animated:hover::before {
+    height: 100%;
+}
+
+/* ==========================================================================
+   Premium Card Styles
+   ========================================================================== */
+.card--premium {
+    background: white;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    transition: all var(--transition-smooth);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card--premium:hover {
+    transform: translateY(-12px);
+    box-shadow: var(--shadow-2xl), 0 12px 24px -8px rgba(67, 97, 238, 0.12);
+}
+
+.card--premium .card__image {
+    margin: 12px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.card--glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-2xl);
+}
+
+.card--elevated {
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-smooth);
+}
+
+.card--elevated:hover {
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-4px);
+}
+
+/* ==========================================================================
+   Premium Feature Cards
+   ========================================================================== */
+.feature-card--premium {
+    background: white;
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    transition: all var(--transition-smooth);
+    border: 1px solid var(--color-gray-100);
+}
+
+.feature-card--premium:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+    border-color: transparent;
+}
+
+.feature-card--premium .feature-card__icon {
+    width: 64px;
+    height: 64px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-lg);
+    color: white;
+    font-size: var(--font-size-2xl);
+}
+
+/* ==========================================================================
+   Section Background Variations
+   ========================================================================== */
+.section--mesh {
+    background-color: #F8FAFC;
+    background-image: var(--gradient-mesh);
+}
+
+.section--dark-gradient {
+    background: var(--gradient-dark);
+    color: white;
+}
+
+.section--dark-gradient .section-title,
+.section--dark-gradient .tagline {
+    color: white;
+}
+
+.section--dark-gradient .tagline {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   Loading States & Skeletons
+   ========================================================================== */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-md);
+}
+
+.skeleton-text {
+    height: 1em;
+    margin-bottom: 0.5em;
+}
+
+.skeleton-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+}
+
+.skeleton-image {
+    width: 100%;
+    aspect-ratio: 16/9;
+}
+
+/* ==========================================================================
+   Hover Effects Utilities
+   ========================================================================== */
+.hover-lift {
+    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.hover-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+}
+
+.hover-scale {
+    transition: transform var(--transition-smooth);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.hover-glow {
+    transition: box-shadow var(--transition-smooth);
+}
+
+.hover-glow:hover {
+    box-shadow: var(--shadow-glow);
+}
+
+.hover-primary:hover {
+    color: var(--color-primary);
+}
+
+/* ==========================================================================
+   Dark Mode Support
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-background: #0f172a;
+        --color-background-alt: #1e293b;
+        --color-text-primary: #f8fafc;
+        --color-text-body: #cbd5e1;
+        --color-text-muted: #94a3b8;
+        --color-border: #334155;
+    }
+}
+
+[data-theme="dark"] {
+    --color-background: #0f172a;
+    --color-background-alt: #1e293b;
+    --color-text-primary: #f8fafc;
+    --color-text-body: #cbd5e1;
+    --color-text-muted: #94a3b8;
+    --color-border: #334155;
+}
+
+[data-theme="dark"] body {
+    background-color: var(--color-background);
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .feature-card,
+[data-theme="dark"] .card--premium,
+[data-theme="dark"] .feature-card--premium {
+    background: var(--color-background-alt);
+    border-color: var(--color-border);
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .card--premium:hover,
+[data-theme="dark"] .feature-card--premium:hover {
+    background: var(--color-gray-800);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .section {
+    background-color: var(--color-background);
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .section--mesh {
+    background-color: var(--color-secondary);
+    background-image: none;
+}
+
+[data-theme="dark"] .section--gray,
+[data-theme="dark"] .features-section,
+[data-theme="dark"] .site-footer {
+    background-color: #1e293b !important;
+    background-image: none !important;
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .footer-bottom {
+    background-color: var(--color-background);
+    border-top: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .newsletter-section {
+    background-color: var(--color-background);
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6,
+[data-theme="dark"] .widget-title,
+[data-theme="dark"] .card__title,
+[data-theme="dark"] .feature-card__title {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .btn--secondary {
+    border-color: var(--color-gray-600);
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .btn--secondary:hover {
+    background-color: var(--color-gray-700);
+    border-color: var(--color-gray-500);
+}
+
+/* ==========================================================================
+   Dark Mode - Header & Navigation
+   ========================================================================== */
+[data-theme="dark"] .site-header {
+    background: var(--color-secondary-85);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .site-header.is-scrolled,
+[data-theme="dark"] .site-header.scrolled {
+    background: var(--color-secondary-95);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .nav-menu li a {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .nav-menu>li>a:hover {
+    background: var(--color-gray-700);
+    color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .nav-menu .sub-menu {
+    background: var(--color-gray-800);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .nav-menu .sub-menu li a {
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .nav-menu .sub-menu li a:hover {
+    background: var(--color-gray-700);
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .hamburger span {
+    background: var(--color-primary-light);
+}
+
+/* ==========================================================================
+   Dark Mode - Mobile Navigation
+   ========================================================================== */
+[data-theme="dark"] .mobile-nav {
+    background: var(--color-secondary);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .mobile-menu li {
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .mobile-menu li a {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .mobile-menu .sub-menu {
+    background: var(--color-gray-800);
+}
+
+[data-theme="dark"] .mobile-menu .sub-menu li {
+    border-color: var(--color-gray-700);
+}
+
+[data-theme="dark"] .mobile-menu .sub-menu li a {
+    color: var(--color-text-body);
+}
+
+/* ==========================================================================
+   Dark Mode - Hero Section
+   ========================================================================== */
+[data-theme="dark"] .hero-section {
+    background: var(--color-secondary);
+}
+
+[data-theme="dark"] .hero-title {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .hero-text {
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .hero-placeholder {
+    background: var(--color-gray-700);
+}
+
+/* ==========================================================================
+   Dark Mode - Features Section
+   ========================================================================== */
+[data-theme="dark"] .features-section {
+    background: var(--color-background-alt);
+}
+
+[data-theme="dark"] .features-section .feature-card {
+    background: var(--color-gray-800);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .feature-icon-placeholder {
+    background: var(--color-gray-700);
+}
+
+/* ==========================================================================
+   Dark Mode - Products & Cards
+   ========================================================================== */
+[data-theme="dark"] .products-section {
+    background: var(--color-secondary);
+}
+
+[data-theme="dark"] .product-card,
+[data-theme="dark"] .story-card {
+    background: var(--color-gray-800);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .product-card__price {
+    color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .card__image--placeholder,
+[data-theme="dark"] .story-card .card__image--placeholder {
+    background: var(--color-gray-700);
+}
+
+[data-theme="dark"] .card__category,
+[data-theme="dark"] .product-category {
+    color: var(--color-accent-light);
+}
+
+[data-theme="dark"] .card__text,
+[data-theme="dark"] .card__content {
+    color: var(--color-text-body);
+}
+
+/* ==========================================================================
+   Dark Mode - Single Product
+   ========================================================================== */
+[data-theme="dark"] .product-header {
+    background: var(--color-secondary);
+}
+
+[data-theme="dark"] .product-title {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .product-excerpt {
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .product-image__placeholder {
+    background: var(--color-gray-700);
+}
+
+/* ==========================================================================
+   Dark Mode - Blog & Archive
+   ========================================================================== */
+[data-theme="dark"] .archive-section,
+[data-theme="dark"] .blog-section {
+    background: var(--color-secondary);
+}
+
+[data-theme="dark"] .post-header {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .post-meta {
+    color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .post-content {
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .post-content blockquote {
+    border-color: var(--color-accent);
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .post-share {
+    background: var(--color-gray-800);
+}
+
+[data-theme="dark"] .author-card {
+    background: var(--color-gray-800);
+}
+
+/* ==========================================================================
+   Dark Mode - Tags
+   ========================================================================== */
+[data-theme="dark"] .tag,
+[data-theme="dark"] .tagline {
+    background: var(--color-gray-700);
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .tag:hover {
+    background: var(--color-gray-600);
+}
+
+/* ==========================================================================
+   Dark Mode - Contact Form
+   ========================================================================== */
+[data-theme="dark"] .contact-form {
+    background: var(--color-gray-800);
+}
+
+[data-theme="dark"] .contact-info__title {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .contact-info__item strong {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .contact-info__item a,
+[data-theme="dark"] .contact-info__item span {
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .form-input,
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="email"],
+[data-theme="dark"] input[type="tel"],
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+    background: var(--color-gray-800);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .form-input::placeholder,
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .form-input:focus,
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(91, 116, 243, 0.2);
+}
+
+/* ==========================================================================
+   Dark Mode - Gravity Forms
+   ========================================================================== */
+[data-theme="dark"] .gform_wrapper.gravity-theme .gfield_label {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .gform_wrapper.gravity-theme input[type="text"],
+[data-theme="dark"] .gform_wrapper.gravity-theme input[type="email"],
+[data-theme="dark"] .gform_wrapper.gravity-theme input[type="tel"],
+[data-theme="dark"] .gform_wrapper.gravity-theme textarea,
+[data-theme="dark"] .gform_wrapper.gravity-theme select {
+    background: var(--color-gray-800);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+}
+
+/* ==========================================================================
+   Dark Mode - Footer
+   ========================================================================== */
+[data-theme="dark"] .site-footer {
+    background: var(--color-background-alt);
+}
+
+[data-theme="dark"] .footer-menu li a {
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .footer-links a {
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .copyright {
+    color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .social-link {
+    background: var(--color-gray-700);
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] .social-link:hover {
+    background: var(--color-primary);
+    color: white;
+}
+
+/* ==========================================================================
+   Dark Mode - Pagination
+   ========================================================================== */
+[data-theme="dark"] .pagination .page-numbers {
+    border-color: var(--color-border);
+    color: var(--color-text-body);
+    background: var(--color-gray-800);
+}
+
+[data-theme="dark"] .pagination .page-numbers.current,
+[data-theme="dark"] .pagination .page-numbers:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+/* ==========================================================================
+   Dark Mode - Filter Nav
+   ========================================================================== */
+[data-theme="dark"] .filter-nav__item {
+    border-color: var(--color-border);
+    color: var(--color-text-body);
+    background: var(--color-gray-800);
+}
+
+[data-theme="dark"] .filter-nav__item:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ==========================================================================
+   Dark Mode - Newsletter Section
+   ========================================================================== */
+[data-theme="dark"] .newsletter-section {
+    background: var(--gradient-primary);
+}
+
+[data-theme="dark"] .newsletter-section .form-input {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+[data-theme="dark"] .newsletter-section .form-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   Dark Mode - 404 Page
+   ========================================================================== */
+[data-theme="dark"] .error-404 {
+    background: var(--color-secondary);
+}
+
+[data-theme="dark"] .error-title {
+    color: var(--color-gray-700);
+}
+
+[data-theme="dark"] .error-text {
+    color: var(--color-text-body);
+}
+
+/* ==========================================================================
+   Dark Mode - Glassmorphism
+   ========================================================================== */
+[data-theme="dark"] .glass {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .glass-light {
+    background: rgba(30, 41, 59, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   Dark Mode - Premium Cards
+   ========================================================================== */
+[data-theme="dark"] .card--premium {
+    background: var(--color-gray-800);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .card--glass {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   Dark Mode - Scrollbar
+   ========================================================================== */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: var(--color-gray-800);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: var(--color-gray-600);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gray-500);
+}
+
+/* ==========================================================================
+   Dark Mode - Skeleton Loading
+   ========================================================================== */
+[data-theme="dark"] .skeleton {
+    background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+    background-size: 200% 100%;
+}
+
+/* ==========================================================================
+   Dark Mode - Link Colors
+   ========================================================================== */
+[data-theme="dark"] a {
+    color: var(--color-text-body);
+}
+
+[data-theme="dark"] a:hover {
+    color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .btn--link {
+    color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .btn--link:hover {
+    color: var(--color-primary);
+}
+
+/* ==========================================================================
+   Additional Utilities
+   ========================================================================== */
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.z-10 {
+    z-index: 10;
+}
+
+.z-20 {
+    z-index: 20;
+}
+
+.z-50 {
+    z-index: 50;
+}
+
+.opacity-0 {
+    opacity: 0;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.opacity-100 {
+    opacity: 1;
+}
+
+.blur-sm {
+    filter: blur(4px);
+}
+
+.blur-md {
+    filter: blur(8px);
+}
+
+.blur-lg {
+    filter: blur(16px);
+}
+
+.grayscale {
+    filter: grayscale(100%);
+}
+
+.grayscale-0 {
+    filter: grayscale(0%);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-gray-300);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gray-400);
+}
+
+/* Selection Styling */
+::selection {
+    background: var(--color-primary);
+    color: white;
 }

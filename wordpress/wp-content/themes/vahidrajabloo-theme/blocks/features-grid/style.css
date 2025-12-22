@@ -1,6 +1,6 @@
 /* Features Grid Block Styles */
 .vr-features-grid {
-    padding: var(--spacing-section, 112px) var(--spacing-container, 64px);
+    padding: 48px var(--spacing-container, 32px);
 }
 
 .vr-features-grid__container {

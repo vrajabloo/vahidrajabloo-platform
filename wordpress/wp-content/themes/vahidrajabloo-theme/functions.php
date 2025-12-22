@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Theme Constants
-define( 'VAHIDRAJABLOO_THEME_VERSION', '1.6.0' );
+define( 'VAHIDRAJABLOO_THEME_VERSION', '2.0.0' );
 define( 'VAHIDRAJABLOO_THEME_PATH', get_template_directory() );
 define( 'VAHIDRAJABLOO_THEME_URL', get_template_directory_uri() );
 define( 'VAHIDRAJABLOO_THEME_ASSETS_URL', VAHIDRAJABLOO_THEME_URL . '/assets/' );
@@ -398,41 +398,260 @@ function vahidrajabloo_customize_register( $wp_customize ) {
         ));
     }
 
-    // === COLORS SECTION ===
+    // ========================================================================
+    // === THEME COLORS PANEL ===
+    // ========================================================================
+    $wp_customize->add_panel( 'vahidrajabloo_colors_panel', array(
+        'title'       => __( 'Theme Colors', 'vahidrajabloo-theme' ),
+        'description' => __( 'Customize all theme colors from here.', 'vahidrajabloo-theme' ),
+        'priority'    => 25,
+    ));
+
+    // --- BRAND COLORS SECTION ---
+    $wp_customize->add_section( 'vahidrajabloo_brand_colors', array(
+        'title'    => __( 'Brand Colors', 'vahidrajabloo-theme' ),
+        'panel'    => 'vahidrajabloo_colors_panel',
+        'priority' => 10,
+    ));
+
+    // Primary Color
     $wp_customize->add_setting( 'theme_primary_color', array(
         'default'           => '#4361EE',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_primary_color', array(
-        'label'   => __( 'Primary Color (Blue)', 'vahidrajabloo-theme' ),
-        'section' => 'colors',
+        'label'       => __( 'Primary Color', 'vahidrajabloo-theme' ),
+        'description' => __( 'Main brand color used for buttons, links, etc.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_brand_colors',
     )));
 
+    // Primary Dark Color
+    $wp_customize->add_setting( 'theme_primary_dark_color', array(
+        'default'           => '#3651D4',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_primary_dark_color', array(
+        'label'       => __( 'Primary Dark', 'vahidrajabloo-theme' ),
+        'description' => __( 'Hover state color for primary elements.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_brand_colors',
+    )));
+
+    // Primary Light Color
+    $wp_customize->add_setting( 'theme_primary_light_color', array(
+        'default'           => '#6B7FFF',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_primary_light_color', array(
+        'label'       => __( 'Primary Light', 'vahidrajabloo-theme' ),
+        'description' => __( 'Light accent of primary color.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_brand_colors',
+    )));
+
+    // --- ACCENT COLORS SECTION ---
+    $wp_customize->add_section( 'vahidrajabloo_accent_colors', array(
+        'title'    => __( 'Accent Colors', 'vahidrajabloo-theme' ),
+        'panel'    => 'vahidrajabloo_colors_panel',
+        'priority' => 20,
+    ));
+
+    // Accent Color
     $wp_customize->add_setting( 'theme_accent_color', array(
         'default'           => '#7C3AED',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_accent_color', array(
-        'label'   => __( 'Accent Color (Purple)', 'vahidrajabloo-theme' ),
-        'section' => 'colors',
+        'label'       => __( 'Accent Color (Purple)', 'vahidrajabloo-theme' ),
+        'description' => __( 'Secondary accent for highlights.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_accent_colors',
     )));
 
+    // Accent Light Color
     $wp_customize->add_setting( 'theme_accent_light_color', array(
         'default'           => '#22D3EE',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_accent_light_color', array(
-        'label'   => __( 'Accent Light Color (Cyan)', 'vahidrajabloo-theme' ),
-        'section' => 'colors',
+        'label'       => __( 'Accent Light (Cyan)', 'vahidrajabloo-theme' ),
+        'description' => __( 'Used for gradient accents.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_accent_colors',
     )));
 
+    // --- BACKGROUND COLORS SECTION ---
+    $wp_customize->add_section( 'vahidrajabloo_background_colors', array(
+        'title'    => __( 'Background Colors', 'vahidrajabloo-theme' ),
+        'panel'    => 'vahidrajabloo_colors_panel',
+        'priority' => 30,
+    ));
+
+    // Secondary/Main Background
+    $wp_customize->add_setting( 'theme_secondary_color', array(
+        'default'           => '#FFFFFF',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_secondary_color', array(
+        'label'       => __( 'Page Background', 'vahidrajabloo-theme' ),
+        'description' => __( 'Main page background color.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_background_colors',
+    )));
+
+    // Background Alt
     $wp_customize->add_setting( 'theme_background_alt_color', array(
         'default'           => '#F8FAFC',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_background_alt_color', array(
-        'label'   => __( 'Background Alt Color (Light Gray)', 'vahidrajabloo-theme' ),
-        'section' => 'colors',
+        'label'       => __( 'Section Background', 'vahidrajabloo-theme' ),
+        'description' => __( 'Alternate background for sections.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_background_colors',
+    )));
+
+    // Background Dark
+    $wp_customize->add_setting( 'theme_background_dark_color', array(
+        'default'           => '#1E293B',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_background_dark_color', array(
+        'label'       => __( 'Dark Background', 'vahidrajabloo-theme' ),
+        'description' => __( 'Footer and dark sections.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_background_colors',
+    )));
+
+    // --- TEXT COLORS SECTION ---
+    $wp_customize->add_section( 'vahidrajabloo_text_colors', array(
+        'title'    => __( 'Text Colors', 'vahidrajabloo-theme' ),
+        'panel'    => 'vahidrajabloo_colors_panel',
+        'priority' => 40,
+    ));
+
+    // Text Primary (Headings)
+    $wp_customize->add_setting( 'theme_text_primary_color', array(
+        'default'           => '#0F172A',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_text_primary_color', array(
+        'label'       => __( 'Headings Color', 'vahidrajabloo-theme' ),
+        'description' => __( 'Color for headings and titles.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_text_colors',
+    )));
+
+    // Text Body
+    $wp_customize->add_setting( 'theme_text_body_color', array(
+        'default'           => '#475569',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_text_body_color', array(
+        'label'       => __( 'Body Text Color', 'vahidrajabloo-theme' ),
+        'description' => __( 'Main paragraph text color.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_text_colors',
+    )));
+
+    // Text Muted
+    $wp_customize->add_setting( 'theme_text_muted_color', array(
+        'default'           => '#94A3B8',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_text_muted_color', array(
+        'label'       => __( 'Muted Text Color', 'vahidrajabloo-theme' ),
+        'description' => __( 'Subtle text like captions.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_text_colors',
+    )));
+
+    // --- BORDER & MISC SECTION ---
+    $wp_customize->add_section( 'vahidrajabloo_misc_colors', array(
+        'title'    => __( 'Border & Misc', 'vahidrajabloo-theme' ),
+        'panel'    => 'vahidrajabloo_colors_panel',
+        'priority' => 50,
+    ));
+
+    // Border Color
+    $wp_customize->add_setting( 'theme_border_color', array(
+        'default'           => '#E2E8F0',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_border_color', array(
+        'label'       => __( 'Border Color', 'vahidrajabloo-theme' ),
+        'description' => __( 'Default border color.', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_misc_colors',
+    )));
+
+    // --- DARK MODE COLORS SECTION ---
+    $wp_customize->add_section( 'vahidrajabloo_dark_mode_colors', array(
+        'title'       => __( 'Dark Mode Colors', 'vahidrajabloo-theme' ),
+        'description' => __( 'Colors used when dark mode is enabled.', 'vahidrajabloo-theme' ),
+        'panel'       => 'vahidrajabloo_colors_panel',
+        'priority'    => 60,
+    ));
+
+    // Dark Mode Primary
+    $wp_customize->add_setting( 'theme_dark_primary_color', array(
+        'default'           => '#5B74F3',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_dark_primary_color', array(
+        'label'       => __( 'Primary Color (Dark Mode)', 'vahidrajabloo-theme' ),
+        'description' => __( 'Button color in dark mode', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_dark_mode_colors',
+    )));
+
+    // Dark Mode Primary Dark (Hover)
+    $wp_customize->add_setting( 'theme_dark_primary_dark_color', array(
+        'default'           => '#4A63E0',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_dark_primary_dark_color', array(
+        'label'       => __( 'Primary Dark (Dark Mode)', 'vahidrajabloo-theme' ),
+        'description' => __( 'Button hover color in dark mode', 'vahidrajabloo-theme' ),
+        'section'     => 'vahidrajabloo_dark_mode_colors',
+    )));
+
+    // Dark Mode Background
+    $wp_customize->add_setting( 'theme_dark_background_color', array(
+        'default'           => '#0F172A',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_dark_background_color', array(
+        'label'   => __( 'Background (Dark Mode)', 'vahidrajabloo-theme' ),
+        'section' => 'vahidrajabloo_dark_mode_colors',
+    )));
+
+    // Dark Mode Background Alt
+    $wp_customize->add_setting( 'theme_dark_background_alt_color', array(
+        'default'           => '#1E293B',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_dark_background_alt_color', array(
+        'label'   => __( 'Section Background (Dark Mode)', 'vahidrajabloo-theme' ),
+        'section' => 'vahidrajabloo_dark_mode_colors',
+    )));
+
+    // Dark Mode Text Primary
+    $wp_customize->add_setting( 'theme_dark_text_primary_color', array(
+        'default'           => '#F8FAFC',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_dark_text_primary_color', array(
+        'label'   => __( 'Headings (Dark Mode)', 'vahidrajabloo-theme' ),
+        'section' => 'vahidrajabloo_dark_mode_colors',
+    )));
+
+    // Dark Mode Text Body
+    $wp_customize->add_setting( 'theme_dark_text_body_color', array(
+        'default'           => '#CBD5E1',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_dark_text_body_color', array(
+        'label'   => __( 'Body Text (Dark Mode)', 'vahidrajabloo-theme' ),
+        'section' => 'vahidrajabloo_dark_mode_colors',
+    )));
+
+    // Dark Mode Border
+    $wp_customize->add_setting( 'theme_dark_border_color', array(
+        'default'           => '#334155',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'theme_dark_border_color', array(
+        'label'   => __( 'Border (Dark Mode)', 'vahidrajabloo-theme' ),
+        'section' => 'vahidrajabloo_dark_mode_colors',
     )));
 }
 add_action( 'customize_register', 'vahidrajabloo_customize_register' );
@@ -441,18 +660,69 @@ add_action( 'customize_register', 'vahidrajabloo_customize_register' );
  * Output Customizer CSS
  */
 function vahidrajabloo_customizer_css() {
-    $primary_color = get_theme_mod( 'theme_primary_color', '#4361EE' );
-    $accent_color = get_theme_mod( 'theme_accent_color', '#7C3AED' );
-    $accent_light_color = get_theme_mod( 'theme_accent_light_color', '#22D3EE' );
-    $background_alt_color = get_theme_mod( 'theme_background_alt_color', '#F8FAFC' );
+    // Light Mode Colors
+    $primary_color         = get_theme_mod( 'theme_primary_color', '#4361EE' );
+    $primary_dark_color    = get_theme_mod( 'theme_primary_dark_color', '#3651D4' );
+    $primary_light_color   = get_theme_mod( 'theme_primary_light_color', '#6B7FFF' );
+    $secondary_color       = get_theme_mod( 'theme_secondary_color', '#FFFFFF' );
+    $accent_color          = get_theme_mod( 'theme_accent_color', '#7C3AED' );
+    $accent_light_color    = get_theme_mod( 'theme_accent_light_color', '#22D3EE' );
+    $background_alt_color  = get_theme_mod( 'theme_background_alt_color', '#F8FAFC' );
+    $background_dark_color = get_theme_mod( 'theme_background_dark_color', '#1E293B' );
+    $text_primary_color    = get_theme_mod( 'theme_text_primary_color', '#0F172A' );
+    $text_body_color       = get_theme_mod( 'theme_text_body_color', '#475569' );
+    $text_muted_color      = get_theme_mod( 'theme_text_muted_color', '#94A3B8' );
+    $border_color          = get_theme_mod( 'theme_border_color', '#E2E8F0' );
+    
+    // Dark Mode Colors
+    $dark_primary_color         = get_theme_mod( 'theme_dark_primary_color', '#5B74F3' );
+    $dark_primary_dark_color    = get_theme_mod( 'theme_dark_primary_dark_color', '#4A63E0' );
+    $dark_background_color      = get_theme_mod( 'theme_dark_background_color', '#0F172A' );
+    $dark_background_alt_color  = get_theme_mod( 'theme_dark_background_alt_color', '#1E293B' );
+    $dark_text_primary_color    = get_theme_mod( 'theme_dark_text_primary_color', '#F8FAFC' );
+    $dark_text_body_color       = get_theme_mod( 'theme_dark_text_body_color', '#CBD5E1' );
+    $dark_border_color          = get_theme_mod( 'theme_dark_border_color', '#334155' );
     
     ?>
-    <style type="text/css">
+    <style type="text/css" id="vahidrajabloo-customizer-css">
         :root {
+            /* Brand Colors */
             --color-primary: <?php echo esc_attr( $primary_color ); ?>;
+            --color-primary-dark: <?php echo esc_attr( $primary_dark_color ); ?>;
+            --color-primary-light: <?php echo esc_attr( $primary_light_color ); ?>;
+            
+            /* Accent Colors */
             --color-accent: <?php echo esc_attr( $accent_color ); ?>;
             --color-accent-light: <?php echo esc_attr( $accent_light_color ); ?>;
+            
+            /* Background Colors */
+            --color-secondary: <?php echo esc_attr( $secondary_color ); ?>;
             --color-background-alt: <?php echo esc_attr( $background_alt_color ); ?>;
+            --color-background-dark: <?php echo esc_attr( $background_dark_color ); ?>;
+            
+            /* Text Colors */
+            --color-text-primary: <?php echo esc_attr( $text_primary_color ); ?>;
+            --color-text-body: <?php echo esc_attr( $text_body_color ); ?>;
+            --color-text-muted: <?php echo esc_attr( $text_muted_color ); ?>;
+            
+            /* Border */
+            --color-border: <?php echo esc_attr( $border_color ); ?>;
+            
+            /* Gradients - Auto Generated */
+            --gradient-primary: linear-gradient(135deg, <?php echo esc_attr( $primary_color ); ?> 0%, <?php echo esc_attr( $accent_color ); ?> 100%);
+            --gradient-accent: linear-gradient(135deg, <?php echo esc_attr( $accent_color ); ?> 0%, <?php echo esc_attr( $accent_light_color ); ?> 100%);
+        }
+        
+        /* Dark Mode Override */
+        [data-theme="dark"] {
+            --color-primary: <?php echo esc_attr( $dark_primary_color ); ?>;
+            --color-primary-dark: <?php echo esc_attr( $dark_primary_dark_color ); ?>;
+            --color-secondary: <?php echo esc_attr( $dark_background_color ); ?>;
+            --color-background: <?php echo esc_attr( $dark_background_color ); ?>;
+            --color-background-alt: <?php echo esc_attr( $dark_background_alt_color ); ?>;
+            --color-text-primary: <?php echo esc_attr( $dark_text_primary_color ); ?>;
+            --color-text-body: <?php echo esc_attr( $dark_text_body_color ); ?>;
+            --color-border: <?php echo esc_attr( $dark_border_color ); ?>;
         }
     </style>
     <?php

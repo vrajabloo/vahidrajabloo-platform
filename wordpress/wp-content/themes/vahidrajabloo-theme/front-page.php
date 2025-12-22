@@ -14,11 +14,11 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
 ?>
 
 <!-- Hero Section -->
-<section class="hero-section section">
+<section class="hero-section section section--mesh">
     <div class="container">
         <div class="hero-grid grid grid--2">
-            <div class="hero-content">
-                <h1 class="hero-title">
+            <div class="hero-content animate-fade-in-up">
+                <h1 class="hero-title text-gradient">
                     <?php echo esc_html( get_theme_mod( 'hero_headline', 'Building systems that serve everyone' ) ); ?>
                 </h1>
                 <p class="hero-text">
@@ -29,15 +29,15 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
                     $btn_primary_text = get_theme_mod( 'hero_btn_primary_text', 'Get Started' );
                     $btn_primary_url = get_theme_mod( 'hero_btn_primary_url', '#' );
                     ?>
-                    <a href="<?php echo esc_url( $btn_primary_url ); ?>" class="btn btn--primary">
+                    <a href="<?php echo esc_url( $btn_primary_url ); ?>" class="btn btn--premium">
                         <?php echo esc_html( $btn_primary_text ); ?>
                     </a>
-                    <a href="#features" class="btn btn--secondary">
+                    <a href="#features" class="btn btn--outline-animated">
                         Learn More
                     </a>
                 </div>
             </div>
-            <div class="hero-image">
+            <div class="hero-image animate-fade-in-right delay-200">
                 <?php
                 $hero_image = get_theme_mod( 'hero_image', '' );
                 if ( $hero_image ) {
@@ -69,9 +69,9 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
                 $has_link = ! empty( $feature_link );
             ?>
                 <?php if ( $has_link ) : ?>
-                    <a href="<?php echo esc_url( $feature_link ); ?>" class="feature-card feature-card--linked">
+                    <a href="<?php echo esc_url( $feature_link ); ?>" class="feature-card feature-card--premium feature-card--linked hover-lift">
                 <?php else : ?>
-                    <div class="feature-card">
+                    <div class="feature-card feature-card--premium hover-lift">
                 <?php endif; ?>
                     
                     <?php

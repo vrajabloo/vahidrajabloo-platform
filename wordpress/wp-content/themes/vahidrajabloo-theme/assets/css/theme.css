@@ -15,7 +15,7 @@
     width: calc(100% - var(--spacing-xl) * 2);
     max-width: var(--container-max-width);
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.85);
+    background: var(--color-secondary-85, rgba(255, 255, 255, 0.85));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--color-border);
@@ -25,7 +25,7 @@
 }
 
 .site-header.scrolled {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--color-secondary-95, rgba(255, 255, 255, 0.95));
     box-shadow: var(--shadow-xl);
 }
 
@@ -131,7 +131,7 @@
     top: 100%;
     left: 0;
     min-width: 220px;
-    background: #FFFFFF;
+    background: var(--color-secondary);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     padding: var(--spacing-xs);
@@ -301,7 +301,7 @@
 .mobile-menu .sub-menu {
     display: none;
     padding-left: var(--spacing-lg);
-    background: var(--color-gray-50);
+    background: var(--color-background-alt);
     list-style: none;
 }
 
@@ -395,7 +395,7 @@
    Hero Section
    ========================================================================== */
 .hero-section {
-    padding: var(--spacing-5xl) 0;
+    padding: var(--spacing-2xl) 0;
 }
 
 .hero-grid {
@@ -497,7 +497,7 @@
 .newsletter-section {
     background: var(--color-primary);
     color: var(--color-secondary);
-    padding: var(--spacing-4xl) 0;
+    padding: var(--spacing-2xl) 0;
 }
 
 .newsletter-title {
@@ -534,7 +534,7 @@
    Footer Styles
    ========================================================================== */
 .footer-main {
-    padding: var(--spacing-4xl) 0;
+    padding: var(--spacing-2xl) 0;
 }
 
 .footer-logo {
@@ -766,7 +766,7 @@
    404 Page
    ========================================================================== */
 .error-404 {
-    padding: var(--spacing-5xl) 0;
+    padding: var(--spacing-2xl) 0;
 }
 
 .error-title {

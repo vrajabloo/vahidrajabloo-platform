@@ -112,6 +112,11 @@ vahidrajabloo-platform/
 │       ├── Models/         # User, Project, Income, etc.
 │       └── Filament/       # Admin panel resources
 └── wordpress/              # WordPress files
+    └── wp-content/
+        ├── themes/
+        │   └── vahidrajabloo-theme/  # Custom theme (Git tracked)
+        └── mu-plugins/
+            └── laravel-sso.php       # SSO integration (Git tracked)
 ```
 
 ---

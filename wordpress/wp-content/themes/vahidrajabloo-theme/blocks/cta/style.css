@@ -1,6 +1,6 @@
 /* CTA Block Styles */
 .vr-cta {
-    padding: var(--spacing-lg, 80px) var(--spacing-container, 64px);
+    padding: 48px var(--spacing-container, 32px);
     background-color: var(--color-gray-100, #f5f5f5);
 }
 

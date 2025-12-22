@@ -1,6 +1,6 @@
 /* Text + Image Block Styles */
 .vr-text-image {
-    padding: var(--spacing-section, 112px) var(--spacing-container, 64px);
+    padding: 48px var(--spacing-container, 32px);
 }
 
 .vr-text-image__container {

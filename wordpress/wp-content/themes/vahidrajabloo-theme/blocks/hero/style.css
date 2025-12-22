@@ -1,6 +1,6 @@
 /* Hero Block Styles */
 .vr-hero {
-    padding: var(--spacing-section, 112px) var(--spacing-container, 64px);
+    padding: 48px var(--spacing-container, 32px);
     background-color: var(--color-background, #ffffff);
 }
 
