@@ -799,3 +799,26 @@ function vahidrajabloo_excerpt_more( $more ) {
     return '...';
 }
 add_filter( 'excerpt_more', 'vahidrajabloo_excerpt_more' );
+
+/**
+ * Configure SMTP for SendGrid
+ */
+function vahidrajabloo_smtp_config( $phpmailer ) {
+    $sendgrid_key = defined('SENDGRID_API_KEY') ? SENDGRID_API_KEY : getenv('SENDGRID_API_KEY');
+    
+    if ( empty($sendgrid_key) ) {
+        return; // Skip if no API key configured
+    }
+    
+    $phpmailer->isSMTP();
+    $phpmailer->Host       = 'smtp.sendgrid.net';
+    $phpmailer->SMTPAuth   = true;
+    $phpmailer->Port       = 587;
+    $phpmailer->Username   = 'apikey';
+    $phpmailer->Password   = $sendgrid_key;
+    $phpmailer->SMTPSecure = 'tls';
+    $phpmailer->From       = 'info@vahidrajabloo.com';
+    $phpmailer->FromName   = 'Vahid Rajabloo';
+}
+add_action( 'phpmailer_init', 'vahidrajabloo_smtp_config' );
+
