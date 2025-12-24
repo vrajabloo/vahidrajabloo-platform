@@ -822,3 +822,67 @@ function vahidrajabloo_smtp_config( $phpmailer ) {
 }
 add_action( 'phpmailer_init', 'vahidrajabloo_smtp_config' );
 
+/**
+ * Newsletter Signup - SendGrid Contacts API
+ */
+function vahidrajabloo_newsletter_signup() {
+    // Verify nonce
+    if ( ! wp_verify_nonce( $_POST['nonce'] ?? '', 'newsletter_nonce' ) ) {
+        wp_send_json_error( [ 'message' => 'Security check failed.' ] );
+    }
+    
+    $email = sanitize_email( $_POST['email'] ?? '' );
+    
+    if ( ! is_email( $email ) ) {
+        wp_send_json_error( [ 'message' => 'Please enter a valid email address.' ] );
+    }
+    
+    // Get SendGrid API Key
+    $api_key = defined('SENDGRID_API_KEY') ? SENDGRID_API_KEY : getenv('SENDGRID_API_KEY');
+    
+    if ( empty( $api_key ) ) {
+        wp_send_json_error( [ 'message' => 'Newsletter service not configured.' ] );
+    }
+    
+    // SendGrid Marketing Contacts API
+    $response = wp_remote_request( 'https://api.sendgrid.com/v3/marketing/contacts', [
+        'method'  => 'PUT',
+        'headers' => [
+            'Authorization' => 'Bearer ' . $api_key,
+            'Content-Type'  => 'application/json',
+        ],
+        'body'    => json_encode([
+            'contacts' => [
+                [ 'email' => $email ]
+            ]
+        ]),
+        'timeout' => 15,
+    ]);
+    
+    if ( is_wp_error( $response ) ) {
+        wp_send_json_error( [ 'message' => 'Connection error. Please try again.' ] );
+    }
+    
+    $code = wp_remote_retrieve_response_code( $response );
+    
+    if ( $code === 202 ) {
+        wp_send_json_success( [ 'message' => 'Thank you for subscribing!' ] );
+    } else {
+        $body = json_decode( wp_remote_retrieve_body( $response ), true );
+        $error_msg = $body['errors'][0]['message'] ?? 'Subscription failed. Please try again.';
+        wp_send_json_error( [ 'message' => $error_msg ] );
+    }
+}
+add_action( 'wp_ajax_newsletter_signup', 'vahidrajabloo_newsletter_signup' );
+add_action( 'wp_ajax_nopriv_newsletter_signup', 'vahidrajabloo_newsletter_signup' );
+
+/**
+ * Enqueue newsletter script data
+ */
+function vahidrajabloo_newsletter_script_data() {
+    wp_localize_script( 'vahidrajabloo-theme-script', 'vrNewsletter', [
+        'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+        'nonce'   => wp_create_nonce( 'newsletter_nonce' ),
+    ]);
+}
+add_action( 'wp_enqueue_scripts', 'vahidrajabloo_newsletter_script_data' );

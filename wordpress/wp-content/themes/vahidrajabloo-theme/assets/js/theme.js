@@ -141,7 +141,8 @@
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
 
-                const email = this.querySelector('input[type="email"]').value;
+                const emailInput = this.querySelector('input[type="email"]');
+                const email = emailInput.value;
                 const button = this.querySelector('button');
                 const originalText = button.textContent;
 
@@ -151,22 +152,53 @@
                     return;
                 }
 
+                // Check if vrNewsletter is available
+                if (typeof vrNewsletter === 'undefined') {
+                    alert('Newsletter service not available.');
+                    return;
+                }
+
                 // Show loading state
                 button.textContent = 'Subscribing...';
                 button.disabled = true;
 
-                // Simulate subscription (replace with actual API call)
-                setTimeout(() => {
-                    button.textContent = 'Subscribed!';
-                    this.querySelector('input[type="email"]').value = '';
+                // Send AJAX request
+                const formData = new FormData();
+                formData.append('action', 'newsletter_signup');
+                formData.append('email', email);
+                formData.append('nonce', vrNewsletter.nonce);
 
-                    setTimeout(() => {
+                fetch(vrNewsletter.ajaxUrl, {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            button.textContent = '✓ Subscribed!';
+                            emailInput.value = '';
+                            button.style.background = '#10B981';
+
+                            setTimeout(() => {
+                                button.textContent = originalText;
+                                button.disabled = false;
+                                button.style.background = '';
+                            }, 3000);
+                        } else {
+                            alert(data.data?.message || 'Subscription failed. Please try again.');
+                            button.textContent = originalText;
+                            button.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Newsletter error:', error);
+                        alert('Connection error. Please try again.');
                         button.textContent = originalText;
                         button.disabled = false;
-                    }, 2000);
-                }, 1000);
+                    });
             });
         });
+
 
         function validateEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
