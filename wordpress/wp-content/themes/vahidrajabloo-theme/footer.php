@@ -22,21 +22,11 @@
     <!-- Footer Main -->
     <div class="footer-main section--gray">
         <div class="container">
-            <div class="footer-grid grid grid--4">
-                <!-- Footer Column 1 - Logo & Info -->
-                <div class="footer-col footer-col--brand">
-                    <div class="footer-logo">
-                        <?php vahidrajabloo_custom_logo(); ?>
-                    </div>
+            <div class="footer-grid grid grid--3">
+                <!-- Footer Column 1 - Links -->
+                <div class="footer-col">
                     <?php if ( is_active_sidebar( 'footer-1' ) ) : ?>
                         <?php dynamic_sidebar( 'footer-1' ); ?>
-                    <?php endif; ?>
-                </div>
-
-                <!-- Footer Column 2 -->
-                <div class="footer-col">
-                    <?php if ( is_active_sidebar( 'footer-2' ) ) : ?>
-                        <?php dynamic_sidebar( 'footer-2' ); ?>
                     <?php else : ?>
                         <h4 class="widget-title">Company</h4>
                         <?php
@@ -51,10 +41,10 @@
                     <?php endif; ?>
                 </div>
 
-                <!-- Footer Column 3 -->
+                <!-- Footer Column 2 - Resources -->
                 <div class="footer-col">
-                    <?php if ( is_active_sidebar( 'footer-3' ) ) : ?>
-                        <?php dynamic_sidebar( 'footer-3' ); ?>
+                    <?php if ( is_active_sidebar( 'footer-2' ) ) : ?>
+                        <?php dynamic_sidebar( 'footer-2' ); ?>
                     <?php else : ?>
                         <h4 class="widget-title">Resources</h4>
                         <?php
@@ -69,11 +59,11 @@
                     <?php endif; ?>
                 </div>
 
-                <!-- Footer Column 4 -->
+                <!-- Footer Column 3 - Connect -->
                 <div class="footer-col">
                     <h4 class="widget-title">Connect</h4>
-                    <?php if ( is_active_sidebar( 'footer-4' ) ) : ?>
-                        <?php dynamic_sidebar( 'footer-4' ); ?>
+                    <?php if ( is_active_sidebar( 'footer-3' ) ) : ?>
+                        <?php dynamic_sidebar( 'footer-3' ); ?>
                     <?php endif; ?>
                     <div class="social-links flex flex--gap-md">
                         <?php
