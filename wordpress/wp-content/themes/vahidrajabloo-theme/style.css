@@ -2194,9 +2194,12 @@ a.btn--primary:hover {
 }
 
 .about-links__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-xl);
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: var(--spacing-xl) !important;
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
 }
 
 .about-links__card {
@@ -2313,15 +2316,15 @@ a.btn--primary:hover {
 /* Responsive Design */
 @media (max-width: 1024px) {
     .about-links__grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
     }
 }
 
 @media (max-width: 640px) {
     .about-links__grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
-    
+
     .about-links__card {
         padding: var(--spacing-xl);
     }
