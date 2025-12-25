@@ -2296,21 +2296,12 @@ a.btn--primary:hover {
     transform: translateX(4px);
 }
 
-/* Card Color Variations */
-.about-links__card--gallery .about-links__icon {
-    background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
-}
-
-.about-links__card--social .about-links__icon {
-    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
-}
-
-.about-links__card--interviews .about-links__icon {
-    background: linear-gradient(135deg, #10B981 0%, #14B8A6 100%);
-}
-
+/* Card Icons - Unified Theme Color */
+.about-links__card--gallery .about-links__icon,
+.about-links__card--social .about-links__icon,
+.about-links__card--interviews .about-links__icon,
 .about-links__card--speeches .about-links__icon {
-    background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
+    background: var(--gradient-primary);
 }
 
 /* Responsive Design */

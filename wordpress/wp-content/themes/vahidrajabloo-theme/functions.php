@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Theme Constants
-define( 'VAHIDRAJABLOO_THEME_VERSION', '2.0.2' );
+define( 'VAHIDRAJABLOO_THEME_VERSION', '2.0.3' );
 define( 'VAHIDRAJABLOO_THEME_PATH', get_template_directory() );
 define( 'VAHIDRAJABLOO_THEME_URL', get_template_directory_uri() );
 define( 'VAHIDRAJABLOO_THEME_ASSETS_URL', VAHIDRAJABLOO_THEME_URL . '/assets/' );
