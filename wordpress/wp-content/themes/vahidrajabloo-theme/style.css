@@ -2176,3 +2176,167 @@ a.btn--primary:hover {
     background: var(--color-primary);
     color: white;
 }
+
+/* ==========================================================================
+   About Page - Links Section
+   ========================================================================== */
+.about-links {
+    padding: var(--spacing-4xl) 0;
+    background: var(--gradient-mesh), var(--color-background-alt);
+}
+
+.about-links__title {
+    text-align: center;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-3xl);
+}
+
+.about-links__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl);
+}
+
+.about-links__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--spacing-2xl);
+    background: var(--color-secondary);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-links__card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
+}
+
+.about-links__card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--color-primary);
+}
+
+.about-links__card:hover::before {
+    transform: scaleX(1);
+}
+
+.about-links__icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--spacing-lg);
+    color: white;
+    transition: all var(--transition-base);
+}
+
+.about-links__card:hover .about-links__icon {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-glow);
+}
+
+.about-links__icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+.about-links__card-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.about-links__card-desc {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-body);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.5;
+}
+
+.about-links__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--color-gray-100);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xl);
+    color: var(--color-primary);
+    transition: all var(--transition-base);
+}
+
+.about-links__card:hover .about-links__arrow {
+    background: var(--color-primary);
+    color: white;
+    transform: translateX(4px);
+}
+
+/* Card Color Variations */
+.about-links__card--gallery .about-links__icon {
+    background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+}
+
+.about-links__card--social .about-links__icon {
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+}
+
+.about-links__card--interviews .about-links__icon {
+    background: linear-gradient(135deg, #10B981 0%, #14B8A6 100%);
+}
+
+.about-links__card--speeches .about-links__icon {
+    background: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .about-links__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .about-links__grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .about-links__card {
+        padding: var(--spacing-xl);
+    }
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .about-links {
+    background: var(--gradient-mesh), var(--color-background-alt);
+}
+
+[data-theme="dark"] .about-links__card {
+    background: var(--color-gray-800);
+    border-color: var(--color-gray-700);
+}
+
+[data-theme="dark"] .about-links__arrow {
+    background: var(--color-gray-700);
+}

@@ -11,7 +11,7 @@
                 <?php echo esc_html( get_theme_mod( 'newsletter_description', 'Subscribe to our newsletter for the latest updates.' ) ); ?>
             </p>
             <form class="newsletter-form" action="#" method="post">
-                <input type="email" class="form-input" placeholder="Enter your email" required>
+                <input type="email" name="email" class="form-input" placeholder="Enter your email" required>
                 <button type="submit" class="btn btn--primary">
                     <?php echo esc_html( get_theme_mod( 'newsletter_btn_text', 'Subscribe' ) ); ?>
                 </button>

@@ -136,10 +136,12 @@
         // Newsletter Form
         // ==========================================================================
         const newsletterForms = document.querySelectorAll('.newsletter-form');
+        console.log('Newsletter forms found:', newsletterForms.length);
 
         newsletterForms.forEach(form => {
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
+                console.log('Newsletter form submitted');
 
                 const emailInput = this.querySelector('input[type="email"]');
                 const email = emailInput.value;

@@ -141,5 +141,147 @@ function vahidrajabloo_additional_customizer_settings($wp_customize) {
         'section' => 'vahidrajabloo_social_links',
         'type'    => 'url',
     ]);
+    // =========================================================================
+    // About Page - Links Section
+    // =========================================================================
+    $wp_customize->add_section('vahidrajabloo_about_links', [
+        'title'    => __('About Page - Links', 'vahidrajabloo-theme'),
+        'priority' => 37,
+    ]);
+
+    // Section Title
+    $wp_customize->add_setting('about_links_title', [
+        'default'           => 'Explore More',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('about_links_title', [
+        'label'   => __('Section Title', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'text',
+    ]);
+
+    // Photo Gallery
+    $wp_customize->add_setting('about_gallery_url', [
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ]);
+    $wp_customize->add_control('about_gallery_url', [
+        'label'   => __('Photo Gallery URL', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'url',
+    ]);
+
+    $wp_customize->add_setting('about_gallery_title', [
+        'default'           => 'Photo Gallery',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('about_gallery_title', [
+        'label'   => __('Gallery Link Title', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'text',
+    ]);
+
+    $wp_customize->add_setting('about_gallery_desc', [
+        'default'           => 'View my photo collection',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('about_gallery_desc', [
+        'label'   => __('Gallery Link Description', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'text',
+    ]);
+
+    // Social Media
+    $wp_customize->add_setting('about_social_url', [
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ]);
+    $wp_customize->add_control('about_social_url', [
+        'label'   => __('Social Media URL', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'url',
+    ]);
+
+    $wp_customize->add_setting('about_social_title', [
+        'default'           => 'Social Media',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('about_social_title', [
+        'label'   => __('Social Link Title', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'text',
+    ]);
+
+    $wp_customize->add_setting('about_social_desc', [
+        'default'           => 'Connect with me online',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('about_social_desc', [
+        'label'   => __('Social Link Description', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'text',
+    ]);
+
+    // Interviews
+    $wp_customize->add_setting('about_interviews_url', [
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ]);
+    $wp_customize->add_control('about_interviews_url', [
+        'label'   => __('Interviews URL', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'url',
+    ]);
+
+    $wp_customize->add_setting('about_interviews_title', [
+        'default'           => 'Interviews',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('about_interviews_title', [
+        'label'   => __('Interviews Link Title', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'text',
+    ]);
+
+    $wp_customize->add_setting('about_interviews_desc', [
+        'default'           => 'Watch my interviews',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('about_interviews_desc', [
+        'label'   => __('Interviews Link Description', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'text',
+    ]);
+
+    // Speeches
+    $wp_customize->add_setting('about_speeches_url', [
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ]);
+    $wp_customize->add_control('about_speeches_url', [
+        'label'   => __('Speeches URL', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'url',
+    ]);
+
+    $wp_customize->add_setting('about_speeches_title', [
+        'default'           => 'Speeches',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('about_speeches_title', [
+        'label'   => __('Speeches Link Title', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'text',
+    ]);
+
+    $wp_customize->add_setting('about_speeches_desc', [
+        'default'           => 'Listen to my speeches',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('about_speeches_desc', [
+        'label'   => __('Speeches Link Description', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_about_links',
+        'type'    => 'text',
+    ]);
 }
 add_action('customize_register', 'vahidrajabloo_additional_customizer_settings');

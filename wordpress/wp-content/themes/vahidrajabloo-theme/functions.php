@@ -124,6 +124,12 @@ function vahidrajabloo_enqueue_scripts() {
         VAHIDRAJABLOO_THEME_VERSION,
         true
     );
+    
+    // Newsletter script data (must be after wp_enqueue_script)
+    wp_localize_script( 'vahidrajabloo-theme-script', 'vrNewsletter', [
+        'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+        'nonce'   => wp_create_nonce( 'newsletter_nonce' ),
+    ]);
 }
 add_action( 'wp_enqueue_scripts', 'vahidrajabloo_enqueue_scripts' );
 
@@ -823,7 +829,7 @@ function vahidrajabloo_smtp_config( $phpmailer ) {
 add_action( 'phpmailer_init', 'vahidrajabloo_smtp_config' );
 
 /**
- * Newsletter Signup - SendGrid Contacts API
+ * Newsletter Signup - Database Storage with optional SendGrid
  */
 function vahidrajabloo_newsletter_signup() {
     // Verify nonce
@@ -837,52 +843,127 @@ function vahidrajabloo_newsletter_signup() {
         wp_send_json_error( [ 'message' => 'Please enter a valid email address.' ] );
     }
     
-    // Get SendGrid API Key
+    // Get existing subscribers
+    $subscribers = get_option( 'vahidrajabloo_newsletter_subscribers', [] );
+    
+    // Check if already subscribed
+    if ( in_array( $email, array_column( $subscribers, 'email' ) ) ) {
+        wp_send_json_error( [ 'message' => 'You are already subscribed!' ] );
+    }
+    
+    // Add new subscriber to database
+    $subscribers[] = [
+        'email'      => $email,
+        'date'       => current_time( 'mysql' ),
+        'ip'         => $_SERVER['REMOTE_ADDR'] ?? '',
+    ];
+    update_option( 'vahidrajabloo_newsletter_subscribers', $subscribers );
+    
+    // Optionally send to SendGrid if configured
     $api_key = defined('SENDGRID_API_KEY') ? SENDGRID_API_KEY : getenv('SENDGRID_API_KEY');
     
-    if ( empty( $api_key ) ) {
-        wp_send_json_error( [ 'message' => 'Newsletter service not configured.' ] );
+    if ( ! empty( $api_key ) ) {
+        // SendGrid Marketing Contacts API
+        wp_remote_request( 'https://api.sendgrid.com/v3/marketing/contacts', [
+            'method'  => 'PUT',
+            'headers' => [
+                'Authorization' => 'Bearer ' . $api_key,
+                'Content-Type'  => 'application/json',
+            ],
+            'body'    => json_encode([
+                'contacts' => [
+                    [ 'email' => $email ]
+                ]
+            ]),
+            'timeout' => 15,
+        ]);
     }
     
-    // SendGrid Marketing Contacts API
-    $response = wp_remote_request( 'https://api.sendgrid.com/v3/marketing/contacts', [
-        'method'  => 'PUT',
-        'headers' => [
-            'Authorization' => 'Bearer ' . $api_key,
-            'Content-Type'  => 'application/json',
-        ],
-        'body'    => json_encode([
-            'contacts' => [
-                [ 'email' => $email ]
-            ]
-        ]),
-        'timeout' => 15,
-    ]);
-    
-    if ( is_wp_error( $response ) ) {
-        wp_send_json_error( [ 'message' => 'Connection error. Please try again.' ] );
-    }
-    
-    $code = wp_remote_retrieve_response_code( $response );
-    
-    if ( $code === 202 ) {
-        wp_send_json_success( [ 'message' => 'Thank you for subscribing!' ] );
-    } else {
-        $body = json_decode( wp_remote_retrieve_body( $response ), true );
-        $error_msg = $body['errors'][0]['message'] ?? 'Subscription failed. Please try again.';
-        wp_send_json_error( [ 'message' => $error_msg ] );
-    }
+    wp_send_json_success( [ 'message' => 'Thank you for subscribing!' ] );
 }
 add_action( 'wp_ajax_newsletter_signup', 'vahidrajabloo_newsletter_signup' );
 add_action( 'wp_ajax_nopriv_newsletter_signup', 'vahidrajabloo_newsletter_signup' );
 
 /**
- * Enqueue newsletter script data
+ * Admin Menu for Newsletter Subscribers
  */
-function vahidrajabloo_newsletter_script_data() {
-    wp_localize_script( 'vahidrajabloo-theme-script', 'vrNewsletter', [
-        'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-        'nonce'   => wp_create_nonce( 'newsletter_nonce' ),
-    ]);
+function vahidrajabloo_newsletter_admin_menu() {
+    add_menu_page(
+        'Newsletter Subscribers',
+        'Newsletter',
+        'manage_options',
+        'newsletter-subscribers',
+        'vahidrajabloo_newsletter_admin_page',
+        'dashicons-email-alt',
+        30
+    );
 }
-add_action( 'wp_enqueue_scripts', 'vahidrajabloo_newsletter_script_data' );
+add_action( 'admin_menu', 'vahidrajabloo_newsletter_admin_menu' );
+
+/**
+ * Newsletter Admin Page
+ */
+function vahidrajabloo_newsletter_admin_page() {
+    $subscribers = get_option( 'vahidrajabloo_newsletter_subscribers', [] );
+    ?>
+    <div class="wrap">
+        <h1>Newsletter Subscribers</h1>
+        <p>Total subscribers: <strong><?php echo count( $subscribers ); ?></strong></p>
+        
+        <?php if ( ! empty( $subscribers ) ) : ?>
+            <table class="wp-list-table widefat fixed striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Email</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ( array_reverse( $subscribers ) as $i => $sub ) : ?>
+                        <tr>
+                            <td><?php echo count( $subscribers ) - $i; ?></td>
+                            <td><?php echo esc_html( $sub['email'] ); ?></td>
+                            <td><?php echo esc_html( $sub['date'] ?? 'N/A' ); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            
+            <h3>Export as CSV</h3>
+            <form method="post" action="">
+                <?php wp_nonce_field( 'export_newsletter', 'newsletter_export_nonce' ); ?>
+                <button type="submit" name="export_newsletter_csv" class="button button-primary">Export CSV</button>
+            </form>
+        <?php else : ?>
+            <p>No subscribers yet.</p>
+        <?php endif; ?>
+    </div>
+    <?php
+    
+    // Handle CSV export
+    if ( isset( $_POST['export_newsletter_csv'] ) && wp_verify_nonce( $_POST['newsletter_export_nonce'] ?? '', 'export_newsletter' ) ) {
+        vahidrajabloo_export_newsletter_csv( $subscribers );
+    }
+}
+
+/**
+ * Export Newsletter Subscribers as CSV
+ */
+function vahidrajabloo_export_newsletter_csv( $subscribers ) {
+    if ( empty( $subscribers ) ) return;
+    
+    header( 'Content-Type: text/csv; charset=utf-8' );
+    header( 'Content-Disposition: attachment; filename=newsletter-subscribers-' . date('Y-m-d') . '.csv' );
+    
+    $output = fopen( 'php://output', 'w' );
+    fputcsv( $output, [ 'Email', 'Date' ] );
+    
+    foreach ( $subscribers as $sub ) {
+        fputcsv( $output, [ $sub['email'], $sub['date'] ?? '' ] );
+    }
+    
+    fclose( $output );
+    exit;
+}
+
