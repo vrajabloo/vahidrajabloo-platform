@@ -38,3 +38,13 @@ docker/certbot/www/
 *.sql
 *.sql.gz
 /backups/
+
+# Local development files
+docker-compose.local.yml
+docker/nginx/local.conf
+docker/mysql/init.sql
+
+# WordPress default themes (from core)
+wordpress/wp-content/themes/twentytwenty*/
+wordpress/wp-content/plugins/akismet/
+wordpress/wp-content/plugins/hello.php
