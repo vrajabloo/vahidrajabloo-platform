@@ -7,40 +7,30 @@ A Docker-based platform with WordPress (Content) and Laravel (Backend/Dashboard)
 ### Prerequisites
 - Docker Desktop
 - Docker Compose
+- Git
 
-### Setup
+### Local Development Setup
 
 1. **Clone project:**
 ```bash
-git clone <repository-url>
+git clone https://github.com/vrajabloo/vahidrajabloo-platform.git
 cd vahidrajabloo-platform
 ```
 
 2. **Copy environment file:**
 ```bash
 cp .env.example .env
-# Edit .env and change passwords
+# Edit .env and set local passwords
 ```
 
-3. **Start Docker:**
+3. **Start Local Docker:**
 ```bash
-docker-compose up -d --build
+docker compose -f docker-compose.local.yml up -d --build
 ```
 
-4. **Setup hosts file:**
-```bash
-sudo nano /etc/hosts
-# Add:
-127.0.0.1 vahidrajabloo.local
-::1 vahidrajabloo.local
-127.0.0.1 app.vahidrajabloo.local
-::1 app.vahidrajabloo.local
-```
-
-5. **Run Laravel migrations:**
-```bash
-docker-compose exec laravel php artisan migrate
-```
+4. **Access the site:**
+- WordPress: http://localhost:8080
+- MySQL: localhost:3306
 
 ---
 
@@ -48,9 +38,39 @@ docker-compose exec laravel php artisan migrate
 
 | Service | Local URL | Production URL |
 |---------|-----------|----------------|
-| WordPress | http://vahidrajabloo.local | https://vahidrajabloo.com |
-| Laravel Dashboard | http://app.vahidrajabloo.local/dashboard | https://app.vahidrajabloo.com/dashboard |
-| Admin Panel | http://app.vahidrajabloo.local/admin | https://app.vahidrajabloo.com/admin |
+| WordPress | http://localhost:8080 | https://vahidrajabloo.com |
+| Laravel Dashboard | - | https://app.vahidrajabloo.com/dashboard |
+| Admin Panel | - | https://app.vahidrajabloo.com/admin |
+
+---
+
+## 🐳 Docker Configurations
+
+| File | Environment | Purpose |
+|------|-------------|---------|
+| `docker-compose.yml` | Production | Full setup with SSL/Certbot |
+| `docker-compose.local.yml` | Local Development | Simplified, no SSL, port 8080 |
+
+### Local Development
+```bash
+# Start
+docker compose -f docker-compose.local.yml up -d
+
+# Stop
+docker compose -f docker-compose.local.yml down
+
+# View logs
+docker logs nginx-local
+docker logs wordpress-local
+
+# Rebuild
+docker compose -f docker-compose.local.yml up -d --build
+```
+
+### Production Deployment
+```bash
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
+```
 
 ---
 
@@ -94,24 +114,28 @@ docker-compose exec laravel php artisan migrate
 
 ```
 vahidrajabloo-platform/
-├── docker-compose.yml      # Docker configuration
-├── .env.production         # Production environment (secret)
-├── deploy.sh               # Deployment script
-├── backup.sh               # Backup script
-├── ARCHITECTURE.md         # Platform architecture
-├── DEPLOYMENT.md           # Deployment guide
+├── docker-compose.yml          # Production Docker config
+├── docker-compose.local.yml    # Local development Docker config
+├── .env.example                # Environment template
+├── deploy.sh                   # Deployment script
+├── backup.sh                   # Backup script
+├── ARCHITECTURE.md             # Platform architecture
+├── DEPLOYMENT.md               # Deployment guide
 ├── docker/
 │   ├── nginx/
-│   │   └── default.conf    # Nginx configuration
+│   │   ├── default.conf        # Production Nginx config
+│   │   └── local.conf          # Local Nginx config
 │   ├── laravel/
-│   │   └── Dockerfile      # Custom Laravel Docker
+│   │   └── Dockerfile          # Custom Laravel Docker
+│   ├── wordpress/
+│   │   └── Dockerfile          # Custom WordPress Docker
 │   └── mysql/
-│       └── init.sql        # Database init script
-├── laravel/                # Laravel project
+│       └── init.sql            # Database init script
+├── laravel/                    # Laravel project
 │   └── app/
-│       ├── Models/         # User, Project, Income, etc.
-│       └── Filament/       # Admin panel resources
-└── wordpress/              # WordPress files
+│       ├── Models/             # User, Project, Income, etc.
+│       └── Filament/           # Admin panel resources
+└── wordpress/                  # WordPress files
     └── wp-content/
         ├── themes/
         │   └── vahidrajabloo-theme/  # Custom theme (Git tracked)
@@ -123,24 +147,37 @@ vahidrajabloo-platform/
 
 ## 🔧 Useful Commands
 
+### Local Development
 ```bash
-# Start
-docker-compose up -d
+# Start local environment
+docker compose -f docker-compose.local.yml up -d
 
-# Stop
-docker-compose down
+# Stop local environment
+docker compose -f docker-compose.local.yml down
+
+# View WordPress logs
+docker logs wordpress-local -f
+
+# Access WordPress container
+docker exec -it wordpress-local bash
+
+# Access MySQL
+docker exec -it mysql-local mysql -u wordpress_user -p
+```
+
+### Production (via SSH)
+```bash
+# Deploy
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 
 # View logs
-docker-compose logs -f
+ssh deploy@116.203.78.31 "docker logs nginx --tail 50"
 
-# Laravel shell
-docker-compose exec laravel bash
+# Status
+ssh deploy@116.203.78.31 "docker ps"
 
-# Run migrations
-docker-compose exec laravel php artisan migrate
-
-# Clear cache
-docker-compose exec laravel php artisan cache:clear
+# Rollback
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"
 ```
 
 ---
@@ -155,6 +192,7 @@ docker-compose exec laravel php artisan cache:clear
 - ✅ Deploy logging & audit trail
 - ✅ Automated backups (daily)
 - ✅ Rollback system ready
+- ✅ Non-root deploy user
 
 ---
 
@@ -169,6 +207,17 @@ docker-compose exec laravel php artisan cache:clear
 
 ---
 
+## 🖥️ Server Info
+
+| Item | Value |
+|------|-------|
+| IP | 116.203.78.31 |
+| Provider | Hetzner |
+| OS | Ubuntu |
+| SSH User | `deploy` (recommended) or `root` (emergency only) |
+
+---
+
 ## ⚠️ Important Notes
 
 - **Never** commit `.env` to Git
@@ -177,4 +226,4 @@ docker-compose exec laravel php artisan cache:clear
 - Use `rollback.sh` for emergencies
 - Follow `DEPLOYMENT.md` for deployments
 - Check `docs/SECURITY_POLICY.md` for full policy
-
+- Use `deploy@` user instead of `root@` for SSH

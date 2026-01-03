@@ -109,17 +109,17 @@ wordpress/wp-content/mu-plugins/laravel-sso.php
 
 ### Step 1: Isolate
 ```bash
-ssh root@116.203.78.31 "docker compose stop wordpress"
+ssh deploy@116.203.78.31 "docker compose stop wordpress"
 ```
 
 ### Step 2: Rollback
 ```bash
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh HEAD~1"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh HEAD~1"
 ```
 
 ### Step 3: Clean Malware
 ```bash
-ssh root@116.203.78.31 "docker exec wordpress find /var/www/html/wp-content/uploads -name '*.php' -delete"
+ssh deploy@116.203.78.31 "docker exec wordpress find /var/www/html/wp-content/uploads -name '*.php' -delete"
 ```
 
 ### Step 4: Reset Passwords

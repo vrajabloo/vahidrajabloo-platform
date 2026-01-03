@@ -49,7 +49,7 @@
 ## Deploy Command
 
 ```bash
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 ```
 
 ---

@@ -1,9 +1,14 @@
+---
+description: How to deploy changes to production server
+---
+
 # 📋 Deployment Workflow
 
 ## 🔐 Golden Rule
 ```
 ❌ هیچ کدی مستقیم روی سرور ویرایش نشود
 ✅ فقط GitHub → deploy.sh
+✅ از یوزر deploy@ استفاده کنید (نه root@)
 ```
 
 ---
@@ -12,9 +17,12 @@
 
 ### 1. Make Changes Locally
 ```bash
-# Edit files on your Mac
+cd "/Users/Data/Desktop/My Site/vahidrajabloo-platform"
+
 # Test locally with Docker
-docker-compose up -d
+docker compose -f docker-compose.local.yml up -d
+
+# Check at http://localhost:8080
 ```
 
 ### 2. Commit & Push to GitHub
@@ -24,25 +32,29 @@ git commit -m "description of changes"
 git push origin main
 ```
 
+// turbo
 ### 3. Deploy to Server
 ```bash
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 ```
 
-Or run from local:
+---
+
+## 🔄 Quick Deploy (One Command)
 ```bash
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && git pull && docker compose up -d --build"
+git add . && git commit -m "update" && git push && ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 ```
 
 ---
 
 ## 🚨 Emergency Rollback
 ```bash
-ssh root@116.203.78.31
-cd /var/www/vahidrajabloo-platform
-git log --oneline -5              # Find previous commit
-git checkout <commit-hash> -- .   # Rollback files
-docker compose up -d --build      # Rebuild
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"
+```
+
+Or to specific commit:
+```bash
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh abc123"
 ```
 
 ---
@@ -52,3 +64,4 @@ docker compose up -d --build      # Rebuild
 - ❌ FTP/SCP single files to server
 - ❌ Change database content without backup
 - ❌ Run `docker compose down -v` (deletes data!)
+- ❌ Use root@ for regular deployments

@@ -20,19 +20,19 @@
 
 ```bash
 # Interactive mode (shows recent commits, pick by number or hash)
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"
 
 # Direct rollback to specific commit
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh abc123"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh abc123"
 
 # Dry-run (simulation, NO changes made)
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --dry-run abc123"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --dry-run abc123"
 
 # Force full Docker rebuild (slower but cleaner)
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --no-cache abc123"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --no-cache abc123"
 
 # Override dirty working tree check (dangerous!)
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --force abc123"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --force abc123"
 ```
 
 ---
@@ -241,7 +241,7 @@ If site is completely broken:
 
 ```bash
 # SSH to server
-ssh root@116.203.78.31
+ssh deploy@116.203.78.31
 
 # Go to project
 cd /var/www/vahidrajabloo-platform

@@ -1,6 +1,6 @@
 # 🚀 Deployment Guide
 
-**Last Updated:** 2025-12-18
+**Last Updated:** 2025-01-03
 
 ## 🔐 Golden Rule
 
@@ -8,6 +8,7 @@
 ❌ Never edit code directly on server
 ✅ Only GitHub → deploy.sh
 ✅ Every deploy is logged
+✅ Use deploy@ user (not root)
 ```
 
 ---
@@ -16,11 +17,28 @@
 
 | Action | Command |
 |--------|---------|
-| Deploy | `ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"` |
-| Rollback | `ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"` |
-| View logs | `ssh root@116.203.78.31 "docker logs nginx --tail 50"` |
-| Status | `ssh root@116.203.78.31 "docker ps"` |
-| File check | `ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./scripts/file-monitor.sh check"` |
+| Deploy | `ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"` |
+| Rollback | `ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"` |
+| View logs | `ssh deploy@116.203.78.31 "docker logs nginx --tail 50"` |
+| Status | `ssh deploy@116.203.78.31 "docker ps"` |
+| File check | `ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./scripts/file-monitor.sh check"` |
+
+---
+
+## 👤 SSH Users
+
+| User | Purpose | Usage |
+|------|---------|-------|
+| `deploy` | Regular deployments | ✅ Recommended |
+| `root` | Emergency only | ⚠️ Use sparingly |
+
+```bash
+# Recommended
+ssh deploy@116.203.78.31
+
+# Emergency only
+ssh root@116.203.78.31 (emergency)
+```
 
 ---
 
@@ -41,8 +59,14 @@
 
 ### Step 1: Make Changes (Local)
 ```bash
-cd ~/Desktop/My\ Web\ Site/vahidrajabloo-platform
-# Edit theme/plugin files
+cd "/Users/Data/Desktop/My Site/vahidrajabloo-platform"
+
+# Test locally first
+docker compose -f docker-compose.local.yml up -d
+
+# Check at http://localhost:8080
+
+# Commit changes
 git add .
 git commit -m "feat: description"
 git push origin main
@@ -50,7 +74,7 @@ git push origin main
 
 ### Step 2: Deploy
 ```bash
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 ```
 
 ### Step 3: Verify
@@ -64,13 +88,13 @@ ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 
 ```bash
 # Interactive mode
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"
 
 # Direct to specific commit
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh abc123"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh abc123"
 
 # Dry run first
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --dry-run"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --dry-run"
 ```
 
 ---
@@ -85,6 +109,7 @@ ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --dr
 | Deploy logging | ✅ Active |
 | File integrity monitor | ✅ Active |
 | Cloudflare WAF | ✅ Active |
+| Non-root deploy user | ✅ Active |
 
 ---
 
@@ -98,6 +123,7 @@ ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --dr
 | Domain | vahidrajabloo.com |
 | SSL | Let's Encrypt |
 | CDN | Cloudflare (Full Strict) |
+| SSH User | deploy (recommended) |
 
 ---
 
@@ -122,4 +148,5 @@ ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --dr
 ❌ Install plugins via wp-admin
 ❌ Expose database port
 ❌ Skip rollback.sh for emergencies
+❌ Use root@ for regular deployments
 ```

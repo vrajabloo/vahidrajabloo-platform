@@ -84,10 +84,10 @@ vahidrajabloo-platform/
 
 ```bash
 # Standard deploy (CODE ONLY)
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 
 # Quick sync without rebuild
-ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && git pull origin main"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && git pull origin main"
 ```
 
 ---
@@ -119,10 +119,10 @@ ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && git pull origin ma
 ### Manual Backup:
 ```bash
 # Database
-ssh root@116.203.78.31 "/var/www/vahidrajabloo-platform/backup.sh"
+ssh deploy@116.203.78.31 "/var/www/vahidrajabloo-platform/backup.sh"
 
 # Uploads (run periodically)
-ssh root@116.203.78.31 "tar -czf /var/backups/vahidrajabloo/uploads_$(date +%Y%m%d).tar.gz -C /var/www/vahidrajabloo-platform/wordpress/wp-content uploads"
+ssh deploy@116.203.78.31 "tar -czf /var/backups/vahidrajabloo/uploads_$(date +%Y%m%d).tar.gz -C /var/www/vahidrajabloo-platform/wordpress/wp-content uploads"
 ```
 
 ### Backup Contents:
@@ -234,9 +234,9 @@ docker compose restart
 
 | Action | Command |
 |--------|---------|
-| Deploy code | `ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"` |
-| Backup DB | `ssh root@116.203.78.31 "/var/www/vahidrajabloo-platform/backup.sh"` |
-| Backup uploads | `ssh root@116.203.78.31 "tar -czf /var/backups/vahidrajabloo/uploads_$(date +%Y%m%d).tar.gz -C /var/www/vahidrajabloo-platform/wordpress/wp-content uploads"` |
-| View logs | `ssh root@116.203.78.31 "docker logs wordpress --tail 50"` |
-| Clear WP cache | `ssh root@116.203.78.31 "docker exec wordpress wp cache flush --allow-root"` |
-| Restart | `ssh root@116.203.78.31 "docker compose restart wordpress"` |
+| Deploy code | `ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"` |
+| Backup DB | `ssh deploy@116.203.78.31 "/var/www/vahidrajabloo-platform/backup.sh"` |
+| Backup uploads | `ssh deploy@116.203.78.31 "tar -czf /var/backups/vahidrajabloo/uploads_$(date +%Y%m%d).tar.gz -C /var/www/vahidrajabloo-platform/wordpress/wp-content uploads"` |
+| View logs | `ssh deploy@116.203.78.31 "docker logs wordpress --tail 50"` |
+| Clear WP cache | `ssh deploy@116.203.78.31 "docker exec wordpress wp cache flush --allow-root"` |
+| Restart | `ssh deploy@116.203.78.31 "docker compose restart wordpress"` |
