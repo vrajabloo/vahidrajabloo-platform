@@ -132,6 +132,7 @@
 | UFW Firewall | ✅ Active (22, 80, 443) |
 | SSL/HTTPS | ✅ Let's Encrypt |
 | Cloudflare WAF | ✅ Active |
+| Trusted Proxies | ✅ Active (Laravel) |
 | DISALLOW_FILE_EDIT | ✅ Active |
 | DISALLOW_FILE_MODS | ✅ Active |
 | File Integrity Monitor | ✅ Active |
@@ -145,6 +146,39 @@
 ## 💰 Currency
 
 All monetary values are in **USD ($)**
+
+---
+
+## 🌐 Nginx Configuration Notes
+
+### Laravel Server Block Requirements
+
+**Critical:** The Laravel nginx server block must handle Livewire routes **before** static file rules:
+
+```nginx
+# Livewire routes - MUST be before static files rule
+location ^~ /livewire/ {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+
+# Static files - browser cache (after livewire)
+location ~* \.(css|js|...)$ {
+    try_files $uri =404;
+}
+```
+
+> ⚠️ **Without this**, Livewire.js returns 404 and login forms fail with "405 Method Not Allowed"
+
+### Trusted Proxies (Cloudflare)
+
+Laravel must trust Cloudflare proxies in `bootstrap/app.php`:
+```php
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->trustProxies(at: '*');
+})
+```
+
+> ⚠️ **Without this**, Laravel generates `http://` URLs instead of `https://` causing Mixed Content errors
 
 ---
 
