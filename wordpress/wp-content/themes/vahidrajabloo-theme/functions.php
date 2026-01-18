@@ -827,6 +827,17 @@ function vahidrajabloo_excerpt_more( $more ) {
 add_filter( 'excerpt_more', 'vahidrajabloo_excerpt_more' );
 
 /**
+ * Add body class for announcement bar
+ */
+function vahidrajabloo_announcement_bar_body_class( $classes ) {
+    if ( get_theme_mod( 'announcement_bar_enable', false ) && get_theme_mod( 'announcement_bar_text', '' ) ) {
+        $classes[] = 'has-announcement-bar';
+    }
+    return $classes;
+}
+add_filter( 'body_class', 'vahidrajabloo_announcement_bar_body_class' );
+
+/**
  * Configure SMTP for SendGrid
  */
 function vahidrajabloo_smtp_config( $phpmailer ) {
