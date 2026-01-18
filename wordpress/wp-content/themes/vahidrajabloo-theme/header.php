@@ -19,6 +19,19 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<?php if (get_theme_mod('announcement_bar_enable', false) && get_theme_mod('announcement_bar_text', '')) : ?>
+<div class="announcement-bar" id="announcement-bar">
+    <div class="container">
+        <p class="announcement-bar__text">
+            <?php echo esc_html(get_theme_mod('announcement_bar_text', '')); ?>
+        </p>
+        <?php if (get_theme_mod('announcement_bar_show_close', true)) : ?>
+        <button class="announcement-bar__close" id="announcement-bar-close" aria-label="<?php esc_attr_e('Close announcement', 'vahidrajabloo-theme'); ?>">×</button>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>
+
 <header class="site-header" id="site-header">
     <div class="container">
         <div class="header-inner flex flex--between">

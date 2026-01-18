@@ -18,6 +18,30 @@
         const mobileNav = document.querySelector('.mobile-nav');
 
         // ==========================================================================
+        // Announcement Bar
+        // ==========================================================================
+        const announcementBar = document.getElementById('announcement-bar');
+        const announcementCloseBtn = document.getElementById('announcement-bar-close');
+        
+        if (announcementBar) {
+            // Check if user hasn't closed it in this session
+            if (sessionStorage.getItem('announcement-bar-closed') !== 'true') {
+                document.body.classList.add('has-announcement-bar');
+            } else {
+                announcementBar.classList.add('is-hidden');
+            }
+            
+            // Close button handler
+            if (announcementCloseBtn) {
+                announcementCloseBtn.addEventListener('click', function() {
+                    announcementBar.classList.add('is-hidden');
+                    document.body.classList.remove('has-announcement-bar');
+                    sessionStorage.setItem('announcement-bar-closed', 'true');
+                });
+            }
+        }
+
+        // ==========================================================================
         // Header Scroll Effect
         // ==========================================================================
         function handleScroll() {

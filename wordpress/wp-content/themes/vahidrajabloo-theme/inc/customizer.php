@@ -14,6 +14,67 @@ if (!defined('ABSPATH')) {
  */
 function vahidrajabloo_additional_customizer_settings($wp_customize) {
     
+    // =========================================================================
+    // Announcement Bar Section
+    // =========================================================================
+    $wp_customize->add_section('vahidrajabloo_announcement_bar', [
+        'title'    => __('Announcement Bar', 'vahidrajabloo-theme'),
+        'priority' => 25,
+    ]);
+
+    // Enable/Disable Announcement Bar
+    $wp_customize->add_setting('announcement_bar_enable', [
+        'default'           => false,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ]);
+    $wp_customize->add_control('announcement_bar_enable', [
+        'label'   => __('Enable Announcement Bar', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_announcement_bar',
+        'type'    => 'checkbox',
+    ]);
+
+    // Announcement Text
+    $wp_customize->add_setting('announcement_bar_text', [
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_text_field',
+    ]);
+    $wp_customize->add_control('announcement_bar_text', [
+        'label'   => __('Announcement Text', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_announcement_bar',
+        'type'    => 'textarea',
+    ]);
+
+    // Background Color
+    $wp_customize->add_setting('announcement_bar_bg_color', [
+        'default'           => '#fbbf24',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ]);
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'announcement_bar_bg_color', [
+        'label'   => __('Background Color', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_announcement_bar',
+    ]));
+
+    // Text Color
+    $wp_customize->add_setting('announcement_bar_text_color', [
+        'default'           => '#000000',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ]);
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'announcement_bar_text_color', [
+        'label'   => __('Text Color', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_announcement_bar',
+    ]));
+
+    // Show Close Button
+    $wp_customize->add_setting('announcement_bar_show_close', [
+        'default'           => true,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ]);
+    $wp_customize->add_control('announcement_bar_show_close', [
+        'label'   => __('Show Close Button', 'vahidrajabloo-theme'),
+        'section' => 'vahidrajabloo_announcement_bar',
+        'type'    => 'checkbox',
+    ]);
+
     // Home Page Products Section
     $wp_customize->add_section('vahidrajabloo_home_products', [
         'title'    => __('Home Page - Products Section', 'vahidrajabloo-theme'),

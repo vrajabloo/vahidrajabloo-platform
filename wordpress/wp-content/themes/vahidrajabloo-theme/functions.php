@@ -732,6 +732,26 @@ function vahidrajabloo_customizer_css() {
         }
     </style>
     <?php
+    
+    // Announcement Bar Colors (inline style for dynamic colors)
+    $announcement_bar_bg    = get_theme_mod('announcement_bar_bg_color', '#fbbf24');
+    $announcement_bar_text  = get_theme_mod('announcement_bar_text_color', '#000000');
+    
+    if (get_theme_mod('announcement_bar_enable', false)) :
+    ?>
+    <style type="text/css" id="announcement-bar-styles">
+        .announcement-bar {
+            background-color: <?php echo esc_attr($announcement_bar_bg); ?>;
+            color: <?php echo esc_attr($announcement_bar_text); ?>;
+        }
+        .announcement-bar__text {
+            color: <?php echo esc_attr($announcement_bar_text); ?>;
+        }
+        .announcement-bar__close {
+            color: <?php echo esc_attr($announcement_bar_text); ?>;
+        }
+    </style>
+    <?php endif;
 }
 add_action( 'wp_head', 'vahidrajabloo_customizer_css' );
 
