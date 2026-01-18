@@ -693,11 +693,11 @@ a.btn--primary:hover {
 
 /* Adjust header position when announcement bar is visible */
 body.has-announcement-bar .site-header {
-    top: 40px;
+    top: 70px !important;
 }
 
 body.has-announcement-bar .site-main {
-    padding-top: calc(var(--header-height) + var(--spacing-xl) + 40px);
+    padding-top: calc(var(--header-height) + var(--spacing-xl) + 70px);
 }
 
 /* ==========================================================================
