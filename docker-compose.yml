@@ -1,35 +1,46 @@
 services:
   nginx:
     image: nginx:alpine
-    container_name: nginx
     restart: always
-    ports:
-      - "80:80"
-      - "443:443"
     volumes:
       - ./docker/nginx:/etc/nginx/conf.d
       - ./wordpress:/var/www/html
       - ./laravel:/var/www/laravel
-      - ./docker/certbot/conf:/etc/letsencrypt
-      - ./docker/certbot/www:/var/www/certbot
       - nginx-cache:/var/cache/nginx
     depends_on:
       - wordpress
       - laravel
     networks:
       - app-network
-
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - ./docker/certbot/conf:/etc/letsencrypt
-      - ./docker/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+      - coolify
+    labels:
+      # Enable Traefik
+      - "traefik.enable=true"
+      # WordPress domain (HTTPS)
+      - "traefik.http.routers.wp.rule=Host(`vahidrajabloo.com`) || Host(`www.vahidrajabloo.com`)"
+      - "traefik.http.routers.wp.entrypoints=https"
+      - "traefik.http.routers.wp.tls=true"
+      - "traefik.http.routers.wp.tls.certresolver=letsencrypt"
+      # Laravel domain (HTTPS)
+      - "traefik.http.routers.laravel.rule=Host(`app.vahidrajabloo.com`)"
+      - "traefik.http.routers.laravel.entrypoints=https"
+      - "traefik.http.routers.laravel.tls=true"
+      - "traefik.http.routers.laravel.tls.certresolver=letsencrypt"
+      # Service port (nginx listens on 80 internally)
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
+      # HTTP to HTTPS redirect - WordPress
+      - "traefik.http.routers.wp-http.rule=Host(`vahidrajabloo.com`) || Host(`www.vahidrajabloo.com`)"
+      - "traefik.http.routers.wp-http.entrypoints=http"
+      - "traefik.http.routers.wp-http.middlewares=redirect-to-https"
+      # HTTP to HTTPS redirect - Laravel
+      - "traefik.http.routers.laravel-http.rule=Host(`app.vahidrajabloo.com`)"
+      - "traefik.http.routers.laravel-http.entrypoints=http"
+      - "traefik.http.routers.laravel-http.middlewares=redirect-to-https"
+      # Redirect middleware
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
   mysql:
     image: mysql:8.0
-    container_name: mysql
     restart: always
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -50,7 +61,6 @@ services:
 
   wordpress:
     image: wordpress:php8.2-fpm
-    container_name: wordpress
     restart: always
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
@@ -61,7 +71,8 @@ services:
       - ./wordpress:/var/www/html
       - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - app-network
 
@@ -69,7 +80,6 @@ services:
     build:
       context: .
       dockerfile: docker/laravel/Dockerfile
-    container_name: laravel
     restart: always
     environment:
       - APP_ENV=production
@@ -83,12 +93,17 @@ services:
       - DB_PASSWORD=${DB_PASSWORD:-laravelpass}
     volumes:
       - ./laravel:/var/www/laravel
+    depends_on:
+      mysql:
+        condition: service_healthy
     networks:
       - app-network
 
 networks:
   app-network:
-
+    driver: bridge
+  coolify:
+    external: true
 
 volumes:
   mysql-data:
