@@ -17,23 +17,23 @@ services:
       # Enable Traefik
       - "traefik.enable=true"
       # WordPress domain (HTTPS)
-      - "traefik.http.routers.wp.rule=Host(`vahidrajabloo.com`) || Host(`www.vahidrajabloo.com`)"
+      - "traefik.http.routers.wp.rule=Host(`wp.vrlooo.shop`)"
       - "traefik.http.routers.wp.entrypoints=https"
       - "traefik.http.routers.wp.tls=true"
       - "traefik.http.routers.wp.tls.certresolver=letsencrypt"
       # Laravel domain (HTTPS)
-      - "traefik.http.routers.laravel.rule=Host(`app.vahidrajabloo.com`)"
+      - "traefik.http.routers.laravel.rule=Host(`dashboard.vrlooo.shop`)"
       - "traefik.http.routers.laravel.entrypoints=https"
       - "traefik.http.routers.laravel.tls=true"
       - "traefik.http.routers.laravel.tls.certresolver=letsencrypt"
       # Service port (nginx listens on 80 internally)
       - "traefik.http.services.nginx.loadbalancer.server.port=80"
       # HTTP to HTTPS redirect - WordPress
-      - "traefik.http.routers.wp-http.rule=Host(`vahidrajabloo.com`) || Host(`www.vahidrajabloo.com`)"
+      - "traefik.http.routers.wp-http.rule=Host(`wp.vrlooo.shop`)"
       - "traefik.http.routers.wp-http.entrypoints=http"
       - "traefik.http.routers.wp-http.middlewares=redirect-to-https"
       # HTTP to HTTPS redirect - Laravel
-      - "traefik.http.routers.laravel-http.rule=Host(`app.vahidrajabloo.com`)"
+      - "traefik.http.routers.laravel-http.rule=Host(`dashboard.vrlooo.shop`)"
       - "traefik.http.routers.laravel-http.entrypoints=http"
       - "traefik.http.routers.laravel-http.middlewares=redirect-to-https"
       # Redirect middleware
@@ -84,7 +84,7 @@ services:
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
-      - APP_URL=https://app.vahidrajabloo.com
+      - APP_URL=https://dashboard.vrlooo.shop
       - DB_CONNECTION=${DB_CONNECTION:-mysql}
       - DB_HOST=${DB_HOST:-mysql}
       - DB_PORT=${DB_PORT:-3306}
