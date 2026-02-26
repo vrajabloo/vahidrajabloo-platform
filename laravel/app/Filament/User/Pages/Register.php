@@ -3,14 +3,25 @@
 namespace App\Filament\User\Pages;
 
 use App\Models\User;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Component;
+use Filament\Forms\Components\Select;
 use Filament\Pages\Auth\Register as BaseRegister;
-use Filament\Actions\Action;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
 class Register extends BaseRegister
 {
+    protected function handleRegistration(array $data): Model
+    {
+        /** @var User $user */
+        $user = parent::handleRegistration($data);
+
+        // Prevent accidental auto-verification if DB default is misconfigured.
+        $user->forceFill(['email_verified_at' => null])->save();
+
+        return $user;
+    }
+
     protected function getForms(): array
     {
         return [
@@ -50,4 +61,3 @@ class Register extends BaseRegister
         );
     }
 }
-
