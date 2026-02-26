@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Auth\Login;
+use App\Filament\Auth\RequestPasswordReset;
+use App\Filament\Auth\ResetPassword;
 use App\Filament\User\Pages\Register;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -28,9 +31,9 @@ class UserPanelProvider extends PanelProvider
         return $panel
             ->id('user')
             ->path('dashboard')
-            ->login()
+            ->login(Login::class)
             ->registration(Register::class)
-            ->passwordReset()
+            ->passwordReset(RequestPasswordReset::class, ResetPassword::class)
             ->emailVerification()
             ->profile()
             ->colors([
@@ -75,5 +78,3 @@ class UserPanelProvider extends PanelProvider
             ]);
     }
 }
-
-
