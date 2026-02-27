@@ -38,6 +38,7 @@ docker/certbot/www/
 *.sql
 *.sql.gz
 /backups/
+.file-integrity-baseline.md5
 
 # Local development files
 docker-compose.local.yml
