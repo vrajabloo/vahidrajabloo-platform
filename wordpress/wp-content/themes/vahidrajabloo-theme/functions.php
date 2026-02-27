@@ -111,7 +111,7 @@ function vahidrajabloo_enqueue_scripts() {
     // Theme CSS
     wp_enqueue_style(
         'vahidrajabloo-theme-style',
-        VAHIDRAJABLOO_THEME_ASSETS_URL . 'css/theme.css',
+        VAHIDRAJABLOO_THEME_ASSETS_URL . 'css/theme-v2.css',
         array( 'vahidrajabloo-style' ),
         VAHIDRAJABLOO_THEME_VERSION
     );
