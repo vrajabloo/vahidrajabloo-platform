@@ -57,6 +57,14 @@ services:
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WP_SMTP_HOST: ${WP_SMTP_HOST:-}
+      WP_SMTP_PORT: ${WP_SMTP_PORT:-587}
+      WP_SMTP_ENCRYPTION: ${WP_SMTP_ENCRYPTION:-tls}
+      WP_SMTP_AUTH: ${WP_SMTP_AUTH:-true}
+      WP_SMTP_USERNAME: ${WP_SMTP_USERNAME:-}
+      WP_SMTP_PASSWORD: ${WP_SMTP_PASSWORD:-}
+      WP_SMTP_FROM_EMAIL: ${WP_SMTP_FROM_EMAIL:-}
+      WP_SMTP_FROM_NAME: ${WP_SMTP_FROM_NAME:-}
     volumes:
       - ./wordpress:/var/www/html
       - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
@@ -76,12 +84,12 @@ services:
       - APP_DEBUG=false
       - SESSION_SECURE_COOKIE=true
       - APP_URL=https://app.vahidrajabloo.com
-      - DB_CONNECTION=${DB_CONNECTION:-mysql}
-      - DB_HOST=${DB_HOST:-mysql}
-      - DB_PORT=${DB_PORT:-3306}
-      - DB_DATABASE=${DB_DATABASE:-laravel}
-      - DB_USERNAME=${DB_USERNAME:-laraveluser}
-      - DB_PASSWORD=${DB_PASSWORD:-laravelpass}
+      - DB_CONNECTION=${LARAVEL_DB_CONNECTION:-mysql}
+      - DB_HOST=${LARAVEL_DB_HOST:-mysql}
+      - DB_PORT=${LARAVEL_DB_PORT:-3306}
+      - DB_DATABASE=${LARAVEL_DB_DATABASE:-laravel}
+      - DB_USERNAME=${LARAVEL_DB_USERNAME:-laraveluser}
+      - DB_PASSWORD=${LARAVEL_DB_PASSWORD:-laravelpass}
     volumes:
       - ./laravel:/var/www/laravel
     networks:
