@@ -1,6 +1,6 @@
 # 🚀 Deployment Guide
 
-**Last Updated:** 2026-01-05
+**Last Updated:** 2026-02-27
 
 ## 🔐 Golden Rule
 
@@ -77,10 +77,50 @@ git push origin main
 ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 ```
 
+Notes:
+- `deploy.sh` blocks only tracked Git changes.
+- Runtime untracked files (for example WordPress plugin files installed from wp-admin) do not block deployment.
+
 ### Step 3: Verify
 - Website: https://vahidrajabloo.com
 - Admin: https://vahidrajabloo.com/wp-admin/
+- App User Panel: https://app.vahidrajabloo.com/dashboard
+- App Admin Panel: https://app.vahidrajabloo.com/admin
 - SSO: From Laravel admin panel
+- Direct WordPress login URL (`/wp-login.php`) returns `403`
+
+### Step 4: Auth & Email Smoke Test
+- [ ] Register a new user at `/dashboard/register`
+- [ ] Confirm user is redirected to email verification screen
+- [ ] Confirm verification email is received and link works
+- [ ] Confirm unverified user cannot access protected panel pages
+- [ ] Confirm login rate limit triggers after repeated failures
+- [ ] Confirm password reset email is received
+
+### Step 5: If `MAIL_*` or `WP_SMTP_*` Changed
+```bash
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker exec laravel php artisan optimize:clear"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose up -d --no-deps --force-recreate wordpress"
+```
+
+Then retry:
+- Register verification email
+- Password reset email
+- WordPress SMTP smoke test
+
+### Step 6: WordPress SMTP Smoke Test
+```bash
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose exec -T wordpress php -r 'require \"/var/www/html/wp-load.php\"; var_export(wp_mail(\"v.rajabloo@gmail.com\", \"WP SMTP smoke\", \"ok\")); echo PHP_EOL;'"
+```
+
+Expected result: `true`
+
+### Step 7: WordPress Security Smoke Test
+- [ ] Open Wordfence panel and confirm no WAF bootstrap/config error
+- [ ] Confirm security plugins are active: Wordfence, Solid Security, WP Activity Log
+- [ ] Confirm Laravel admin SSO still opens WordPress dashboard
+- [ ] Confirm `https://vahidrajabloo.com/wp-json` returns `404`
+- [ ] Confirm direct `https://vahidrajabloo.com/wp-admin/admin-ajax.php` returns `404`
 
 ---
 
@@ -110,6 +150,12 @@ ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --
 | File integrity monitor | ✅ Active |
 | Cloudflare WAF | ✅ Active |
 | Non-root deploy user | ✅ Active |
+| Direct `/wp-login.php` blocked | ✅ Active |
+| Laravel SSO-only WP admin entry | ✅ Active |
+| Wordfence runtime WAF bootstrap | ✅ Active |
+| WordPress security plugins | ✅ Active |
+| WP SMTP via env (`WP_SMTP_*`) | ✅ Active |
+| Fluent Forms notification feeds enabled | ✅ Active |
 
 ---
 

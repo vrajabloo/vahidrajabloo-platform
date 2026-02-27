@@ -35,25 +35,41 @@ if [ ! -d ".git" ]; then
     exit 1
 fi
 
-# Step 1: Check for local changes (should be none!)
-echo -e "${YELLOW}[1/5] Checking for local changes...${NC}"
-if [ -n "$(git status --porcelain)" ]; then
-    echo -e "${RED}⚠️  WARNING: Local changes detected!${NC}"
-    echo "Uncommitted changes:"
-    git status --short
+# Step 1: Check for tracked local changes (runtime untracked files are allowed)
+echo -e "${YELLOW}[1/5] Checking for tracked local changes...${NC}"
+TRACKED_CHANGES="$(git status --porcelain --untracked-files=no)"
+if [ -n "$TRACKED_CHANGES" ]; then
+    echo -e "${RED}⚠️  WARNING: Tracked local changes detected!${NC}"
+    echo "Tracked changes:"
+    git status --short --untracked-files=no
     echo ""
     echo -e "${RED}This violates the Golden Rule!${NC}"
     echo "Options:"
-    echo "  1. Discard changes: git checkout -- ."
+    echo "  1. Discard tracked changes: git reset --hard HEAD"
     echo "  2. Or commit locally first and push"
-    read -p "Discard local changes and continue? (y/N): " confirm
-    if [ "$confirm" != "y" ]; then
-        echo "Deployment cancelled."
+
+    if [ -t 0 ]; then
+        read -p "Discard tracked changes and continue? (y/N): " confirm
+        if [ "$confirm" != "y" ]; then
+            echo "Deployment cancelled."
+            exit 1
+        fi
+        git reset --hard HEAD
+    else
+        echo -e "${RED}Non-interactive session detected. Aborting deploy to protect tracked changes.${NC}"
+        echo "Fix by running one of these commands first:"
+        echo "  git reset --hard HEAD"
+        echo "  git commit -am \"...\" && git push"
         exit 1
     fi
-    git checkout -- .
 fi
-echo -e "${GREEN}✓ No local changes${NC}"
+echo -e "${GREEN}✓ No tracked local changes${NC}"
+
+# Informative only: untracked runtime files should not block deploy
+UNTRACKED_COUNT="$(git ls-files --others --exclude-standard | wc -l | tr -d ' ')"
+if [ "${UNTRACKED_COUNT}" -gt 0 ]; then
+    echo -e "${YELLOW}ℹ Found ${UNTRACKED_COUNT} untracked file(s) (runtime files/plugins); deploy will continue.${NC}"
+fi
 
 # Step 2: Pull from GitHub
 echo -e "${YELLOW}[2/5] Pulling from GitHub...${NC}"
@@ -132,4 +148,3 @@ echo ""
 echo "Deployed commit:"
 git log -1 --oneline
 echo ""
-
