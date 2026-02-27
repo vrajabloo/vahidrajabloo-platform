@@ -2,6 +2,8 @@
 
 A Docker-based platform with WordPress (Content) and Laravel (Backend/Dashboard).
 
+**Last Updated:** 2026-02-27
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -72,6 +74,18 @@ docker compose -f docker-compose.local.yml up -d --build
 ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 ```
 
+### Laravel DB Variables (Production)
+
+- Docker `laravel` service reads database credentials from `LARAVEL_DB_*` keys in root `.env`.
+- Do not rely on generic `DB_*` in `docker-compose.yml` for production container runtime.
+- Required keys:
+  - `LARAVEL_DB_CONNECTION`
+  - `LARAVEL_DB_HOST`
+  - `LARAVEL_DB_PORT`
+  - `LARAVEL_DB_DATABASE`
+  - `LARAVEL_DB_USERNAME`
+  - `LARAVEL_DB_PASSWORD`
+
 ---
 
 ## 👥 User Roles
@@ -140,7 +154,8 @@ vahidrajabloo-platform/
         ├── themes/
         │   └── vahidrajabloo-theme/  # Custom theme (Git tracked)
         └── mu-plugins/
-            └── laravel-sso.php       # SSO integration (Git tracked)
+            ├── laravel-sso.php              # SSO integration (Git tracked)
+            └── wp-fingerprint-hardening.php # WP fingerprint hardening (Git tracked)
 ```
 
 ---
@@ -193,6 +208,44 @@ ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"
 - ✅ Automated backups (daily)
 - ✅ Rollback system ready
 - ✅ Non-root deploy user
+- ✅ Email verification required for user signup
+- ✅ Auth rate limiting on login/register/password reset
+- ✅ Direct WordPress login endpoint (`/wp-login.php`) blocked (HTTP 403)
+- ✅ WordPress dashboard entry via Laravel SSO flow
+- ✅ Wordfence runtime WAF bootstrap active
+- ✅ Security plugins active (Wordfence, Solid Security, WP Activity Log)
+
+### Auth Protection Limits (Filament)
+
+| Flow | Limit |
+|------|-------|
+| Login (`/admin`, `/dashboard`) | 5 attempts / 300 seconds |
+| Register (`/dashboard/register`) | 3 attempts / 600 seconds |
+| Password reset request | 3 attempts / 600 seconds |
+| Password reset submit | 3 attempts / 600 seconds |
+
+### WordPress Security Stack (Production)
+
+| Control | Current State |
+|---------|---------------|
+| Direct `/wp-login.php` access | Blocked at Nginx (`403`) |
+| WordPress admin access | Via Laravel SSO link from admin panel |
+| Wordfence WAF runtime files | `wordfence-waf.php`, `.user.ini`, `wp-content/wflogs/` |
+| Security plugins | Wordfence, Solid Security (`better-wp-security`), WP Activity Log |
+
+### WordPress SMTP (Production)
+
+- SMTP is configured via `WP_SMTP_*` environment variables (not hardcoded in theme/wp-config).
+- Current relay provider: Brevo SMTP (`smtp-relay.brevo.com:587`, `tls`).
+- `WP_SMTP_PASSWORD` must only exist in server `.env` and never in Git.
+- Fluent Forms notifications are enabled for form IDs `1` and `2` to:
+  - `vahidrajablou87@gmail.com`
+  - `v.rajabloo@gmail.com`
+
+Quick verification:
+```bash
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose exec -T wordpress php -r 'require \"/var/www/html/wp-load.php\"; var_export(wp_mail(\"v.rajabloo@gmail.com\", \"SMTP smoke\", \"ok\")); echo PHP_EOL;'"
+```
 
 ---
 

@@ -88,6 +88,7 @@ Notes:
 - App Admin Panel: https://app.vahidrajabloo.com/admin
 - SSO: From Laravel admin panel
 - Direct WordPress login URL (`/wp-login.php`) returns `403`
+- App login page (`/dashboard/login`) returns `200` (not `500`)
 
 ### Step 4: Auth & Email Smoke Test
 - [ ] Register a new user at `/dashboard/register`
@@ -121,6 +122,28 @@ Expected result: `true`
 - [ ] Confirm Laravel admin SSO still opens WordPress dashboard
 - [ ] Confirm `https://vahidrajabloo.com/wp-json` returns `404`
 - [ ] Confirm direct `https://vahidrajabloo.com/wp-admin/admin-ajax.php` returns `404`
+
+### Step 8: Laravel Runtime Sanity (Critical)
+```bash
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose exec -T laravel sh -lc 'env | grep -E \"^DB_(CONNECTION|HOST|PORT|DATABASE|USERNAME|PASSWORD)=\"'"
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose exec -T -u www-data laravel sh -lc 'test -w /var/www/laravel/storage && test -w /var/www/laravel/bootstrap/cache && echo writable-ok'"
+```
+
+Expected:
+- Laravel container DB values are present and match `LARAVEL_DB_*` in server `.env`
+- `storage` and `bootstrap/cache` are writable by `www-data`
+
+### If App Returns `500` (Quick Recovery)
+```bash
+# 1) Recreate laravel container with current env
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose up -d --no-deps --force-recreate laravel"
+
+# 2) Fix runtime permissions
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose exec -T laravel sh -lc 'chown -R www-data:www-data /var/www/laravel/storage /var/www/laravel/bootstrap/cache && chmod -R ug+rwX /var/www/laravel/storage /var/www/laravel/bootstrap/cache'"
+
+# 3) Check app endpoint
+curl -I -s https://app.vahidrajabloo.com/dashboard/login | head -n 1
+```
 
 ---
 
