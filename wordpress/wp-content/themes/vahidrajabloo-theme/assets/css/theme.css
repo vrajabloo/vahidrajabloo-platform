@@ -506,7 +506,7 @@
 }
 
 .newsletter-description {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-secondary);
     margin-bottom: var(--spacing-xl);
 }
 

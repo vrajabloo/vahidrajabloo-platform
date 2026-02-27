@@ -28,7 +28,7 @@
                     <?php if ( is_active_sidebar( 'footer-1' ) ) : ?>
                         <?php dynamic_sidebar( 'footer-1' ); ?>
                     <?php else : ?>
-                        <h4 class="widget-title">Company</h4>
+                        <h3 class="widget-title">Company</h3>
                         <?php
                         wp_nav_menu( array(
                             'theme_location' => 'footer',
@@ -46,7 +46,7 @@
                     <?php if ( is_active_sidebar( 'footer-2' ) ) : ?>
                         <?php dynamic_sidebar( 'footer-2' ); ?>
                     <?php else : ?>
-                        <h4 class="widget-title">Resources</h4>
+                        <h3 class="widget-title">Resources</h3>
                         <?php
                         wp_nav_menu( array(
                             'theme_location' => 'footer-2',
@@ -61,7 +61,7 @@
 
                 <!-- Footer Column 3 - Connect -->
                 <div class="footer-col">
-                    <h4 class="widget-title">Connect</h4>
+                    <h3 class="widget-title">Connect</h3>
                     <?php if ( is_active_sidebar( 'footer-3' ) ) : ?>
                         <?php dynamic_sidebar( 'footer-3' ); ?>
                     <?php endif; ?>
