@@ -43,6 +43,18 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
             ])
+            ->renderHook(
+                'panels::head.end',
+                fn () => view('filament.accessibility.skip-link-styles')
+            )
+            ->renderHook(
+                'panels::body.start',
+                fn () => view('filament.accessibility.skip-link')
+            )
+            ->renderHook(
+                'panels::body.end',
+                fn () => view('filament.accessibility.skip-link-main-target-script')
+            )
             ->navigationItems([
                 \Filament\Navigation\NavigationItem::make('WordPress Admin')
                     ->url(fn () => route('wp.redirect'))

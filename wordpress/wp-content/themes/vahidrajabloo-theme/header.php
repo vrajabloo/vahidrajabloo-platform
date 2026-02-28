@@ -24,6 +24,7 @@ if (! preg_match('/\blang=/', $vr_html_language_attributes)) {
 
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<a class="skip-link" href="#main"><?php esc_html_e( 'Skip to main content', 'vahidrajabloo-theme' ); ?></a>
 
 <?php if (get_theme_mod('announcement_bar_enable', false) && get_theme_mod('announcement_bar_text', '')) : ?>
 <div class="announcement-bar" id="announcement-bar">

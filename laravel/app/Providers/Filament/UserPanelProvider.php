@@ -51,6 +51,18 @@ class UserPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
             ])
             ->renderHook(
+                'panels::head.end',
+                fn () => view('filament.accessibility.skip-link-styles')
+            )
+            ->renderHook(
+                'panels::body.start',
+                fn () => view('filament.accessibility.skip-link')
+            )
+            ->renderHook(
+                'panels::body.end',
+                fn () => view('filament.accessibility.skip-link-main-target-script')
+            )
+            ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
                 fn () => Blade::render('<div class="text-center mt-4"><a href="https://vahidrajabloo.com" class="text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400">← Back to Website</a></div>')
             )
