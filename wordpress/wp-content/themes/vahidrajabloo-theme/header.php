@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-<html <?php language_attributes(); ?>>
+<?php
+$vr_html_language_attributes = get_language_attributes();
+if (! preg_match('/\blang=/', $vr_html_language_attributes)) {
+    $vr_html_language_attributes = trim($vr_html_language_attributes . ' lang="en-US"');
+}
+?>
+<html <?php echo $vr_html_language_attributes; ?>>
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
