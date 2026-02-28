@@ -64,14 +64,38 @@
         const themeToggles = document.querySelectorAll('.theme-toggle-btn');
         const html = document.documentElement;
 
+        function updateThemeToggleA11y(theme) {
+            const isDark = theme === 'dark';
+
+            themeToggles.forEach(btn => {
+                const darkLabel = btn.getAttribute('data-label-dark') || 'Switch to dark mode';
+                const lightLabel = btn.getAttribute('data-label-light') || 'Switch to light mode';
+                const currentLabel = isDark ? lightLabel : darkLabel;
+
+                btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+                btn.setAttribute('aria-label', currentLabel);
+                btn.setAttribute('title', currentLabel);
+
+                const srText = btn.querySelector('.theme-toggle-sr-text');
+                if (srText) {
+                    srText.textContent = currentLabel;
+                }
+
+                const visibleText = btn.querySelector('.theme-toggle-text');
+                if (visibleText) {
+                    visibleText.textContent = currentLabel;
+                }
+            });
+        }
+
         // Check for saved user preference, if any, on load
         const savedTheme = localStorage.getItem('theme');
         const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 
         if (savedTheme === 'dark' || (!savedTheme && systemTheme === 'dark')) {
             html.setAttribute('data-theme', 'dark');
-            themeToggles.forEach(btn => btn.setAttribute('aria-pressed', 'true'));
         }
+        updateThemeToggleA11y(html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 
         themeToggles.forEach(toggle => {
             toggle.addEventListener('click', function () {
@@ -81,7 +105,7 @@
                 html.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
 
-                themeToggles.forEach(btn => btn.setAttribute('aria-pressed', newTheme === 'dark'));
+                updateThemeToggleA11y(newTheme);
             });
         });
 
