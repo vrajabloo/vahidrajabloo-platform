@@ -96,6 +96,11 @@ echo -e "${GREEN}✓ Build complete${NC}"
 
 echo -e "${YELLOW}[5/5] Restarting services...${NC}"
 docker compose up -d
+
+# Force-recreate nginx so Docker DNS for upstream service names is refreshed
+# after container IP changes (e.g. laravel/wordpress recreate on deploy).
+docker compose up -d --no-deps --force-recreate nginx
+
 echo -e "${GREEN}✓ Services started${NC}"
 
 # Step 5: Health check

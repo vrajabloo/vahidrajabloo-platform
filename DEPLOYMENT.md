@@ -133,6 +133,15 @@ Expected:
 - Laravel container DB values are present and match `LARAVEL_DB_*` in server `.env`
 - `storage` and `bootstrap/cache` are writable by `www-data`
 
+### If App Returns `404 File not found` (Upstream Cache Stale)
+```bash
+# Refresh nginx container so Docker DNS upstream mapping is re-resolved
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose up -d --no-deps --force-recreate nginx"
+
+# Re-check app endpoint
+curl -I -s https://app.vahidrajabloo.com/dashboard/login | head -n 1
+```
+
 ### If App Returns `500` (Quick Recovery)
 ```bash
 # 1) Recreate laravel container with current env

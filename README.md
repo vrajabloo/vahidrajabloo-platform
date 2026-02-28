@@ -74,6 +74,8 @@ docker compose -f docker-compose.local.yml up -d --build
 ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
 ```
 
+`deploy.sh` also force-recreates `nginx` to refresh Docker DNS upstream mapping for Laravel/WordPress containers.
+
 ### Laravel DB Variables (Production)
 
 - Docker `laravel` service reads database credentials from `LARAVEL_DB_*` keys in root `.env`.
