@@ -11,7 +11,19 @@
                 <?php echo esc_html( get_theme_mod( 'newsletter_description', 'Subscribe to our newsletter for the latest updates.' ) ); ?>
             </p>
             <form class="newsletter-form" action="#" method="post">
-                <input type="email" name="email" class="form-input" placeholder="Enter your email" required>
+                <label for="newsletter-email" class="screen-reader-text">
+                    <?php esc_html_e( 'Email Address', 'vahidrajabloo-theme' ); ?>
+                </label>
+                <input
+                    id="newsletter-email"
+                    type="email"
+                    name="email"
+                    class="form-input"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                    aria-required="true"
+                >
                 <button type="submit" class="btn btn--primary">
                     <?php echo esc_html( get_theme_mod( 'newsletter_btn_text', 'Subscribe' ) ); ?>
                 </button>
