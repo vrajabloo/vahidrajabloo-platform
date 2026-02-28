@@ -8,10 +8,10 @@
    Accessibility
    ========================================================================== */
 .skip-link {
-    position: fixed;
-    top: 0.75rem;
-    left: 0.75rem;
-    z-index: 5000;
+    position: fixed !important;
+    top: 0.75rem !important;
+    left: 0.75rem !important;
+    z-index: 5000 !important;
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     border: 2px solid #111827;
@@ -20,13 +20,13 @@
     font-weight: 700;
     line-height: 1.2;
     text-decoration: none;
-    transform: translateY(-250%);
+    transform: translateY(-250%) !important;
     transition: transform 120ms ease;
 }
 
 .skip-link:focus,
 .skip-link:focus-visible {
-    transform: translateY(0);
+    transform: translateY(0) !important;
     outline: 3px solid #ff750f;
     outline-offset: 2px;
 }

@@ -92,6 +92,11 @@ add_action( 'after_setup_theme', 'vahidrajabloo_content_width', 0 );
  * Enqueue Scripts and Styles
  */
 function vahidrajabloo_enqueue_scripts() {
+    $theme_dir = get_stylesheet_directory();
+    $style_version = file_exists( $theme_dir . '/style.css' ) ? (string) filemtime( $theme_dir . '/style.css' ) : VAHIDRAJABLOO_THEME_VERSION;
+    $theme_v2_version = file_exists( $theme_dir . '/assets/css/theme-v2.css' ) ? (string) filemtime( $theme_dir . '/assets/css/theme-v2.css' ) : VAHIDRAJABLOO_THEME_VERSION;
+    $theme_js_version = file_exists( $theme_dir . '/assets/js/theme.js' ) ? (string) filemtime( $theme_dir . '/assets/js/theme.js' ) : VAHIDRAJABLOO_THEME_VERSION;
+
     // Google Fonts - Inter
     wp_enqueue_style(
         'vahidrajabloo-google-fonts',
@@ -103,25 +108,25 @@ function vahidrajabloo_enqueue_scripts() {
     // Main Stylesheet
     wp_enqueue_style(
         'vahidrajabloo-style',
-        get_stylesheet_uri(),
+        get_stylesheet_uri() . '?v=' . $style_version,
         array(),
-        VAHIDRAJABLOO_THEME_VERSION
+        null
     );
 
     // Theme CSS
     wp_enqueue_style(
         'vahidrajabloo-theme-style',
-        VAHIDRAJABLOO_THEME_ASSETS_URL . 'css/theme-v2.css',
+        VAHIDRAJABLOO_THEME_ASSETS_URL . 'css/theme-v2.css?v=' . $theme_v2_version,
         array( 'vahidrajabloo-style' ),
-        VAHIDRAJABLOO_THEME_VERSION
+        null
     );
 
     // Theme JavaScript
     wp_enqueue_script(
         'vahidrajabloo-theme-script',
-        VAHIDRAJABLOO_THEME_ASSETS_URL . 'js/theme.js',
+        VAHIDRAJABLOO_THEME_ASSETS_URL . 'js/theme.js?v=' . $theme_js_version,
         array(),
-        VAHIDRAJABLOO_THEME_VERSION,
+        null,
         true
     );
     
@@ -838,24 +843,52 @@ function vahidrajabloo_announcement_bar_body_class( $classes ) {
 add_filter( 'body_class', 'vahidrajabloo_announcement_bar_body_class' );
 
 /**
- * Configure SMTP for SendGrid
+ * Read config value from constant or env.
+ */
+function vahidrajabloo_get_config_value( $key, $default = '' ) {
+    if ( defined( $key ) ) {
+        $value = constant( $key );
+        if ( $value !== '' && $value !== null ) {
+            return (string) $value;
+        }
+    }
+
+    $value = getenv( $key );
+    if ( $value === false || $value === '' ) {
+        return (string) $default;
+    }
+
+    return (string) $value;
+}
+
+/**
+ * Configure SMTP via environment variables.
  */
 function vahidrajabloo_smtp_config( $phpmailer ) {
-    $sendgrid_key = defined('SENDGRID_API_KEY') ? SENDGRID_API_KEY : getenv('SENDGRID_API_KEY');
-    
-    if ( empty($sendgrid_key) ) {
-        return; // Skip if no API key configured
+    $host       = vahidrajabloo_get_config_value( 'WP_SMTP_HOST' );
+    $port       = (int) vahidrajabloo_get_config_value( 'WP_SMTP_PORT', '587' );
+    $username   = vahidrajabloo_get_config_value( 'WP_SMTP_USERNAME' );
+    $password   = vahidrajabloo_get_config_value( 'WP_SMTP_PASSWORD' );
+    $encryption = strtolower( vahidrajabloo_get_config_value( 'WP_SMTP_ENCRYPTION', 'tls' ) );
+    $from_email = vahidrajabloo_get_config_value( 'WP_SMTP_FROM_EMAIL', get_option( 'admin_email' ) );
+    $from_name  = vahidrajabloo_get_config_value( 'WP_SMTP_FROM_NAME', get_bloginfo( 'name' ) );
+    $auth_raw   = strtolower( vahidrajabloo_get_config_value( 'WP_SMTP_AUTH', 'true' ) );
+
+    if ( empty( $host ) || empty( $username ) || empty( $password ) ) {
+        return;
     }
-    
+
+    $smtp_auth = ! in_array( $auth_raw, [ '0', 'false', 'off', 'no' ], true );
+
     $phpmailer->isSMTP();
-    $phpmailer->Host       = 'smtp.sendgrid.net';
-    $phpmailer->SMTPAuth   = true;
-    $phpmailer->Port       = 587;
-    $phpmailer->Username   = 'apikey';
-    $phpmailer->Password   = $sendgrid_key;
-    $phpmailer->SMTPSecure = 'tls';
-    $phpmailer->From       = 'info@vahidrajabloo.com';
-    $phpmailer->FromName   = 'Vahid Rajabloo';
+    $phpmailer->Host       = $host;
+    $phpmailer->SMTPAuth   = $smtp_auth;
+    $phpmailer->Port       = $port > 0 ? $port : 587;
+    $phpmailer->Username   = $username;
+    $phpmailer->Password   = $password;
+    $phpmailer->SMTPSecure = in_array( $encryption, [ 'tls', 'ssl' ], true ) ? $encryption : '';
+    $phpmailer->From       = $from_email;
+    $phpmailer->FromName   = $from_name;
 }
 add_action( 'phpmailer_init', 'vahidrajabloo_smtp_config' );
 
@@ -997,4 +1030,3 @@ function vahidrajabloo_export_newsletter_csv( $subscribers ) {
     fclose( $output );
     exit;
 }
-
