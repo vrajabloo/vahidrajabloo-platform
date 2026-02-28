@@ -41,7 +41,9 @@
 
 ### 🏗️ Infrastructure
 - [ ] `git pull` only (no force)
-- [ ] Docker builds successfully
+- [ ] Fast deploy is enough for this change (`./deploy.sh`)
+- [ ] If this is weekly maintenance, run full rebuild (`./deploy.sh --full-rebuild`)
+- [ ] Docker build strategy selected correctly (cached vs full rebuild)
 - [ ] Containers start without error
 - [ ] Health checks pass (HTTP 200)
 - [ ] If `WP_SMTP_*` changed, WordPress container will be recreated

@@ -18,6 +18,7 @@
 | Action | Command |
 |--------|---------|
 | Deploy | `ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"` |
+| Full rebuild deploy | `ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh --full-rebuild"` |
 | Rollback | `ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh"` |
 | View logs | `ssh deploy@116.203.78.31 "docker logs nginx --tail 50"` |
 | Status | `ssh deploy@116.203.78.31 "docker ps"` |
@@ -74,12 +75,18 @@ git push origin main
 
 ### Step 2: Deploy
 ```bash
+# Fast deploy (default, uses Docker cache)
 ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
+
+# Weekly/maintenance deploy (forces no-cache rebuild)
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh --full-rebuild"
 ```
 
 Notes:
 - `deploy.sh` blocks only tracked Git changes.
 - Runtime untracked files (for example WordPress plugin files installed from wp-admin) do not block deployment.
+- Fast deploy skips heavy image rebuild unless container-level files changed.
+- Full rebuild should run at least weekly for base image/package freshness.
 
 ### Step 3: Verify
 - Website: https://vahidrajabloo.com
@@ -168,6 +175,20 @@ ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh ab
 # Dry run first
 ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./rollback.sh --dry-run"
 ```
+
+---
+
+## ⏱️ Weekly Full Rebuild (Security Freshness)
+
+Even with fast deploy enabled, run a clean rebuild weekly:
+
+```bash
+# Install weekly cron (Sunday 03:30 UTC)
+ssh deploy@116.203.78.31 "(sudo crontab -l 2>/dev/null; echo '30 3 * * 0 /var/www/vahidrajabloo-platform/scripts/weekly-full-rebuild.sh') | sudo crontab -"
+```
+
+Log file:
+- `/var/log/vahidrajabloo/weekly-full-rebuild.log`
 
 ---
 

@@ -3,17 +3,17 @@
 # ===========================================
 # 🚀 VahidRajabloo Platform - Production Deployment
 # ===========================================
-# 
+#
 # GOLDEN RULE:
 # ❌ No direct edits on server
 # ✅ Only GitHub → deploy.sh
 #
 # Usage:
-#   ssh root@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
-#
+#   ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
+#   ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh --full-rebuild"
 # ===========================================
 
-set -e
+set -euo pipefail
 
 # Colors
 RED='\033[0;31m'
@@ -21,11 +21,81 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
+FULL_REBUILD="${FULL_REBUILD:-0}"
+CHANGED_FILES=""
+
+print_usage() {
+    cat <<EOF
+Usage: ./deploy.sh [--full-rebuild] [--help]
+
+Options:
+  --full-rebuild   Force clean Docker image rebuild (no cache).
+                   Use weekly for security patch freshness.
+  --help           Show this help message.
+
+Environment:
+  FULL_REBUILD=1   Same as --full-rebuild
+EOF
+}
+
+contains_changed_pattern() {
+    local pattern="$1"
+    if [ -z "${CHANGED_FILES}" ]; then
+        return 1
+    fi
+    echo "${CHANGED_FILES}" | grep -Eq "${pattern}"
+}
+
+check_container_running() {
+    local name="$1"
+    if docker ps --format '{{.Names}}' | grep -qx "${name}"; then
+        echo -e "${GREEN}✓ ${name}: Running${NC}"
+        return 0
+    fi
+    echo -e "${RED}✗ ${name}: Not running${NC}"
+    return 1
+}
+
+check_http_endpoint() {
+    local label="$1"
+    local host="$2"
+    local path="$3"
+    if curl -fsS --max-time 15 -o /dev/null -H "Host: ${host}" "http://127.0.0.1${path}"; then
+        echo -e "${GREEN}✓ ${label}: HTTP 200${NC}"
+        return 0
+    fi
+    echo -e "${RED}✗ ${label}: HTTP check failed${NC}"
+    return 1
+}
+
+for arg in "$@"; do
+    case "${arg}" in
+        --full-rebuild)
+            FULL_REBUILD=1
+            ;;
+        --help|-h)
+            print_usage
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Unknown argument: ${arg}${NC}"
+            print_usage
+            exit 1
+            ;;
+    esac
+done
+
 echo ""
 echo "=========================================="
 echo "🚀 VahidRajabloo Platform - Deployment"
 echo "=========================================="
 echo ""
+
+if [ "${FULL_REBUILD}" = "1" ]; then
+    echo -e "${YELLOW}Mode: FULL REBUILD (no cache)${NC}"
+else
+    echo -e "${YELLOW}Mode: FAST DEPLOY (cached)${NC}"
+fi
 
 # Check if git repository
 if [ ! -d ".git" ]; then
@@ -38,7 +108,7 @@ fi
 # Step 1: Check for tracked local changes (runtime untracked files are allowed)
 echo -e "${YELLOW}[1/5] Checking for tracked local changes...${NC}"
 TRACKED_CHANGES="$(git status --porcelain --untracked-files=no)"
-if [ -n "$TRACKED_CHANGES" ]; then
+if [ -n "${TRACKED_CHANGES}" ]; then
     echo -e "${RED}⚠️  WARNING: Tracked local changes detected!${NC}"
     echo "Tracked changes:"
     git status --short --untracked-files=no
@@ -49,8 +119,8 @@ if [ -n "$TRACKED_CHANGES" ]; then
     echo "  2. Or commit locally first and push"
 
     if [ -t 0 ]; then
-        read -p "Discard tracked changes and continue? (y/N): " confirm
-        if [ "$confirm" != "y" ]; then
+        read -r -p "Discard tracked changes and continue? (y/N): " confirm
+        if [ "${confirm}" != "y" ]; then
             echo "Deployment cancelled."
             exit 1
         fi
@@ -73,8 +143,18 @@ fi
 
 # Step 2: Pull from GitHub
 echo -e "${YELLOW}[2/5] Pulling from GitHub...${NC}"
+PRE_PULL_COMMIT="$(git rev-parse HEAD)"
 git pull origin main
-echo -e "${GREEN}✓ Code updated${NC}"
+POST_PULL_COMMIT="$(git rev-parse HEAD)"
+
+if [ "${PRE_PULL_COMMIT}" = "${POST_PULL_COMMIT}" ]; then
+    echo -e "${GREEN}✓ Code already up-to-date${NC}"
+else
+    CHANGED_FILES="$(git diff --name-only "${PRE_PULL_COMMIT}" "${POST_PULL_COMMIT}")"
+    echo -e "${GREEN}✓ Code updated${NC}"
+    echo -e "${YELLOW}Changed files in this deploy:${NC}"
+    echo "${CHANGED_FILES}" | sed 's/^/  - /'
+fi
 
 # Step 3: Check .env file
 echo -e "${YELLOW}[3/5] Checking environment...${NC}"
@@ -89,49 +169,81 @@ if [ ! -f ".env" ]; then
 fi
 echo -e "${GREEN}✓ Environment ready${NC}"
 
-# Step 4: Build and restart containers
+# Step 4: Build strategy
 echo -e "${YELLOW}[4/5] Building containers...${NC}"
-docker compose build --no-cache
-echo -e "${GREEN}✓ Build complete${NC}"
+NEEDS_LARAVEL_REBUILD=0
+if [ "${FULL_REBUILD}" = "1" ]; then
+    NEEDS_LARAVEL_REBUILD=1
+elif contains_changed_pattern '^docker/laravel/' || contains_changed_pattern '^docker-compose\.yml$'; then
+    NEEDS_LARAVEL_REBUILD=1
+fi
+
+if [ "${NEEDS_LARAVEL_REBUILD}" = "1" ]; then
+    if [ "${FULL_REBUILD}" = "1" ]; then
+        docker compose build --no-cache laravel
+    else
+        docker compose build laravel
+    fi
+    echo -e "${GREEN}✓ Laravel image build complete${NC}"
+else
+    echo -e "${YELLOW}ℹ Skipping image rebuild (no container-level changes detected)${NC}"
+fi
 
 echo -e "${YELLOW}[5/5] Restarting services...${NC}"
 docker compose up -d
 
-# Force-recreate nginx so Docker DNS for upstream service names is refreshed
-# after container IP changes (e.g. laravel/wordpress recreate on deploy).
-docker compose up -d --no-deps --force-recreate nginx
+# Refresh nginx DNS mapping only when container topology might change.
+if [ "${NEEDS_LARAVEL_REBUILD}" = "1" ] || [ "${FULL_REBUILD}" = "1" ]; then
+    docker compose up -d --no-deps --force-recreate nginx
+    echo -e "${GREEN}✓ Nginx recreated (upstream DNS refresh)${NC}"
+fi
+
+# Keep runtime dependencies in sync when composer files changed.
+if contains_changed_pattern '^laravel/composer\.json$' || contains_changed_pattern '^laravel/composer\.lock$'; then
+    echo -e "${YELLOW}Syncing Laravel vendor dependencies...${NC}"
+    docker compose exec -T laravel sh -lc 'cd /var/www/laravel && composer install --no-dev --optimize-autoloader --no-interaction'
+    echo -e "${GREEN}✓ Laravel dependencies updated${NC}"
+fi
+
+# Clear Laravel app caches when Laravel code changed.
+if contains_changed_pattern '^laravel/'; then
+    docker compose exec -T laravel php artisan optimize:clear >/dev/null
+    echo -e "${GREEN}✓ Laravel runtime cache cleared${NC}"
+fi
+
+# Reset WordPress opcode cache for PHP/theme/plugin updates.
+if contains_changed_pattern '^wordpress/'; then
+    docker compose exec -T wordpress sh -lc 'php -r "if (function_exists(\"opcache_reset\")) { opcache_reset(); }"' >/dev/null || true
+    echo -e "${GREEN}✓ WordPress OPCache reset${NC}"
+fi
+
+# Purge Nginx FastCGI cache to avoid stale HTML after deploy.
+docker exec nginx sh -lc 'rm -rf /var/cache/nginx/fastcgi/*' >/dev/null 2>&1 || true
+echo -e "${GREEN}✓ Nginx FastCGI cache purged${NC}"
 
 echo -e "${GREEN}✓ Services started${NC}"
 
-# Step 5: Health check
+# Health checks
 echo ""
 echo -e "${YELLOW}Waiting for services to start...${NC}"
 sleep 5
 
-# Check if nginx is running
-if docker ps | grep -q nginx; then
-    echo -e "${GREEN}✓ Nginx: Running${NC}"
-else
-    echo -e "${RED}✗ Nginx: Not running${NC}"
-fi
+HEALTH_FAILED=0
+check_container_running "nginx" || HEALTH_FAILED=1
+check_container_running "wordpress" || HEALTH_FAILED=1
+check_container_running "mysql" || HEALTH_FAILED=1
+check_container_running "laravel" || HEALTH_FAILED=1
 
-# Check if wordpress is running
-if docker ps | grep -q wordpress; then
-    echo -e "${GREEN}✓ WordPress: Running${NC}"
-else
-    echo -e "${RED}✗ WordPress: Not running${NC}"
-fi
-
-# Check if mysql is running
-if docker ps | grep -q mysql; then
-    echo -e "${GREEN}✓ MySQL: Running${NC}"
-else
-    echo -e "${RED}✗ MySQL: Not running${NC}"
-fi
+check_http_endpoint "Website" "vahidrajabloo.com" "/" || HEALTH_FAILED=1
+check_http_endpoint "App Login" "app.vahidrajabloo.com" "/dashboard/login" || HEALTH_FAILED=1
 
 echo ""
 echo "=========================================="
-echo -e "${GREEN}✅ Deployment Complete!${NC}"
+if [ "${HEALTH_FAILED}" -eq 0 ]; then
+    echo -e "${GREEN}✅ Deployment Complete!${NC}"
+else
+    echo -e "${RED}❌ Deployment completed with health-check errors${NC}"
+fi
 echo "=========================================="
 echo ""
 
@@ -153,3 +265,7 @@ echo ""
 echo "Deployed commit:"
 git log -1 --oneline
 echo ""
+
+if [ "${HEALTH_FAILED}" -ne 0 ]; then
+    exit 1
+fi
