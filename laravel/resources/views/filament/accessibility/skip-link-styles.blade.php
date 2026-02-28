@@ -22,7 +22,6 @@
         right: 0.75rem;
     }
 
-    .vr-skip-link:focus,
     .vr-skip-link:focus-visible {
         transform: translateY(0);
         outline: 3px solid #ff750f;
@@ -38,34 +37,10 @@
         summary,
         [role="button"],
         [tabindex]:not([tabindex="-1"])
-    ):focus,
-    :where(
-        a,
-        button,
-        input,
-        select,
-        textarea,
-        summary,
-        [role="button"],
-        [tabindex]:not([tabindex="-1"])
     ):focus-visible {
         outline: 3px solid #ff750f !important;
         outline-offset: 2px !important;
         box-shadow: 0 0 0 2px rgba(255, 117, 15, 0.2);
-    }
-
-    :where(
-        a,
-        button,
-        input,
-        select,
-        textarea,
-        summary,
-        [role="button"],
-        [tabindex]:not([tabindex="-1"])
-    ):focus:not(:focus-visible) {
-        outline: none;
-        box-shadow: none;
     }
 
     #main-content {
