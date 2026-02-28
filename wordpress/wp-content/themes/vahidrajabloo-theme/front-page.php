@@ -67,6 +67,12 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
             <?php for ( $i = 1; $i <= 4; $i++ ) : 
                 $feature_link = get_theme_mod( "feature_{$i}_link", '' );
                 $has_link = ! empty( $feature_link );
+                $feature_title = get_theme_mod( "feature_{$i}_title", "Feature {$i}" );
+                $feature_icon_alt = sprintf(
+                    /* translators: %s: Feature title. */
+                    __( 'Icon for %s', 'vahidrajabloo-theme' ),
+                    $feature_title
+                );
             ?>
                 <?php if ( $has_link ) : ?>
                     <a href="<?php echo esc_url( $feature_link ); ?>" class="feature-card feature-card--premium feature-card--linked hover-lift">
@@ -77,13 +83,13 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
                     <?php
                     $icon = get_theme_mod( "feature_{$i}_icon", '' );
                     if ( $icon ) {
-                        echo '<img src="' . esc_url( $icon ) . '" alt="" class="feature-card__icon">';
+                        echo '<img src="' . esc_url( $icon ) . '" alt="' . esc_attr( $feature_icon_alt ) . '" class="feature-card__icon">';
                     } else {
                         echo '<div class="feature-card__icon feature-icon-placeholder"></div>';
                     }
                     ?>
                     <h3 class="feature-card__title">
-                        <?php echo esc_html( get_theme_mod( "feature_{$i}_title", "Feature {$i}" ) ); ?>
+                        <?php echo esc_html( $feature_title ); ?>
                     </h3>
                     <p class="feature-card__text">
                         <?php echo esc_html( get_theme_mod( "feature_{$i}_text", 'Feature description goes here.' ) ); ?>

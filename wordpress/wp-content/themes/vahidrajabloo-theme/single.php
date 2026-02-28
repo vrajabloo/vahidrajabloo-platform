@@ -100,7 +100,18 @@ get_header();
             <div class="container container--narrow">
                 <div class="author-card flex flex--gap-lg">
                     <div class="author-avatar">
-                        <?php echo get_avatar( get_the_author_meta( 'ID' ), 80 ); ?>
+                        <?php
+                        echo get_avatar(
+                            get_the_author_meta( 'ID' ),
+                            80,
+                            '',
+                            sprintf(
+                                /* translators: %s: Author display name. */
+                                __( 'Avatar of %s', 'vahidrajabloo-theme' ),
+                                get_the_author()
+                            )
+                        );
+                        ?>
                     </div>
                     <div class="author-info">
                         <h4 class="author-name"><?php the_author(); ?></h4>

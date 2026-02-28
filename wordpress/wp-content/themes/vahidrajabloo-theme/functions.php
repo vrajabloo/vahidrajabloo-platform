@@ -764,10 +764,16 @@ add_action( 'wp_head', 'vahidrajabloo_customizer_css' );
  * Custom Logo
  */
 function vahidrajabloo_custom_logo() {
+    $site_name = get_bloginfo( 'name' );
     $home_aria_label = sprintf(
         /* translators: %s: Site name. */
         __( '%s - Home', 'vahidrajabloo-theme' ),
-        get_bloginfo( 'name' )
+        $site_name
+    );
+    $logo_alt_text = sprintf(
+        /* translators: %s: Site name. */
+        __( '%s logo', 'vahidrajabloo-theme' ),
+        $site_name
     );
 
     if ( has_custom_logo() ) {
@@ -782,8 +788,7 @@ function vahidrajabloo_custom_logo() {
                     'class'       => 'custom-logo',
                     'loading'     => 'eager',
                     'decoding'    => 'async',
-                    'alt'         => '',
-                    'aria-hidden' => 'true',
+                    'alt'         => $logo_alt_text,
                 )
             );
 
