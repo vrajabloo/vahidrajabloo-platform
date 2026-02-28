@@ -8,10 +8,8 @@ Route::get('/', function () {
 });
 
 // WordPress Auto-Login (SSO)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/wp-redirect', [WpAutoLoginController::class, 'redirectToWordPress'])
-        ->name('wp.redirect');
-});
+Route::get('/wp-redirect', [WpAutoLoginController::class, 'redirectToWordPress'])
+    ->name('wp.redirect');
 
 // API endpoint for WordPress to validate token (no auth required)
 Route::get('/api/wp-validate-token', [WpAutoLoginController::class, 'validateToken'])

@@ -14,8 +14,12 @@ class WpAutoLoginController extends Controller
     public function redirectToWordPress(Request $request)
     {
         $user = Auth::user();
-        
-        if (!$user || !$user->isAdmin()) {
+
+        if (!$user) {
+            return redirect('/admin/login');
+        }
+
+        if (!$user->isAdmin()) {
             abort(403, 'Only admins can access WordPress dashboard');
         }
 
