@@ -27,7 +27,7 @@ if (! preg_match('/\blang=/', $vr_html_language_attributes)) {
 <a class="skip-link" href="#main"><?php esc_html_e( 'Skip to main content', 'vahidrajabloo-theme' ); ?></a>
 
 <?php if (get_theme_mod('announcement_bar_enable', false) && get_theme_mod('announcement_bar_text', '')) : ?>
-<div class="announcement-bar" id="announcement-bar">
+<div class="announcement-bar" id="announcement-bar" role="status" aria-live="polite" aria-atomic="true">
     <div class="container">
         <p class="announcement-bar__text">
             <?php echo esc_html(get_theme_mod('announcement_bar_text', '')); ?>
