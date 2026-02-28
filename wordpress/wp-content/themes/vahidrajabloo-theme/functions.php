@@ -809,6 +809,46 @@ function vahidrajabloo_custom_logo() {
 }
 
 /**
+ * Ensure avatar images always have meaningful alt text.
+ */
+function vahidrajabloo_avatar_alt_text( $avatar, $id_or_email, $size, $default, $alt, $args ) {
+    $resolved_alt = trim( (string) $alt );
+
+    if ( $resolved_alt === '' ) {
+        $display_name = '';
+
+        if ( is_numeric( $id_or_email ) ) {
+            $user = get_userdata( (int) $id_or_email );
+            $display_name = $user ? $user->display_name : '';
+        } elseif ( $id_or_email instanceof WP_User ) {
+            $display_name = $id_or_email->display_name;
+        } elseif ( $id_or_email instanceof WP_Comment ) {
+            $display_name = (string) $id_or_email->comment_author;
+        } elseif ( is_string( $id_or_email ) && is_email( $id_or_email ) ) {
+            $user = get_user_by( 'email', $id_or_email );
+            $display_name = $user ? $user->display_name : '';
+        }
+
+        if ( $display_name === '' ) {
+            $display_name = __( 'user', 'vahidrajabloo-theme' );
+        }
+
+        $resolved_alt = sprintf(
+            /* translators: %s: Avatar owner name. */
+            __( 'Avatar of %s', 'vahidrajabloo-theme' ),
+            $display_name
+        );
+    }
+
+    if ( preg_match( '/\salt=("|\').*?\1/i', $avatar ) ) {
+        return preg_replace( '/\salt=("|\').*?\1/i', ' alt="' . esc_attr( $resolved_alt ) . '"', $avatar, 1 ) ?: $avatar;
+    }
+
+    return preg_replace( '/<img\s+/i', '<img alt="' . esc_attr( $resolved_alt ) . '" ', $avatar, 1 ) ?: $avatar;
+}
+add_filter( 'get_avatar', 'vahidrajabloo_avatar_alt_text', 10, 6 );
+
+/**
  * Widget Areas
  */
 function vahidrajabloo_widgets_init() {
