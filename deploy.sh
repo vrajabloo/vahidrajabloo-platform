@@ -172,10 +172,16 @@ echo -e "${GREEN}✓ Environment ready${NC}"
 # Step 4: Build strategy
 echo -e "${YELLOW}[4/5] Building containers...${NC}"
 NEEDS_LARAVEL_REBUILD=0
+NEEDS_NGINX_RECREATE=0
 if [ "${FULL_REBUILD}" = "1" ]; then
     NEEDS_LARAVEL_REBUILD=1
+    NEEDS_NGINX_RECREATE=1
 elif contains_changed_pattern '^docker/laravel/' || contains_changed_pattern '^docker-compose\.yml$'; then
     NEEDS_LARAVEL_REBUILD=1
+fi
+
+if contains_changed_pattern '^docker/nginx/' || contains_changed_pattern '^docker-compose\.yml$'; then
+    NEEDS_NGINX_RECREATE=1
 fi
 
 if [ "${NEEDS_LARAVEL_REBUILD}" = "1" ]; then
@@ -192,10 +198,10 @@ fi
 echo -e "${YELLOW}[5/5] Restarting services...${NC}"
 docker compose up -d
 
-# Refresh nginx DNS mapping only when container topology might change.
-if [ "${NEEDS_LARAVEL_REBUILD}" = "1" ] || [ "${FULL_REBUILD}" = "1" ]; then
+# Recreate nginx when upstream topology or nginx config changed.
+if [ "${NEEDS_LARAVEL_REBUILD}" = "1" ] || [ "${NEEDS_NGINX_RECREATE}" = "1" ]; then
     docker compose up -d --no-deps --force-recreate nginx
-    echo -e "${GREEN}✓ Nginx recreated (upstream DNS refresh)${NC}"
+    echo -e "${GREEN}✓ Nginx recreated (upstream DNS/config refresh)${NC}"
 fi
 
 # Keep runtime dependencies in sync when composer files changed.
