@@ -764,13 +764,43 @@ add_action( 'wp_head', 'vahidrajabloo_customizer_css' );
  * Custom Logo
  */
 function vahidrajabloo_custom_logo() {
+    $home_aria_label = sprintf(
+        /* translators: %s: Site name. */
+        __( '%s - Home', 'vahidrajabloo-theme' ),
+        get_bloginfo( 'name' )
+    );
+
     if ( has_custom_logo() ) {
-        the_custom_logo();
-    } else {
-        echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="site-logo">';
-        echo '<span class="site-title">' . get_bloginfo( 'name' ) . '</span>';
-        echo '</a>';
+        $custom_logo_id = (int) get_theme_mod( 'custom_logo' );
+
+        if ( $custom_logo_id > 0 ) {
+            $custom_logo_img = wp_get_attachment_image(
+                $custom_logo_id,
+                'full',
+                false,
+                array(
+                    'class'       => 'custom-logo',
+                    'loading'     => 'eager',
+                    'decoding'    => 'async',
+                    'alt'         => '',
+                    'aria-hidden' => 'true',
+                )
+            );
+
+            if ( $custom_logo_img ) {
+                $aria_current = ( is_front_page() && ! is_paged() ) ? ' aria-current="page"' : '';
+
+                echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="custom-logo-link" rel="home" aria-label="' . esc_attr( $home_aria_label ) . '"' . $aria_current . '>';
+                echo $custom_logo_img;
+                echo '</a>';
+                return;
+            }
+        }
     }
+
+    echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="site-logo" aria-label="' . esc_attr( $home_aria_label ) . '">';
+    echo '<span class="site-title">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+    echo '</a>';
 }
 
 /**
