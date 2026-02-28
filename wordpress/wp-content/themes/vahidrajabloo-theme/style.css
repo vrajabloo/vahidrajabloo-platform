@@ -502,7 +502,8 @@ a.btn--primary:hover {
 }
 
 .form-input:focus {
-    outline: none;
+    outline: 3px solid #ff750f;
+    outline-offset: 2px;
     border-color: var(--color-primary);
 }
 
@@ -903,7 +904,8 @@ body.has-announcement-bar .site-main {
 .gform_wrapper.gravity-theme textarea:focus,
 .gform_wrapper.gravity-theme select:focus {
     border-color: var(--color-primary);
-    outline: none;
+    outline: 3px solid #ff750f;
+    outline-offset: 2px;
     box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
 }
 

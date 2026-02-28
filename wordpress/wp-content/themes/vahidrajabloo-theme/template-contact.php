@@ -426,7 +426,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['vr_contact_nonce'])) 
 
 .form-group input:focus,
 .form-group textarea:focus {
-    outline: none;
+    outline: 3px solid #ff750f;
+    outline-offset: 2px;
     border-color: var(--color-primary, #4361EE);
     box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
 }
