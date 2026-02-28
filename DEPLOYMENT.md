@@ -184,11 +184,11 @@ Even with fast deploy enabled, run a clean rebuild weekly:
 
 ```bash
 # Install weekly cron (Sunday 03:30 UTC)
-ssh deploy@116.203.78.31 "(sudo crontab -l 2>/dev/null; echo '30 3 * * 0 /var/www/vahidrajabloo-platform/scripts/weekly-full-rebuild.sh') | sudo crontab -"
+ssh deploy@116.203.78.31 "(crontab -l 2>/dev/null; echo '30 3 * * 0 /var/www/vahidrajabloo-platform/scripts/weekly-full-rebuild.sh') | crontab -"
 ```
 
 Log file:
-- `/var/log/vahidrajabloo/weekly-full-rebuild.log`
+- `/var/www/vahidrajabloo-platform/logs/weekly-full-rebuild.log`
 
 ---
 

@@ -3,7 +3,7 @@
 set -euo pipefail
 
 PROJECT_DIR="/var/www/vahidrajabloo-platform"
-LOG_FILE="/var/log/vahidrajabloo/weekly-full-rebuild.log"
+LOG_FILE="${PROJECT_DIR}/logs/weekly-full-rebuild.log"
 
 mkdir -p "$(dirname "${LOG_FILE}")"
 
