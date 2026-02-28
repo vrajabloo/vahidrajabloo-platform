@@ -53,10 +53,16 @@ get_header();
                         <?php
                         $link = get_post_meta(get_the_ID(), '_product_link', true);
                         $link_text = get_post_meta(get_the_ID(), '_product_link_text', true) ?: 'Learn More';
+                        $link_aria_label = sprintf(
+                            /* translators: 1: link text, 2: product title. */
+                            __('%1$s - %2$s', 'vahidrajabloo-theme'),
+                            $link_text,
+                            get_the_title()
+                        );
                         ?>
                         <div class="product-actions">
                             <?php if ($link) : ?>
-                                <a href="<?php echo esc_url($link); ?>" class="btn btn--primary" target="_blank" rel="noopener">
+                                <a href="<?php echo esc_url($link); ?>" class="btn btn--primary" target="_blank" rel="noopener" aria-label="<?php echo esc_attr($link_aria_label); ?>">
                                     <?php echo esc_html($link_text); ?>
                                 </a>
                             <?php endif; ?>
@@ -127,7 +133,11 @@ get_header();
                                     <span class="product-card__price"><?php echo esc_html($card_price . ' ' . $card_currency); ?></span>
                                 <?php endif; ?>
                                 
-                                <a href="<?php the_permalink(); ?>" class="btn btn--link">View Details →</a>
+                                <a
+                                    href="<?php the_permalink(); ?>"
+                                    class="btn btn--link"
+                                    aria-label="<?php echo esc_attr( sprintf( __( 'View details - %s', 'vahidrajabloo-theme' ), get_the_title() ) ); ?>"
+                                >View Details →</a>
                             </div>
                         </article>
                     <?php endwhile; ?>

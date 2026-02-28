@@ -32,7 +32,7 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
                     <a href="<?php echo esc_url( $btn_primary_url ); ?>" class="btn btn--premium">
                         <?php echo esc_html( $btn_primary_text ); ?>
                     </a>
-                    <a href="#features" class="btn btn--outline-animated">
+                    <a href="#features" class="btn btn--outline-animated" aria-label="<?php echo esc_attr__( 'Learn more about our accessible technology features', 'vahidrajabloo-theme' ); ?>">
                         Learn More
                     </a>
                 </div>
@@ -156,7 +156,11 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
                             <p class="card__text"><?php echo wp_trim_words( get_the_excerpt(), 12 ); ?></p>
                         <?php endif; ?>
                         
-                        <a href="<?php the_permalink(); ?>" class="btn btn--link">View Details →</a>
+                        <a
+                            href="<?php the_permalink(); ?>"
+                            class="btn btn--link"
+                            aria-label="<?php echo esc_attr( sprintf( __( 'View details - %s', 'vahidrajabloo-theme' ), get_the_title() ) ); ?>"
+                        >View Details →</a>
                     </div>
                 </article>
             <?php
@@ -225,7 +229,11 @@ if ( defined( 'ELEMENTOR_VERSION' ) && \Elementor\Plugin::$instance->preview->is
                             <?php echo wp_trim_words( get_the_excerpt(), 15 ); ?>
                         </p>
                         
-                        <a href="<?php the_permalink(); ?>" class="btn btn--link">
+                        <a
+                            href="<?php the_permalink(); ?>"
+                            class="btn btn--link"
+                            aria-label="<?php echo esc_attr( sprintf( __( 'Read more - %s', 'vahidrajabloo-theme' ), get_the_title() ) ); ?>"
+                        >
                             Read More →
                         </a>
                     </div>

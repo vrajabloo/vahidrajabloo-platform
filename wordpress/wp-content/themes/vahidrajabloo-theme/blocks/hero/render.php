@@ -21,6 +21,22 @@ $show_secondary = $attributes['showSecondaryButton'] ?? true;
 $wrapper_attributes = get_block_wrapper_attributes([
     'class' => 'vr-hero vr-hero--' . esc_attr($alignment),
 ]);
+
+$secondary_aria_label = '';
+if ($secondary_btn_text) {
+    if ($secondary_btn_url === '#features') {
+        $secondary_aria_label = __('Learn more about our accessible technology features', 'vahidrajabloo-theme');
+    } elseif ($title) {
+        $secondary_aria_label = sprintf(
+            /* translators: 1: link text, 2: hero title. */
+            __('%1$s - %2$s', 'vahidrajabloo-theme'),
+            $secondary_btn_text,
+            $title
+        );
+    } else {
+        $secondary_aria_label = $secondary_btn_text;
+    }
+}
 ?>
 
 <section <?php echo $wrapper_attributes; ?>>
@@ -42,7 +58,7 @@ $wrapper_attributes = get_block_wrapper_attributes([
                 <?php endif; ?>
                 
                 <?php if ($show_secondary && $secondary_btn_text) : ?>
-                    <a href="<?php echo esc_url($secondary_btn_url); ?>" class="btn btn--secondary">
+                    <a href="<?php echo esc_url($secondary_btn_url); ?>" class="btn btn--secondary" aria-label="<?php echo esc_attr($secondary_aria_label); ?>">
                         <?php echo esc_html($secondary_btn_text); ?>
                     </a>
                 <?php endif; ?>

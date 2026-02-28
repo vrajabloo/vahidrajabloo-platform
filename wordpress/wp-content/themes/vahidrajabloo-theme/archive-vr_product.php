@@ -75,7 +75,11 @@ get_header();
                                 <p class="card__text"><?php echo wp_trim_words(get_the_excerpt(), 15); ?></p>
                             <?php endif; ?>
                             
-                            <a href="<?php the_permalink(); ?>" class="btn btn--link">View Details →</a>
+                            <a
+                                href="<?php the_permalink(); ?>"
+                                class="btn btn--link"
+                                aria-label="<?php echo esc_attr( sprintf( __( 'View details - %s', 'vahidrajabloo-theme' ), get_the_title() ) ); ?>"
+                            >View Details →</a>
                         </div>
                     </article>
                 <?php endwhile; ?>

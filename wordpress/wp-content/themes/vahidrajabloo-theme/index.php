@@ -49,7 +49,11 @@ get_header();
                                 <?php echo wp_trim_words( get_the_excerpt(), 20 ); ?>
                             </p>
                             
-                            <a href="<?php the_permalink(); ?>" class="btn btn--link">
+                            <a
+                                href="<?php the_permalink(); ?>"
+                                class="btn btn--link"
+                                aria-label="<?php echo esc_attr( sprintf( __( 'Read more - %s', 'vahidrajabloo-theme' ), get_the_title() ) ); ?>"
+                            >
                                 Read More →
                             </a>
                         </div>
