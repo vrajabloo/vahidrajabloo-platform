@@ -139,6 +139,19 @@ function vahidrajabloo_enqueue_scripts() {
 add_action( 'wp_enqueue_scripts', 'vahidrajabloo_enqueue_scripts' );
 
 /**
+ * Remove frontend Gutenberg block stylesheet to avoid inherited focus resets.
+ */
+function vahidrajabloo_dequeue_block_library_styles() {
+    if ( is_admin() ) {
+        return;
+    }
+
+    wp_dequeue_style( 'wp-block-library' );
+    wp_dequeue_style( 'wp-block-library-theme' );
+}
+add_action( 'wp_enqueue_scripts', 'vahidrajabloo_dequeue_block_library_styles', 100 );
+
+/**
  * Elementor Theme Locations
  */
 function vahidrajabloo_register_elementor_locations( $elementor_theme_manager ) {
