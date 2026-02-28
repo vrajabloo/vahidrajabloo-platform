@@ -1,5 +1,7 @@
 # 🏗️ VahidRajabloo Platform Architecture
 
+**Last Updated:** 2026-02-28
+
 ## 🔐 Golden Rule
 
 > **Never mix WordPress and Laravel!**
@@ -101,9 +103,9 @@
 ### Authentication
 | Feature | Description |
 |---------|-------------|
-| Registration | With role selection (no admin) |
-| Login | Email/password |
-| Password Reset | Email-based |
+| Registration | With role selection (no admin) + email verification required |
+| Login | Email/password + rate limited (5 attempts / 300s) |
+| Password Reset | Email-based + request/reset rate limited (3 attempts / 600s each) |
 | Profile | Edit personal info |
 
 ### Filament Resources (4)
@@ -140,8 +142,32 @@
 | Rollback System | ✅ Ready |
 | Daily Backups | ✅ 2am cron |
 | SSL Auto-Renew | ✅ 3am cron |
+| User Email Verification | ✅ Required |
+| Auth Rate Limiting | ✅ Active |
+| Direct `/wp-login.php` | ✅ Blocked (403) |
+| WordPress Admin Entry | ✅ Laravel SSO only |
+| Wordfence Runtime WAF | ✅ Active |
+| WordPress Security Plugins | ✅ Active |
 
 ---
+
+## 🚀 Deployment Strategy
+
+| Mode | Command | Purpose |
+|------|---------|---------|
+| Fast Deploy (default) | `./deploy.sh` | Daily deploys with Docker cache and selective rebuild |
+| Full Rebuild | `./deploy.sh --full-rebuild` | Weekly security refresh of base layers/packages |
+
+- Fast mode keeps downtime low and avoids unnecessary image rebuilds.
+- Full rebuild is scheduled weekly via cron to keep patch freshness.
+
+---
+
+## 🔐 WordPress Admin Entry Model
+
+- Direct login endpoint (`/wp-login.php`) is blocked at Nginx
+- Normal entry to WordPress admin is through Laravel SSO token flow
+- Security telemetry is collected by Wordfence, Solid Security, and WP Activity Log
 
 ## 💰 Currency
 
@@ -190,4 +216,3 @@ Laravel must trust Cloudflare proxies in `bootstrap/app.php`:
 | `docs/ROLLBACK.md` | Emergency rollback |
 | `docs/SECURITY_POLICY.md` | Security guidelines |
 | `docs/PRE_DEPLOY_CHECKLIST.md` | Deploy checklist |
-

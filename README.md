@@ -2,7 +2,7 @@
 
 A Docker-based platform with WordPress (Content) and Laravel (Backend/Dashboard).
 
-**Last Updated:** 2026-02-27
+**Last Updated:** 2026-02-28
 
 ## 🚀 Quick Start
 
@@ -71,10 +71,15 @@ docker compose -f docker-compose.local.yml up -d --build
 
 ### Production Deployment
 ```bash
+# Fast deploy (default)
 ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
+
+# Full rebuild deploy (weekly/security maintenance)
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh --full-rebuild"
 ```
 
-`deploy.sh` also force-recreates `nginx` to refresh Docker DNS upstream mapping for Laravel/WordPress containers.
+`deploy.sh` uses cached fast mode by default and only rebuilds/recreates what is necessary.  
+Run `--full-rebuild` weekly to refresh base layers and security patches.
 
 ### Laravel DB Variables (Production)
 
@@ -184,8 +189,14 @@ docker exec -it mysql-local mysql -u wordpress_user -p
 
 ### Production (via SSH)
 ```bash
-# Deploy
+# Fast deploy
 ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh"
+
+# Full rebuild deploy (weekly)
+ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && ./deploy.sh --full-rebuild"
+
+# Install weekly full rebuild cron (Sunday 03:30 UTC)
+ssh deploy@116.203.78.31 "(crontab -l 2>/dev/null; echo '30 3 * * 0 /var/www/vahidrajabloo-platform/scripts/weekly-full-rebuild.sh') | crontab -"
 
 # View logs
 ssh deploy@116.203.78.31 "docker logs nginx --tail 50"
@@ -256,6 +267,7 @@ ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose e
 | Script | Purpose |
 |--------|---------|
 | `deploy.sh` | Safe deployment with logging |
+| `scripts/weekly-full-rebuild.sh` | Scheduled full rebuild for security freshness |
 | `rollback.sh` | Emergency rollback |
 | `scripts/file-monitor.sh` | File integrity monitoring |
 | `scripts/deploy-log.sh` | Deploy audit trail |

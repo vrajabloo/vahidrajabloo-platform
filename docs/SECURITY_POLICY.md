@@ -1,6 +1,6 @@
 # 🔒 Security Policy
 
-**Last Updated:** 2026-02-27
+**Last Updated:** 2026-02-28
 
 ## 🎯 Core Principles
 
@@ -127,7 +127,8 @@ ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker compose e
 |--------|---------|-------|
 | `scripts/file-monitor.sh` | Detect unauthorized file changes | `./file-monitor.sh check` |
 | `scripts/deploy-log.sh` | Audit trail for deployments | Auto-runs on deploy |
-| `deploy.sh` | Safe deployment | `./deploy.sh` |
+| `deploy.sh` | Safe deployment (fast by default) | `./deploy.sh` |
+| `scripts/weekly-full-rebuild.sh` | Weekly no-cache rebuild for patch freshness | Cron (`30 3 * * 0`) |
 | `rollback.sh` | Emergency rollback | `./rollback.sh <commit>` |
 
 ### File Integrity Monitoring
@@ -254,6 +255,7 @@ ssh deploy@116.203.78.31 "cd /var/www/vahidrajabloo-platform && docker exec lara
 
 - [ ] Run `file-monitor.sh check`
 - [ ] Review deploy-history.log
+- [ ] Verify weekly full rebuild log: `/var/www/vahidrajabloo-platform/logs/weekly-full-rebuild.log`
 - [ ] Check Cloudflare WAF logs
 - [ ] Check Wordfence WAF status is healthy (no config warning)
 - [ ] Verify no unknown admin users
