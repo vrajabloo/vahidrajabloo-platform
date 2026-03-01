@@ -40,6 +40,11 @@ Text Domain: vahidrajabloo-theme
     outline-offset: 2px;
 }
 
+*:focus-visible {
+    outline: 3px solid #ff750f !important;
+    outline-offset: 2px !important;
+}
+
 /* ==========================================================================
    CSS Variables - HaiChat Design System
    ========================================================================== */
